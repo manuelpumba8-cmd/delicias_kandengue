@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="pt-PT" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delícias da Kandengue - Buffet para Eventos</title>
+<link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIt7yIRQb8_MeXmVrnpQCCQUD5uXGhvNU",
+            authDomain: "delicias-91228.firebaseapp.com",
+            databaseURL: "https://delicias-91228-default-rtdb.firebaseio.com",
+            projectId: "delicias-91228",
+            storageBucket: "delicias-91228.firebasestorage.app",
+            messagingSenderId: "163923093683",
+            appId: "1:163923093683:web:82660c6097ecca35dda8c6",
+            measurementId: "G-3JF00F4X1G"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        console.log('🔥 Firebase inicializado!');
+    </script>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #c0392b;
+            --gold: #f1c40f;
+            --dark: #1a1a2e;
+            --cor-principal: #ffc107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #faf8f5;
+            color: #2d2d2d;
+            overflow-x: hidden;
+            padding-top: 76px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ==========================================
+           NAVBAR
+        ========================================== */
+        .navbar {
+            background: rgba(26, 26, 46, 0.97) !important;
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            border-bottom: 2px solid rgba(241, 196, 15, 0.12);
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand img {
+            width: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand span {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+        .navbar-brand span .gold {
+            color: var(--gold);
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 8px;
+        }
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        .navbar-toggler-icon {
+            filter: invert(1);
+        }
+
+        .nav-link {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8) !important;
+            transition: color 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+            margin: 0 12px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 60%;
+        }
+        .nav-link:hover {
+            color: var(--gold) !important;
+        }
+
+        .btn-nav {
+            padding: 8px 22px;
+            background: var(--gold);
+            color: var(--dark);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(241, 196, 15, 0.3);
+            color: var(--dark);
+        }
+
+        .btn-nav-outline {
+            padding: 8px 22px;
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-nav-outline:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar-nav {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), #f39c12);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-avatar-nav img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .user-avatar-nav:hover {
+            transform: scale(1.08);
+            border-color: var(--gold);
+        }
+
+        .user-avatar-nav .status-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: #27ae60;
+            border-radius: 50%;
+            border: 2px solid var(--dark);
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 115%;
+            right: 0;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            min-width: 250px;
+            padding: 12px 0;
+            z-index: 1060;
+            animation: fadeInDown 0.3s ease;
+        }
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .profile-dropdown .dropdown-header {
+            padding: 12px 20px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .profile-dropdown .dropdown-header .avatar-small {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--dark);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .profile-dropdown .dropdown-header .avatar-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-dropdown .dropdown-header .user-info .name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+        .profile-dropdown .dropdown-header .user-info .email {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+        .profile-dropdown .dropdown-header .user-info .role {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 50px;
+            background: var(--gold);
+            color: var(--dark);
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        .profile-dropdown .divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 6px 12px;
+        }
+
+        .profile-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .profile-dropdown a:hover {
+            background: #f8f9fa;
+            color: var(--gold);
+        }
+        .profile-dropdown a i {
+            width: 20px;
+            text-align: center;
+        }
+        .profile-dropdown .logout-btn {
+            color: #e74c3c;
+            border-top: 1px solid #f0f0f0;
+            margin-top: 4px;
+            padding-top: 12px;
+        }
+        .profile-dropdown .logout-btn:hover {
+            color: #c0392b;
+            background: #fde8e8;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==========================================
+           HERO
+        ========================================== */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #2d2d44 100%);
+            padding: 20px 0 60px;
+            overflow: hidden;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(192, 57, 43, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(241, 196, 15, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(241, 196, 15, 0.15);
+            border: 1px solid rgba(241, 196, 15, 0.25);
+            color: var(--gold);
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.05;
+            margin-bottom: 20px;
+        }
+
+        .hero-title .highlight {
+            color: var(--gold);
+            position: relative;
+        }
+        .hero-title .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: rgba(241, 196, 15, 0.2);
+            border-radius: 4px;
+            z-index: -1;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 1.3vw, 1.2rem);
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            max-width: 550px;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn-primary-custom {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 36px;
+            background: var(--gold);
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(241, 196, 15, 0.3);
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 35px rgba(241, 196, 15, 0.4);
+            color: var(--dark);
+        }
+
+        .btn-secondary-custom {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 36px;
+            background: transparent;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary-custom:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .hero-image-wrapper .badge-gold {
+            position: absolute;
+            bottom: -10px;
+            right: 1px;
+            background: var(--gold);
+            color: var(--dark);
+            padding: 15px 20px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-align: center;
+            line-height: 1.2;
+            box-shadow: 0 8px 30px rgba(241, 196, 15, 0.3);
+            z-index: 3;
+            animation: pulseBadge 2s ease-in-out infinite;
+        }
+        .hero-image-wrapper .badge-gold small {
+            display: block;
+            font-weight: 400;
+            font-size: 0.65rem;
+        }
+
+        @keyframes pulseBadge {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* ==========================================
+           SOBRE
+        ========================================== */
+        #sobre {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .section-tag {
+            display: inline-block;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .section-tag::before {
+            content: '';
+            display: inline-block;
+            width: 30px;
+            height: 2px;
+            background: var(--gold);
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+        .section-title span {
+            color: var(--primary);
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .about-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .about-feature i {
+            color: var(--gold);
+            font-size: 1.5rem;
+        }
+        .about-feature span {
+            font-weight: 500;
+        }
+
+        /* ==========================================
+           SERVIÇOS
+        ========================================== */
+        #servicos {
+            padding: 80px 0;
+            background: #faf8f5;
+        }
+
+        .service-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 35px 25px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(192, 57, 43, 0.08), rgba(241, 196, 15, 0.08));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.2rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        .service-card:hover .service-icon {
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .service-card h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        .service-card p {
+            color: #6c757d;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .service-card .price-tag {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 4px 16px;
+            background: rgba(241, 196, 15, 0.15);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--primary);
+        }
+
+        /* ==========================================
+           DEPOIMENTOS (COM FORMULÁRIO)
+        ========================================== */
+        #depoimentos {
+            padding: 80px 0;
+            background: var(--dark);
+            color: #fff;
+        }
+
+        .testimonial-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .testimonial-form .form-control {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 12px;
+            padding: 12px 16px;
+        }
+
+        .testimonial-form .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .testimonial-form .form-control:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.1);
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+
+        .testimonial-form .btn-submit-depoimento {
+            padding: 12px 30px;
+            background: var(--gold);
+            color: var(--dark);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .testimonial-form .btn-submit-depoimento:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(241, 196, 15, 0.3);
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            height: 100%;
+        }
+        .testimonial-card .stars {
+            color: var(--gold);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        .testimonial-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            font-style: italic;
+        }
+        .testimonial-card .client {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .testimonial-card .client-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--dark);
+            overflow: hidden;
+        }
+        .testimonial-card .client-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .testimonial-card .client-info h6 {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            font-weight: 600;
+        }
+        .testimonial-card .client-info small {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ==========================================
+           GALERIA
+        ========================================== */
+        #galeria {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+        .gallery-item .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            color: #fff;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .gallery-item:hover .overlay {
+            opacity: 1;
+        }
+        .gallery-item .overlay h6 {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+        }
+        .gallery-item .overlay small {
+            opacity: 0.8;
+        }
+
+        /* ==========================================
+           CONTATO (COM ENVIO DE DEPOIMENTO)
+        ========================================== */
+        #contato {
+            padding: 80px 0;
+            background: #faf8f5;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .contact-item .icon {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--primary);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+        .contact-item .info h6 {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            font-weight: 600;
+        }
+        .contact-item .info p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .form-control-custom {
+            padding: 14px 18px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .form-control-custom:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.1);
+            outline: none;
+        }
+
+        .btn-submit {
+            padding: 14px 40px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .btn-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(192, 57, 43, 0.3);
+        }
+
+        /* ==========================================
+           FOOTER
+        ========================================== */
+        .footer {
+            background: var(--dark);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 60px 0 20px;
+            margin-top: 100px;
+            border-top: 1px solid rgba(0, 191, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cor-principal), transparent) !important;
+        }
+        .footer-logo {
+            width: 120px;
+            margin-bottom: 20px;
+            filter: brightness(0) invert(1);
+        }
+        .footer h5 {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--cor-principal);
+        }
+        .footer a {
+            color: #aaa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        .footer a:hover {
+            color: var(--gold);
+            padding-left: 8px;
+        }
+        .footer-social a {
+            display: inline-flex;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: 0.3s;
+            margin-right: 10px;
+        }
+        .footer-social a:hover {
+            background: var(--cor-principal);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px var(--cor-principal);
+            color: #fff;
+            padding-left: 0px;
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            color: #888 !important;
+            font-size: 0.9rem;
+        }
+
+        /* ==========================================
+           TOAST
+        ========================================== */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+        }
+        .custom-toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px 24px;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid var(--gold);
+            animation: slideInRight 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .custom-toast.success {
+            border-left-color: #27ae60;
+        }
+        .custom-toast.error {
+            border-left-color: #e74c3c;
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================
+           RESPONSIVIDADE
+        ========================================== */
+        @media (max-width: 992px) {
+            .hero-container .row {
+                flex-direction: column-reverse;
+                text-align: center;
+            }
+            .hero-subtitle {
+                max-width: 100%;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .hero-image-wrapper {
+                max-width: 380px;
+                margin: 0 auto;
+            }
+            .hero-image-wrapper .badge-gold {
+                bottom: -10px;
+                right: -10px;
+                padding: 12px 16px;
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            #hero {
+                padding: 100px 0 40px;
+                min-height: auto;
+            }
+            .hero-title {
+                font-size: 2rem;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn-primary-custom,
+            .btn-secondary-custom {
+                width: 100%;
+                justify-content: center;
+            }
+            .hero-image-wrapper {
+                max-width: 280px;
+            }
+            .hero-image-wrapper .badge-gold {
+                display: none;
+            }
+            .gallery-item img {
+                height: 180px;
+            }
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+            .navbar-brand span {
+                font-size: 0.95rem;
+            }
+            .btn-nav,
+            .btn-nav-outline {
+                font-size: 0.7rem;
+                padding: 6px 14px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOAST -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ==========================================
+         NAVBAR
+    ========================================== -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="media/imagens/Copilot_20251027_215018d.png" alt="Logo">
+                <span>Delícias <span class="gold">Kandengue</span></span>
+            </a>
+
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link active" href="#html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#sobre">Sobre</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicos">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#depoimentos">Depoimentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#galeria">Galeria</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
+                    <li class="nav-item"><a class="nav-link" href="orcamento.html">Orçamento</a></li>
+                    <li class="nav-item ms-lg-2" id="authSection"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- OFFCANVAS MOBILE -->
+    <div class="offcanvas offcanvas-end text-bg-dark d-lg-none" tabindex="-1"
+         style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #2d2d44 100%); z-index: 9999999 !important;"
+         id="offcanvasNavbar">
+        <div class="offcanvas-header">
+            <img src="media/imagens/Copilot_20251027_215018d.png" width="50px" alt="Logo">
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link active" href="#html" onclick="closeOffcanvas()">Início</a></li>
+                <li class="nav-item"><a class="nav-link" href="#sobre" onclick="closeOffcanvas()">Sobre</a></li>
+                <li class="nav-item"><a class="nav-link" href="#servicos" onclick="closeOffcanvas()">Serviços</a></li>
+                <li class="nav-item"><a class="nav-link" href="#depoimentos" onclick="closeOffcanvas()">Depoimentos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#galeria" onclick="closeOffcanvas()">Galeria</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contato" onclick="closeOffcanvas()">Contato</a></li>
+                <li class="nav-item"><a class="nav-link" href="orcamento.html" onclick="closeOffcanvas()">Orçamento</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html" onclick="closeOffcanvas()">Login</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         HERO
+    ========================================== -->
+    <section id="hero">
+        <div class="container hero-container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <div class="hero-badge"><i class="bi bi-star-fill me-1"></i> Sabores que encantam</div>
+                    <h1 class="hero-title">Buffet para <br><span class="highlight">Eventos Inesquecíveis</span></h1>
+                    <p class="hero-subtitle">Transformamos cada evento numa experiência gastronómica única. Casamentos, aniversários, eventos corporativos e muito mais.</p>
+                    <div class="hero-buttons">
+                        <a href="orcamento.html" class="btn-primary-custom"><i class="bi bi-whatsapp"></i> Pedir Orçamento</a>
+                        <a href="#servicos" class="btn-secondary-custom">Ver Cardápio <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image-wrapper">
+                        <img src="media/imagens/angola.png" alt="Delícias da Kandengue" style="width: 70% !important;">
+                        <div class="badge-gold"><i class="bi bi-award-fill"></i><br>+5 anos <small>de experiência</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         SOBRE
+    ========================================== -->
+    <section id="sobre" class="fade-in">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <img src="media/imagens/angola.jpeg" alt="Sobre" class="img-fluid rounded-4 shadow">
+                </div>
+                <div class="col-lg-6">
+                    <span class="section-tag">Quem Somos</span>
+                    <h2 class="section-title">O sabor que <span>faz a diferença</span></h2>
+                    <p style="color: #555; line-height: 1.8;">A <strong>Delícias da Kandengue</strong> é um buffet especializado em eventos, que nasceu da paixão pela culinária e do desejo de criar momentos inesquecíveis.</p>
+                    <p style="color: #555; line-height: 1.8;">Com mais de 5 anos de experiência, já realizamos centenas de eventos em Luanda, sempre com o compromisso de oferecer sabores autênticos e atendimento impecável.</p>
+                    <div class="about-features">
+                        <div class="about-feature"><i class="bi bi-check-circle-fill"></i><span>Ingredientes frescos</span></div>
+                        <div class="about-feature"><i class="bi bi-check-circle-fill"></i><span>Chef especializado</span></div>
+                        <div class="about-feature"><i class="bi bi-check-circle-fill"></i><span>Montagem personalizada</span></div>
+                        <div class="about-feature"><i class="bi bi-check-circle-fill"></i><span>Atendimento premium</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         SERVIÇOS
+    ========================================== --> <section id="servicos" class="fade-in">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="section-tag">O que oferecemos</span>
+        <h2 class="section-title">Cardápios para <span>todos os gostos</span></h2>
+        <p style="color: #6c757d; max-width: 600px; margin: 0 auto;">
+          Escolha o serviço ideal para o seu evento. Cada cardápio é personalizado
+          de acordo com as suas preferências.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        
+        <!-- Casamentos -->
+        <div class="col-md-4">
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="bi bi-heart-fill"></i>
+            </div>
+            <h4>Casamentos</h4>
+            <p>Buffet completo para o dia mais especial da sua vida. Entradas, pratos principais, sobremesas e open bar.</p>
+            <span class="price-tag">A partir de 15.000 Kz/pessoa</span>
+          </div>
+        </div>
+
+        <!-- Aniversários -->
+        <div class="col-md-4">
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="bi bi-gift-fill"></i>
+            </div>
+            <h4>Aniversários</h4>
+            <p>Festa infantil ou adulto? Temos opções para todos. Bolo personalizado, salgadinhos, doces e muito mais.</p>
+            <span class="price-tag">A partir de 8.000 Kz/pessoa</span>
+          </div>
+        </div>
+
+        <!-- Eventos Corporativos -->
+        <div class="col-md-4">
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="bi bi-building"></i>
+            </div>
+            <h4>Eventos Corporativos</h4>
+            <p>Coffee breaks, almoços executivos, happy hours. Perfeito para impressionar clientes e colaboradores.</p>
+            <span class="price-tag">A partir de 10.000 Kz/pessoa</span>
+          </div>
+        </div>
+
+        <!-- Buffet Privado -->
+        <div class="col-md-4">
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="bi bi-house-fill"></i>
+            </div>
+            <h4>Eventos Privados</h4>
+            <p>Jantares românticos, almoços em família, churrascos. Nós levamos a nossa cozinha até si.</p>
+            <span class="price-tag">A partir de 12.000 Kz/pessoa</span>
+          </div>
+        </div>
+
+        <!-- Buffet Temático -->
+        <div class="col-md-4">
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="bi bi-globe"></i>
+            </div>
+            <h4>Buffet Temático</h4>
+            <p>Culinária angolana, portuguesa, italiana, asiática... Surpreenda os seus convidados com sabores do mundo.</p>
+            <span class="price-tag">Sob consulta</span>
+          </div>
+        </div>
+
+        <!-- Serviço de Bolo -->
+        <div class="col-md-4">
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="bi bi-cake"></i>
+            </div>
+            <h4>Bolos & Doces</h4>
+            <p>Bolos personalizados para todas as ocasiões. Decoração exclusiva e sabores irresistíveis.</p>
+            <span class="price-tag">A partir de 5.000 Kz</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+    <!-- ==========================================
+         DEPOIMENTOS (COM FORMULÁRIO)
+    ========================================== -->
+    <section id="depoimentos" class="fade-in">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="section-tag" style="color: var(--gold);">Depoimentos</span>
+                <h2 class="section-title" style="color: #fff;">O que dizem <span style="color: var(--gold);">sobre nós</span></h2>
+            </div>
+
+            <div class="row">
+                <!-- Lista de depoimentos -->
+                <div class="col-lg-7" id="depoimentosList">
+                    <!-- Carregado do Firebase -->
+                    <div class="text-center text-light opacity-50 py-5">
+                        <i class="bi bi-chat-dots fs-1"></i>
+                        <p class="mt-2">Carregando depoimentos...</p>
+                    </div>
+                </div>
+
+                <!-- Formulário de Depoimento -->
+                <div class="col-lg-5">
+                    <div class="testimonial-form">
+                        <h5 class="text-light mb-3"><i class="bi bi-pencil-square text-warning"></i> Deixe seu depoimento</h5>
+                        <form id="depoimentoForm" onsubmit="enviarDepoimento(event)">
+                            <div class="mb-3">
+                                <label class="text-light-50 small">Seu nome</label>
+                                <input type="text" class="form-control" id="depoNome" placeholder="Seu nome" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-light-50 small">Avaliação</label>
+                                <select class="form-control" id="depoEstrelas" required>
+                                    <option value="5">⭐⭐⭐⭐⭐ - Excelente</option>
+                                    <option value="4">⭐⭐⭐⭐ - Muito Bom</option>
+                                    <option value="3">⭐⭐⭐ - Bom</option>
+                                    <option value="2">⭐⭐ - Regular</option>
+                                    <option value="1">⭐ - Ruim</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-light-50 small">Seu depoimento</label>
+                                <textarea class="form-control" id="depoMensagem" rows="3" placeholder="Conte-nos sobre sua experiência..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit-depoimento w-100">
+                                <i class="bi bi-send"></i> Enviar Depoimento
+                            </button>
+                            <p class="text-light opacity-50 small mt-2 text-center">
+                                <i class="bi bi-shield-check"></i> Seu depoimento será publicado após aprovação
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         GALERIA
+    ========================================== -->
+    <section id="galeria" class="fade-in">
+    <div class="container">
+      <div class="text-center mb-5">
+        <span class="section-tag">Galeria</span>
+        <h2 class="section-title">Momentos <span>dos nossos eventos</span></h2>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <img src="media/imagens/comidas/IMG-20251027-WA0012.jpg" alt="Evento Delícias">
+            <div class="overlay">
+              <h6>Decoração de Mesa</h6>
+              <small>Casamento - 2024</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <img src="media/imagens/comidas/IMG-20251027-WA0013.jpg" alt="Evento Delícias">
+            <div class="overlay">
+              <h6>Buffet Servido</h6>
+              <small>Evento Corporativo</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <img src="media/imagens/comidas/IMG-20251027-WA0015.jpg" alt="Evento Delícias">
+            <div class="overlay">
+              <h6>Mesa de Sobremesas</h6>
+              <small>Aniversário</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <img src="media/imagens/comidas/IMG-20251027-WA0016.jpg" alt="Evento Delícias">
+            <div class="overlay">
+              <h6>Montagem do Buffet</h6>
+              <small>Evento Privado</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <img src="media/imagens/comidas/IMG-20251027-WA0017.jpg" alt="Evento Delícias">
+            <div class="overlay">
+              <h6>Equipa Delícias</h6>
+              <small>Preparação</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="gallery-item">
+            <img src="media/imagens/comidas/IMG-20251027-WA0014.jpg" alt="Evento Delícias">
+            <div class="overlay">
+              <h6>Pratos Especiais</h6>
+              <small>Cardápio Premium</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+    <!-- ==========================================
+         CONTATO
+    ========================================== -->
+    <section id="contato" class="fade-in">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-5">
+                    <span class="section-tag">Contato</span>
+                    <h2 class="section-title">Vamos <span>conversar?</span></h2>
+                    <p style="color: #6c757d; line-height: 1.8;">Quer fazer do seu evento um momento inesquecível? Entre em contacto connosco e vamos criar o cardápio perfeito para si.</p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="icon"><i class="bi bi-whatsapp"></i></div>
+                            <div class="info"><h6>WhatsApp</h6><p>+244 956 75 98 13</p></div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="icon"><i class="bi bi-envelope"></i></div>
+                            <div class="info"><h6>Email</h6><p>manuelpumba8@gmail.com</p></div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="icon"><i class="bi bi-geo-alt"></i></div>
+                            <div class="info"><h6>Localização</h6><p>Luanda, Angola</p></div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <a href="https://wa.me/+244956759813" target="_blank" class="btn-primary-custom"><i class="bi bi-whatsapp"></i> Fale connosco</a>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <form id="contactForm" style="background: #fff; padding: 40px; border-radius: 20px; box-shadow: var(--shadow);">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Nome</label>
+                                <input type="text" class="form-control-custom" placeholder="Seu nome" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Email</label>
+                                <input type="email" class="form-control-custom" placeholder="seu@email.com" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Tipo de Evento</label>
+                                <select class="form-control-custom">
+                                    <option value="">Selecione...</option>
+                                    <option>Casamento</option>
+                                    <option>Aniversário</option>
+                                    <option>Evento Corporativo</option>
+                                    <option>Evento Privado</option>
+                                    <option>Outro</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Nº de Convidados</label>
+                                <input type="number" class="form-control-custom" placeholder="Quantas pessoas?" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Mensagem</label>
+                                <textarea class="form-control-custom" rows="4" placeholder="Conte-nos sobre o seu evento..." required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn-submit"><i class="bi bi-send"></i> Enviar Mensagem</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         FOOTER
+    ========================================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <img src="media/imagens/Copilot_20251027_215018.png" alt="Logo" class="footer-logo">
+                    <p style="margin-top: 15px; max-width: 300px;">Buffet especializado em eventos. Sabores que encantam e transformam cada ocasião num momento inesquecível.</p>
+                    <div class="footer-social">
+                        <a href="https://wa.me/+244956759813" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                        <a href="#" target="_blank"><i class="bi bi-facebook"></i></a>
+                        <a href="https://www.instagram.com/manuel_pumba8" target="_blank"><i class="bi bi-instagram"></i></a>
+                        <a href="#" target="_blank"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <h5>Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#html">Início</a></li>
+                        <li><a href="#sobre">Sobre</a></li>
+                        <li><a href="#servicos">Serviços</a></li>
+                        <li><a href="#galeria">Galeria</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Serviços</h5>
+                    <ul class="list-unstyled" id="footerServicos">
+                        <li><a href="#servicos">Casamentos</a></li>
+                        <li><a href="#servicos">Aniversários</a></li>
+                        <li><a href="#servicos">Eventos Corporativos</a></li>
+                        <li><a href="#servicos">Buffet Privado</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contato</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-telephone me-2"></i> +244 956 75 98 13</li>
+                        <li><i class="bi bi-envelope me-2"></i> manuelpumba8@gmail.com</li>
+                        <li><i class="bi bi-geo-alt me-2"></i> Luanda, Angola</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 <strong>Delícias da Kandengue</strong> - Todos os direitos reservados</p>
+                <p>Desenvolvido com <i class="bi bi-heart-fill text-danger"></i> por <strong>FT Code</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         SCRIPTS
+    ========================================== -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ==========================================
+        // 🔥 FIREBASE - AUTENTICAÇÃO
+        // ==========================================
+        const authSection = document.getElementById('authSection');
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+                const initial = displayName.charAt(0).toUpperCase();
+
+                authSection.innerHTML = `
+                            <div style="position: relative;">
+                                <a href="#" class="user-avatar-nav" onclick="toggleProfileDropdown(event)" title="${displayName}">
+                                    ${user.photoURL ? `<img src="${user.photoURL}" alt="${displayName}">` : initial}
+                                    <span class="status-dot"></span>
+                                </a>
+                                <div class="profile-dropdown" id="profileDropdown">
+                                    <div class="dropdown-header">
+                                        <div class="avatar-small">
+                                            ${user.photoURL ? `<img src="${user.photoURL}" alt="${displayName}">` : initial}
+                                        </div>
+                                        <div class="user-info">
+                                            <div class="name">${displayName}</div>
+                                            <div class="email">${user.email}</div>
+                                            <span class="role">${user.email === 'manuelpumba8@gmail.com' ? '👑 Admin' : 'Utilizador'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="divider"></div>
+                                    <a href="dashboard.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                                    <a href="configuracoes.html"><i class="bi bi-gear"></i> Configurações</a>
+                                    <div class="divider"></div>
+                                    <a href="#" onclick="logoutUser(event)" class="logout-btn"><i class="bi bi-box-arrow-right"></i> Sair</a>
+                                </div>
+                            </div>
+                        `;
+            } else {
+                authSection.innerHTML = `
+                            <a href="login.html" class="btn-nav-outline me-2">Entrar</a>
+                            <a href="cadastro.html" class="btn-nav">Registar</a>
+                        `;
+            }
+        });
+
+        function toggleProfileDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const dropdown = document.getElementById('profileDropdown');
+            if (dropdown) dropdown.classList.toggle('show');
+        }
+
+        function logoutUser(event) {
+            if (event) event.preventDefault();
+            if (confirm('Tem a certeza que deseja sair?')) {
+                auth.signOut().then(() => {
+                    showToast('Logout efetuado com sucesso!', 'success');
+                    const dropdown = document.getElementById('profileDropdown');
+                    if (dropdown) dropdown.classList.remove('show');
+                }).catch(error => {
+                    showToast('Erro ao sair: ' + error.message, 'error');
+                });
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('profileDropdown');
+            const avatar = document.querySelector('.user-avatar-nav');
+            if (dropdown && avatar) {
+                if (!avatar.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        });
+
+        // ==========================================
+        // FECHAR OFFCANVAS
+        // ==========================================
+        function closeOffcanvas() {
+            const offcanvas = document.getElementById('offcanvasNavbar');
+            if (!offcanvas) return;
+            if (typeof bootstrap !== 'undefined') {
+                try {
+                    const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvas);
+                    if (bsOffcanvas) { bsOffcanvas.hide(); return; }
+                    new bootstrap.Offcanvas(offcanvas).hide();
+                    return;
+                } catch (e) {}
+            }
+            offcanvas.classList.remove('show');
+            document.querySelectorAll('.offcanvas-backdrop').forEach(el => el.remove());
+            document.body.classList.remove('offcanvas-open');
+            document.body.style.overflow = '';
+        }
+
+        // ==========================================
+        // TOAST SYSTEM
+        // ==========================================
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type}`;
+            const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+            toast.innerHTML = `
+                        <span>${icons[type] || 'ℹ️'}</span>
+                        <span>${message}</span>
+                        <span style="cursor:pointer;margin-left:auto;font-weight:700;" onclick="this.parentElement.remove()">✕</span>
+                    `;
+            container.appendChild(toast);
+            setTimeout(() => { if (toast.parentElement) toast.remove(); }, 5000);
+        }
+
+        // ==========================================
+        // FORM CONTATO
+        // ==========================================
+        document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> A enviar...';
+            btn.disabled = true;
+            setTimeout(() => {
+                showToast('Mensagem enviada com sucesso! Entraremos em contacto.', 'success');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                this.reset();
+            }, 1500);
+        });
+
+        // ==========================================
+        // 🔥 CARREGAR SERVIÇOS
+        // ==========================================
+        function carregarServicos() {
+            const container = document.getElementById('servicosContainer');
+            database.ref('servicos').once('value').then(snapshot => {
+                const servicos = snapshot.val();
+                if (servicos) {
+                    let html = '';
+                    Object.keys(servicos).forEach(key => {
+                        const s = servicos[key];
+                        html += `
+                                    <div class="col-md-4">
+                                        <div class="service-card">
+                                            <div class="service-icon"><i class="bi ${s.icone || 'bi-star'}"></i></div>
+                                            <h4>${s.nome}</h4>
+                                            <p>${s.descricao}</p>
+                                            <span class="price-tag">${s.preco}</span>
+                                        </div>
+                                    </div>
+                                `;
+                    });
+                    container.innerHTML = html;
+                } else {
+                    // Serviços padrão
+                    container.innerHTML = `
+                                <div class="col-md-4"><div class="service-card"><div class="service-icon"><i class="bi bi-heart-fill"></i></div><h4>Casamentos</h4><p>Buffet completo para o dia mais especial da sua vida.</p><span class="price-tag">A partir de 15.000 Kz/pessoa</span></div></div>
+                                <div class="col-md-4"><div class="service-card"><div class="service-icon"><i class="bi bi-gift-fill"></i></div><h4>Aniversários</h4><p>Festa infantil ou adulto com opções personalizadas.</p><span class="price-tag">A partir de 8.000 Kz/pessoa</span></div></div>
+                                <div class="col-md-4"><div class="service-card"><div class="service-icon"><i class="bi bi-building"></i></div><h4>Eventos Corporativos</h4><p>Coffee breaks, almoços executivos e happy hours.</p><span class="price-tag">A partir de 10.000 Kz/pessoa</span></div></div>
+                            `;
+                }
+            }).catch(() => {});
+        }
+
+        // ==========================================
+        // 🔥 CARREGAR GALERIA
+        // ==========================================
+        function carregarGaleria() {
+            const container = document.getElementById('galeriaContainer');
+            database.ref('galeria').once('value').then(snapshot => {
+                const imagens = snapshot.val();
+                if (imagens) {
+                    let html = '';
+                    Object.keys(imagens).forEach(key => {
+                        const img = imagens[key];
+                        html += `
+                                    <div class="col-md-4">
+                                        <div class="gallery-item">
+                                            <img src="${img.url}" alt="${img.titulo}">
+                                            <div class="overlay">
+                                                <h6>${img.titulo}</h6>
+                                                <small>${img.descricao || ''}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                    });
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = `
+                                <div class="col-12 text-center text-muted py-5">
+                                    <i class="bi bi-images fs-1"></i>
+                                    <p class="mt-2">Nenhuma imagem na galeria ainda.</p>
+                                </div>
+                            `;
+                }
+            }).catch(() => {});
+        }
+
+        // ==========================================
+        // 🔥 CARREGAR DEPOIMENTOS
+        // ==========================================
+        function carregarDepoimentos() {
+            const container = document.getElementById('depoimentosList');
+            database.ref('depoimentos').orderByChild('aprovado').equalTo(true).once('value').then(snapshot => {
+                const depoimentos = snapshot.val();
+                if (depoimentos) {
+                    let html = '<div class="row g-4">';
+                    let count = 0;
+                    Object.keys(depoimentos).forEach(key => {
+                        if (count >= 3) return;
+                        const d = depoimentos[key];
+                        if (!d.aprovado) return;
+                        const estrelas = '⭐'.repeat(d.estrelas || 5);
+                        const inicial = d.nome.charAt(0).toUpperCase();
+                        html += `
+                                    <div class="col-md-4">
+                                        <div class="testimonial-card">
+                                            <div class="stars">${estrelas}</div>
+                                            <p>"${d.mensagem}"</p>
+                                            <div class="client">
+                                                <div class="client-avatar">${d.foto ? `<img src="${d.foto}">` : inicial}</div>
+                                                <div class="client-info">
+                                                    <h6>${d.nome}</h6>
+                                                    <small>${d.data || 'Cliente'}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                        count++;
+                    });
+                    html += '</div>';
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = `
+                                <div class="text-center text-light opacity-50 py-5">
+                                    <i class="bi bi-chat-dots fs-1"></i>
+                                    <p class="mt-2">Seja o primeiro a deixar um depoimento!</p>
+                                </div>
+                            `;
+                }
+            }).catch(() => {});
+        }
+
+        // ==========================================
+        // 🔥 ENVIAR DEPOIMENTO
+        // ==========================================
+        function enviarDepoimento(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById('depoNome').value.trim();
+            const estrelas = parseInt(document.getElementById('depoEstrelas').value);
+            const mensagem = document.getElementById('depoMensagem').value.trim();
+
+            if (!nome || !mensagem) {
+                showToast('Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+
+            const btn = event.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> A enviar...';
+            btn.disabled = true;
+
+            const depoimentoRef = database.ref('depoimentos').push();
+            depoimentoRef.set({
+                nome: nome,
+                estrelas: estrelas,
+                mensagem: mensagem,
+                aprovado: true, // Aprovação automática
+                data: new Date().toLocaleDateString('pt-PT'),
+                createdAt: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                showToast('✅ Depoimento enviado com sucesso! Obrigado!', 'success');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                document.getElementById('depoimentoForm').reset();
+                carregarDepoimentos();
+            }).catch(error => {
+                showToast('❌ Erro ao enviar depoimento: ' + error.message, 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        }
+
+        // ==========================================
+        // SCROLL ANIMATION
+        // ==========================================
+        function revealOnScroll() {
+            document.querySelectorAll('.fade-in').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 80) {
+                    el.classList.add('visible');
+                }
+            });
+        }
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // ==========================================
+        // NAVBAR ACTIVE LINK
+        // ==========================================
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ==========================================
+        // INICIALIZAR
+        // ==========================================
+        carregarServicos();
+        carregarGaleria();
+        carregarDepoimentos();
+
+        console.log('✅ Site Delícias da Kandengue carregado!');
+        console.log('🔥 Firebase:', firebaseConfig.projectId);
+    </script>
+
+</body>
+</html>

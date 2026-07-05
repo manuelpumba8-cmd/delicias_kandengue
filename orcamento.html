@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orçamento - Delícias da Kandengue</title>
+<link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
+    <!-- ========================================== -->
+    <!-- 🔥 FIREBASE SDKs -->
+    <!-- ========================================== -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js">
+    </script>
+
+    <!-- ========================================== -->
+    <!-- 🔥 CONFIGURAÇÃO FIREBASE -->
+    <!-- ========================================== -->
+    <script>
+        // ════════════════════════════════════════════════════
+        // 🔥 SEUS DADOS DO FIREBASE - JÁ CONFIGURADOS!
+        // ════════════════════════════════════════════════════
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIt7yIRQb8_MeXmVrnpQCCQUD5uXGhvNU",
+            authDomain: "delicias-91228.firebaseapp.com",
+            databaseURL: "https://delicias-91228-default-rtdb.firebaseio.com",
+            projectId: "delicias-91228",
+            storageBucket: "delicias-91228.firebasestorage.app",
+            messagingSenderId: "163923093683",
+            appId: "1:163923093683:web:82660c6097ecca35dda8c6",
+            measurementId: "G-3JF00F4X1G"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // Persistência
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+            .catch(() => auth.setPersistence(firebase.auth.Auth.Persistence.SESSION));
+
+        console.log('🔥 Firebase inicializado!');
+    </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================
+           RESET & GLOBAL
+        ========================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #faf8f5 0%, #e9ecef 100%);
+            padding: 80px 0 40px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Background decorativo */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(241, 196, 15, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            animation: floatBg 25s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -40%;
+            left: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(192, 57, 43, 0.04) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            animation: floatBg 30s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatBg {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(-30px, 20px) scale(1.05);
+            }
+            50% {
+                transform: translate(20px, -30px) scale(0.95);
+            }
+            75% {
+                transform: translate(-20px, -10px) scale(1.02);
+            }
+        }
+
+        /* ==========================================
+           CONTAINER
+        ========================================== */
+        .card-orcamento {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08);
+            padding: 45px;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .card-orcamento h2 {
+            font-family: 'Playfair Display', serif;
+            color: #1a1a2e;
+        }
+
+        .card-orcamento .subtitle {
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        /* ==========================================
+           FORMULÁRIO
+        ========================================== */
+        .form-control,
+        .form-select {
+            padding: 14px 18px;
+            border-radius: 14px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            background: #faf8f5;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #f1c40f;
+            box-shadow: 0 0 0 5px rgba(241, 196, 15, 0.08);
+            background: #fff;
+        }
+
+        .form-control.error {
+            border-color: #e74c3c;
+        }
+
+        .form-control.success {
+            border-color: #27ae60;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #1a1a2e;
+        }
+
+        .form-label .required {
+            color: #e74c3c;
+            margin-left: 2px;
+        }
+
+        /* ==========================================
+           BOTÕES
+        ========================================== */
+        .btn-submit {
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(26, 26, 46, 0.25);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-submit .spinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        .btn-submit.loading .btn-text {
+            display: none;
+        }
+
+        .btn-submit.loading .spinner {
+            display: block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-voltar {
+            padding: 10px 24px;
+            background: #e9ecef;
+            color: #333;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-voltar:hover {
+            background: #dee2e6;
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================
+           SERVICE OPTIONS
+        ========================================== */
+        .service-option {
+            padding: 14px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            background: #faf8f5;
+        }
+
+        .service-option:hover {
+            border-color: #f1c40f;
+            background: rgba(241, 196, 15, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .service-option.selected {
+            border-color: #f1c40f;
+            background: rgba(241, 196, 15, 0.08);
+            box-shadow: 0 4px 15px rgba(241, 196, 15, 0.08);
+        }
+
+        .service-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            accent-color: #f1c40f;
+            cursor: pointer;
+        }
+
+        /* ==========================================
+           TOAST
+        ========================================== */
+        .toast-container {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 380px;
+        }
+
+        .custom-toast {
+            background: #fff;
+            border-radius: 14px;
+            padding: 16px 22px;
+            margin-bottom: 10px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+            border-left: 4px solid #27ae60;
+            animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+
+        .custom-toast.error {
+            border-left-color: #e74c3c;
+        }
+
+        .custom-toast.info {
+            border-left-color: #0d6efd;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(80px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .custom-toast .close-toast {
+            cursor: pointer;
+            margin-left: auto;
+            font-weight: 700;
+            opacity: 0.5;
+            transition: 0.3s;
+            padding: 0 4px;
+        }
+
+        .custom-toast .close-toast:hover {
+            opacity: 1;
+        }
+
+        /* ==========================================
+           SHIELD ICON ANIMADO
+        ========================================== */
+        .shield-icon {
+            display: inline-block;
+            animation: pulseShield 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseShield {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* ==========================================
+           RESPONSIVIDADE
+        ========================================== */
+        @media (max-width: 768px) {
+            .card-orcamento {
+                padding: 25px 20px;
+                border-radius: 24px;
+            }
+
+            .card-orcamento .d-flex {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .btn-voltar {
+                font-size: 0.8rem;
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 70px 0 30px;
+            }
+
+            .card-orcamento {
+                padding: 20px 16px;
+                border-radius: 20px;
+            }
+
+            .card-orcamento h2 {
+                font-size: 1.4rem;
+            }
+
+            .form-control,
+            .form-select {
+                padding: 12px 14px;
+                font-size: 0.9rem;
+            }
+
+            .btn-submit {
+                padding: 14px;
+                font-size: 0.95rem;
+            }
+
+            .service-option {
+                padding: 12px 14px;
+                font-size: 0.85rem;
+            }
+
+            .toast-container {
+                right: 10px;
+                left: 10px;
+                max-width: 100%;
+            }
+
+            body::before,
+            body::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+    TOAST CONTAINER
+    ========================================== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ==========================================
+    CONTEÚDO
+    ========================================== -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="card-orcamento">
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                        <div>
+                            <h2>
+                                <i class="bi bi-calculator text-warning"></i>
+                                Pedir Orçamento
+                            </h2>
+                            <p class="subtitle">Preencha os dados e receba uma proposta personalizada.</p>
+                        </div>
+                        <a href="index.html" class="btn-voltar">
+                            <i class="bi bi-arrow-left"></i> Voltar
+                        </a>
+                    </div>
+                    <hr>
+
+                    <!-- ==========================================
+                    FORM ORÇAMENTO
+                    ========================================== -->
+                    <form id="orcamentoForm" onsubmit="enviarOrcamento(event)">
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="form-label">Nome completo <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="nome" placeholder="Seu nome completo" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Email <span class="required">*</span></label>
+                                <input type="email" class="form-control" id="email" placeholder="seu@email.com" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Telefone <span class="required">*</span></label>
+                                <input type="tel" class="form-control" id="telefone" placeholder="+244 900 000 000" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Tipo de Evento <span class="required">*</span></label>
+                                <select class="form-select" id="tipoEvento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Casamento">Casamento</option>
+                                    <option value="Aniversário">Aniversário</option>
+                                    <option value="Evento Corporativo">Evento Corporativo</option>
+                                    <option value="Evento Privado">Evento Privado</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Nº de Convidados <span class="required">*</span></label>
+                                <input type="number" class="form-control" id="convidados" placeholder="Ex: 100" required min="1">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Data do Evento <span class="required">*</span></label>
+                                <input type="date" class="form-control" id="dataEvento" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Orçamento estimado</label>
+                                <input type="text" class="form-control" id="orcamentoEstimado" placeholder="Ex: 500.000 Kz">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Serviços desejados</label>
+                                <div class="row g-2">
+                                    <div class="col-sm-6">
+                                        <label class="service-option w-100" onclick="toggleService(this)">
+                                            <input type="checkbox" value="Buffet completo"> Buffet completo
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="service-option w-100" onclick="toggleService(this)">
+                                            <input type="checkbox" value="Bolo personalizado"> Bolo personalizado
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="service-option w-100" onclick="toggleService(this)">
+                                            <input type="checkbox" value="Decoração"> Decoração
+                                        </label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="service-option w-100" onclick="toggleService(this)">
+                                            <input type="checkbox" value="Open bar"> Open bar
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Mensagem adicional</label>
+                                <textarea class="form-control" id="mensagem" rows="4" placeholder="Conte-nos mais sobre o seu evento..."></textarea>
+                            </div>
+
+                            <div class="col-12 text-center mt-3">
+                                <button type="submit" class="btn-submit" id="submitBtn">
+                                    <span class="btn-text"><i class="bi bi-send"></i> Enviar Orçamento</span>
+                                    <span class="spinner"></span>
+                                </button>
+                                <p class="text-muted mt-3">
+                                    <i class="bi bi-shield-check shield-icon text-warning"></i>
+                                    Os seus dados estão seguros
+                                </p>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+    SCRIPTS
+    ========================================== -->
+    <script>
+        // ==========================================
+        // TOGGLE SERVICE
+        // ==========================================
+        function toggleService(element) {
+            const checkbox = element.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            element.classList.toggle('selected');
+        }
+
+        // ==========================================
+        // SHOW TOAST
+        // ==========================================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type}`;
+
+            const icons = {
+                success: '✅',
+                error: '❌',
+                info: 'ℹ️'
+            };
+
+            toast.innerHTML = `
+                        <span style="font-size:1.2rem;">${icons[type] || 'ℹ️'}</span>
+                        <span>${message}</span>
+                        <span class="close-toast" onclick="this.parentElement.remove()">✕</span>
+                    `;
+
+            container.appendChild(toast);
+
+            // Auto-remover após 6 segundos
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(80px)';
+                    setTimeout(() => toast.remove(), 400);
+                }
+            }, 6000);
+        }
+
+        // ==========================================
+        // SET LOADING
+        // ==========================================
+        function setLoading(loading) {
+            const btn = document.getElementById('submitBtn');
+            if (loading) {
+                btn.classList.add('loading');
+                btn.disabled = true;
+            } else {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        }
+
+        // ==========================================
+        // 🔥 ENVIAR ORÇAMENTO PARA FIREBASE
+        // ==========================================
+        function enviarOrcamento(event) {
+            event.preventDefault();
+
+            // ==========================================
+            // VALIDAÇÕES
+            // ==========================================
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const tipoEvento = document.getElementById('tipoEvento').value;
+            const convidados = document.getElementById('convidados').value;
+            const dataEvento = document.getElementById('dataEvento').value;
+            const orcamentoEstimado = document.getElementById('orcamentoEstimado').value.trim();
+            const mensagem = document.getElementById('mensagem').value.trim();
+
+            // Verificar serviços selecionados
+            const servicos = [];
+            document.querySelectorAll('.service-option input[type="checkbox"]:checked').forEach(cb => {
+                servicos.push(cb.value);
+            });
+
+            // Validações
+            if (!nome) {
+                showToast('Por favor, insira o seu nome completo.', 'error');
+                document.getElementById('nome').focus();
+                return;
+            }
+
+            if (nome.length < 3) {
+                showToast('O nome deve ter pelo menos 3 caracteres.', 'error');
+                document.getElementById('nome').focus();
+                return;
+            }
+
+            if (!email) {
+                showToast('Por favor, insira o seu email.', 'error');
+                document.getElementById('email').focus();
+                return;
+            }
+
+            if (!email.includes('@') || !email.includes('.')) {
+                showToast('Por favor, insira um email válido.', 'error');
+                document.getElementById('email').focus();
+                return;
+            }
+
+            if (!telefone) {
+                showToast('Por favor, insira o seu telefone.', 'error');
+                document.getElementById('telefone').focus();
+                return;
+            }
+
+            if (telefone.length < 9) {
+                showToast('Por favor, insira um telefone válido.', 'error');
+                document.getElementById('telefone').focus();
+                return;
+            }
+
+            if (!tipoEvento) {
+                showToast('Por favor, selecione o tipo de evento.', 'error');
+                document.getElementById('tipoEvento').focus();
+                return;
+            }
+
+            if (!convidados || convidados < 1) {
+                showToast('Por favor, insira o número de convidados.', 'error');
+                document.getElementById('convidados').focus();
+                return;
+            }
+
+            if (!dataEvento) {
+                showToast('Por favor, selecione a data do evento.', 'error');
+                document.getElementById('dataEvento').focus();
+                return;
+            }
+
+            // Verificar se a data é futura
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            const dataSelecionada = new Date(dataEvento + 'T00:00:00');
+
+            if (dataSelecionada < hoje) {
+                showToast('A data do evento deve ser futura.', 'error');
+                document.getElementById('dataEvento').focus();
+                return;
+            }
+
+            if (servicos.length === 0) {
+                showToast('Por favor, selecione pelo menos um serviço.', 'error');
+                return;
+            }
+
+            // ==========================================
+            // SALVAR NO FIREBASE
+            // ==========================================
+            setLoading(true);
+
+            // Gerar ID único para o orçamento
+            const orcamentoRef = database.ref('orcamentos').push();
+
+            const dadosOrcamento = {
+                id: orcamentoRef.key,
+                nome: nome,
+                email: email,
+                telefone: telefone,
+                tipoEvento: tipoEvento,
+                convidados: parseInt(convidados),
+                dataEvento: dataEvento,
+                orcamentoEstimado: orcamentoEstimado || 'Não informado',
+                servicos: servicos,
+                mensagem: mensagem || 'Sem mensagem adicional',
+                status: 'pendente',
+                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                userId: auth.currentUser ? auth.currentUser.uid : null,
+                userEmail: auth.currentUser ? auth.currentUser.email : null
+            };
+
+            orcamentoRef.set(dadosOrcamento)
+                .then(() => {
+                    setLoading(false);
+
+                    // Enviar notificação por email (simulado)
+                    console.log('📧 Notificação enviada para:', email);
+                    console.log('📋 Orçamento ID:', orcamentoRef.key);
+
+                    showToast('✅ Orçamento enviado com sucesso! Entraremos em contacto em breve.', 'success');
+
+                    // Limpar formulário
+                    document.getElementById('orcamentoForm').reset();
+                    document.querySelectorAll('.service-option').forEach(el => {
+                        el.classList.remove('selected');
+                        el.querySelector('input[type="checkbox"]').checked = false;
+                    });
+
+                    // Mostrar resumo do orçamento
+                    setTimeout(() => {
+                        showToast(`📋 Resumo: ${servicos.length} serviço(s) selecionado(s) para ${convidados} pessoas`, 'info');
+                    }, 500);
+                })
+                .catch(error => {
+                    setLoading(false);
+                    console.error('Erro ao salvar orçamento:', error);
+                    showToast('❌ Erro ao enviar orçamento. Tente novamente.', 'error');
+                });
+        }
+
+        // ==========================================
+        // PREENCHER DADOS DO UTILIZADOR LOGADO
+        // ==========================================
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // Preencher email automaticamente
+                const emailInput = document.getElementById('email');
+                if (emailInput && user.email) {
+                    emailInput.value = user.email;
+                }
+
+                // Preencher nome se disponível
+                const nomeInput = document.getElementById('nome');
+                if (nomeInput && user.displayName) {
+                    nomeInput.value = user.displayName;
+                }
+
+                // Buscar dados adicionais do utilizador
+                database.ref('users/' + user.uid).once('value')
+                    .then(snapshot => {
+                        const data = snapshot.val();
+                        if (data) {
+                            if (data.phone && document.getElementById('telefone')) {
+                                document.getElementById('telefone').value = data.phone;
+                            }
+                        }
+                    })
+                    .catch(() => {});
+            }
+        });
+
+        // ==========================================
+        // MASCARAR TELEFONE
+        // ==========================================
+        document.getElementById('telefone')?.addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length > 12) value = value.slice(0, 12);
+
+            if (value.length > 3) {
+                value = '+' + value.slice(0, 3) + ' ' + value.slice(3);
+            }
+            if (value.length > 8) {
+                value = value.slice(0, 8) + ' ' + value.slice(8);
+            }
+
+            this.value = value;
+        });
+
+        // ==========================================
+        // VALIDAÇÃO DE EMAIL EM TEMPO REAL
+        // ==========================================
+        document.getElementById('email')?.addEventListener('blur', function() {
+            const email = this.value.trim();
+            if (email && (!email.includes('@') || !email.includes('.'))) {
+                this.classList.add('error');
+                this.classList.remove('success');
+            } else if (email) {
+                this.classList.remove('error');
+                this.classList.add('success');
+            }
+        });
+
+        // ==========================================
+        // VALIDAÇÃO DE DATA MÍNIMA (hoje)
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const dataInput = document.getElementById('dataEvento');
+            if (dataInput) {
+                const hoje = new Date();
+                const ano = hoje.getFullYear();
+                const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+                const dia = String(hoje.getDate()).padStart(2, '0');
+                dataInput.min = `${ano}-${mes}-${dia}`;
+            }
+        });
+    </script>
+
+</body>
+</html>

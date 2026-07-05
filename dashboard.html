@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Delícias da Kandengue</title>
+<link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
+    <!-- ========================================== -->
+    <!-- 🔥 FIREBASE SDKs -->
+    <!-- ========================================== -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js">
+    </script>
+
+    <!-- ========================================== -->
+    <!-- 🔥 CONFIGURAÇÃO FIREBASE -->
+    <!-- ========================================== -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIt7yIRQb8_MeXmVrnpQCCQUD5uXGhvNU",
+            authDomain: "delicias-91228.firebaseapp.com",
+            databaseURL: "https://delicias-91228-default-rtdb.firebaseio.com",
+            projectId: "delicias-91228",
+            storageBucket: "delicias-91228.firebasestorage.app",
+            messagingSenderId: "163923093683",
+            appId: "1:163923093683:web:82660c6097ecca35dda8c6",
+            measurementId: "G-3JF00F4X1G"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        console.log('🔥 Firebase inicializado!');
+    </script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================
+           RESET & GLOBAL
+        ========================================== */
+        :root {
+            --primary: #c0392b;
+            --gold: #f1c40f;
+            --dark: #1a1a2e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #faf8f5;
+            padding-top: 76px;
+        }
+
+        /* ==========================================
+           NAVBAR
+        ========================================== */
+        .navbar {
+            background: rgba(26, 26, 46, 0.97) !important;
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            border-bottom: 2px solid rgba(241, 196, 15, 0.12);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand img {
+            width: 45px;
+        }
+
+        .navbar-brand span {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .navbar-brand span .gold {
+            color: var(--gold);
+        }
+
+        .nav-link {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.75) !important;
+            transition: color 0.3s ease;
+            padding: 8px 14px !important;
+            border-radius: 8px;
+        }
+        .nav-link:hover {
+            color: var(--gold) !important;
+            background: rgba(241, 196, 15, 0.08);
+        }
+        .nav-link.active {
+            color: var(--gold) !important;
+            background: rgba(241, 196, 15, 0.1);
+        }
+
+        .user-avatar-nav {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-decoration: none;
+            overflow: hidden;
+        }
+        .user-avatar-nav img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .user-avatar-nav:hover {
+            transform: scale(1.08);
+            border-color: var(--gold);
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            padding: 12px 0;
+            z-index: 1060;
+            animation: fadeInDown 0.3s ease;
+        }
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .profile-dropdown .dropdown-header {
+            padding: 8px 20px 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .profile-dropdown .dropdown-header .name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .profile-dropdown .dropdown-header .email {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+
+        .profile-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .profile-dropdown a:hover {
+            background: #f8f9fa;
+            color: var(--gold);
+        }
+        .profile-dropdown .divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 6px 0;
+        }
+        .profile-dropdown .logout-btn {
+            color: #e74c3c;
+        }
+        .profile-dropdown .logout-btn:hover {
+            color: #c0392b;
+            background: #fde8e8;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==========================================
+           DASHBOARD HEADER
+        ========================================== */
+        .dashboard-header {
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            color: #fff;
+            padding: 30px 0;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            overflow: hidden;
+        }
+        .dashboard-header .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-back {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        .btn-logout {
+            padding: 8px 20px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .btn-logout:hover {
+            background: #c0392b;
+            color: #fff;
+        }
+
+        /* ==========================================
+           TABS
+        ========================================== */
+        .nav-tabs .nav-link {
+            color: #6c757d;
+            border: none;
+            padding: 12px 24px;
+            font-weight: 500;
+            border-radius: 12px;
+            margin-right: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        .nav-tabs .nav-link:hover {
+            background: rgba(241, 196, 15, 0.08);
+            color: var(--gold);
+        }
+        .nav-tabs .nav-link.active {
+            background: var(--gold);
+            color: var(--dark);
+            font-weight: 600;
+        }
+        .nav-tabs .nav-link i {
+            margin-right: 8px;
+        }
+
+        /* ==========================================
+           CARDS DE GESTÃO
+        ========================================== */
+        .card-gestao {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: 0.3s;
+        }
+        .card-gestao:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-gestao .card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-gestao .card-title .badge-count {
+            background: var(--gold);
+            color: var(--dark);
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+        }
+
+        /* ==========================================
+           TABELAS
+        ========================================== */
+        .table-gestao {
+            font-size: 0.9rem;
+        }
+        .table-gestao th {
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid #f0f0f0;
+            padding: 12px 8px;
+        }
+        .table-gestao td {
+            padding: 12px 8px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .table-gestao .btn-actions {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            margin: 0 2px;
+            border: none;
+            transition: 0.3s;
+        }
+        .table-gestao .btn-actions:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-actions.btn-danger {
+            background: #fee;
+            color: #e74c3c;
+        }
+        .btn-actions.btn-danger:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .btn-actions.btn-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .btn-actions.btn-warning:hover {
+            background: #ffc107;
+            color: #fff;
+        }
+
+        .btn-actions.btn-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .btn-actions.btn-success:hover {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .btn-actions.btn-info {
+            background: #cce5ff;
+            color: #004085;
+        }
+        .btn-actions.btn-info:hover {
+            background: #0d6efd;
+            color: #fff;
+        }
+
+        .btn-actions.btn-primary {
+            background: #d4edda;
+            color: #155724;
+        }
+        .btn-actions.btn-primary:hover {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: #6c757d;
+        }
+        .empty-state i {
+            font-size: 3rem;
+            opacity: 0.3;
+            margin-bottom: 15px;
+        }
+
+        /* ==========================================
+           STATUS BADGES
+        ========================================== */
+        .status-badge {
+            padding: 3px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .status-badge.pendente {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-badge.aprovado {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-badge.rejeitado {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status-badge.em-andamento {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        /* ==========================================
+           MODAIS
+        ========================================== */
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        .modal-header {
+            border-bottom: 1px solid #f0f0f0;
+            padding: 20px 25px;
+        }
+        .modal-body {
+            padding: 25px;
+        }
+        .modal-footer {
+            border-top: 1px solid #f0f0f0;
+            padding: 15px 25px;
+        }
+
+        .form-control-modal {
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            padding: 12px 16px;
+            transition: 0.3s;
+        }
+        .form-control-modal:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.08);
+        }
+
+        /* ==========================================
+           TOAST
+        ========================================== */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 380px;
+        }
+        .custom-toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+            border-left: 4px solid var(--gold);
+            animation: slideInRight 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+        .custom-toast.success {
+            border-left-color: #27ae60;
+        }
+        .custom-toast.error {
+            border-left-color: #e74c3c;
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(80px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ==========================================
+           RESPONSIVIDADE
+        ========================================== */
+        @media (max-width: 768px) {
+            .dashboard-header .row {
+                flex-direction: column;
+                text-align: center;
+            }
+            .dashboard-header .avatar {
+                margin: 0 auto;
+            }
+            .nav-tabs .nav-link {
+                padding: 8px 14px;
+                font-size: 0.75rem;
+            }
+            .nav-tabs .nav-link i {
+                margin-right: 4px;
+            }
+            .table-gestao {
+                font-size: 0.75rem;
+            }
+            .table-gestao .btn-actions {
+                padding: 2px 6px;
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+         TOAST
+    ========================================== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ==========================================
+         NAVBAR
+    ========================================== -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="media/imagens/Copilot_20251027_215018d.png" alt="Logo">
+                <span>Delícias <span class="gold">Kandengue</span></span>
+            </a>
+
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="configuracoes.html">Configurações</a></li>
+                    <li class="nav-item ms-lg-2" id="authSection"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==========================================
+         OFFCANVAS MOBILE
+    ========================================== -->
+    <div class="offcanvas offcanvas-end text-bg-dark d-lg-none" tabindex="-1"
+    style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #2d2d44 100%); z-index: 9999999 !important;"
+    id="offcanvasNavbar">
+    <div class="offcanvas-header">
+        <img src="media/imagens/Copilot_20251027_215018d.png" width="50px" alt="Logo">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="index.html" onclick="closeOffcanvas()">Início</a></li>
+            <li class="nav-item"><a class="nav-link active" href="dashboard.html" onclick="closeOffcanvas()">Dashboard</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="configuracoes.html" onclick="closeOffcanvas()">Configurações</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="login.html" onclick="closeOffcanvas()">Login</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ==========================================
+     DASHBOARD HEADER
+========================================== -->
+<div class="dashboard-header">
+    <div class="container">
+        <div class="row align-items-center g-3">
+            <div class="col-md-6 d-flex align-items-center gap-4">
+                <div class="avatar" id="userAvatar">U</div>
+                <div>
+                    <h2 id="userName" style="font-family: 'Playfair Display', serif;">Utilizador</h2>
+                    <p class="text-light opacity-75" id="userEmail">email@email.com</p>
+                    <span class="badge bg-warning text-dark" id="userRole">Utilizador</span>
+                </div>
+            </div>
+            <div class="col-md-6 text-md-end d-flex gap-2 justify-content-md-end flex-wrap">
+                <a href="index.html" class="btn-back"><i class="bi bi-house"></i> Início</a>
+                <button onclick="logoutUser()" class="btn-logout"><i class="bi bi-box-arrow-right"></i> Sair</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     TABS
+========================================== -->
+<div class="container">
+    <ul class="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-depoimentos" data-bs-toggle="tab" data-bs-target="#depoimentos"
+            type="button" role="tab">
+            <i class="bi bi-chat-dots"></i> Depoimentos
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-galeria" data-bs-toggle="tab" data-bs-target="#galeria" type="button"
+        role="tab">
+        <i class="bi bi-images"></i> Galeria
+    </button>
+</li>
+<li class="nav-item" role="presentation">
+    <button class="nav-link" id="tab-servicos" data-bs-toggle="tab" data-bs-target="#servicos" type="button"
+    role="tab">
+    <i class="bi bi-grid"></i> Serviços
+</button>
+</li>
+<li class="nav-item" role="presentation">
+    <button class="nav-link" id="tab-orcamentos" data-bs-toggle="tab" data-bs-target="#orcamentos" type="button"
+    role="tab">
+    <i class="bi bi-calculator"></i> Orçamentos
+</button>
+</li>
+<li class="nav-item" role="presentation">
+    <button class="nav-link" id="tab-utilizadores" data-bs-toggle="tab" data-bs-target="#utilizadores"
+    type="button" role="tab">
+    <i class="bi bi-people"></i> Utilizadores
+</button>
+</li>
+</ul>
+
+<!-- ==========================================
+     TAB CONTENT
+========================================== -->
+<div class="tab-content">
+
+    <!-- ==========================================
+     DEPOIMENTOS
+    ========================================== -->
+    <div class="tab-pane fade show active" id="depoimentos" role="tabpanel">
+        <div class="card-gestao">
+            <div class="card-title">
+                <span><i class="bi bi-chat-dots text-warning"></i> Gestão de Depoimentos</span>
+                <span class="badge-count" id="totalDepoimentos">0</span>
+            </div>
+            <div id="depoimentosList">
+                <div class="empty-state">
+                    <i class="bi bi-chat-dots"></i>
+                    <p>Carregando depoimentos...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+     GALERIA
+    ========================================== -->
+    <div class="tab-pane fade" id="galeria" role="tabpanel">
+        <div class="card-gestao">
+            <div class="card-title">
+                <span><i class="bi bi-images text-warning"></i> Gestão da Galeria</span>
+                <button class="btn btn-warning btn-sm" onclick="abrirModalGaleria()">
+                    <i class="bi bi-plus-circle"></i> Adicionar
+                </button>
+            </div>
+            <div id="galeriaList">
+                <div class="empty-state">
+                    <i class="bi bi-images"></i>
+                    <p>Carregando imagens...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+     SERVIÇOS
+    ========================================== -->
+    <div class="tab-pane fade" id="servicos" role="tabpanel">
+        <div class="card-gestao">
+            <div class="card-title">
+                <span><i class="bi bi-grid text-warning"></i> Gestão de Serviços</span>
+                <button class="btn btn-warning btn-sm" onclick="abrirModalServico()">
+                    <i class="bi bi-plus-circle"></i> Adicionar
+                </button>
+            </div>
+            <div id="servicosList">
+                <div class="empty-state">
+                    <i class="bi bi-grid"></i>
+                    <p>Carregando serviços...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+     ORÇAMENTOS
+    ========================================== -->
+    <div class="tab-pane fade" id="orcamentos" role="tabpanel">
+        <div class="card-gestao">
+            <div class="card-title">
+                <span><i class="bi bi-calculator text-warning"></i> Gestão de Orçamentos</span>
+                <span class="badge-count" id="totalOrcamentos">0</span>
+            </div>
+            <div id="orcamentosList">
+                <div class="empty-state">
+                    <i class="bi bi-calculator"></i>
+                    <p>Carregando orçamentos...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+     UTILIZADORES
+    ========================================== -->
+    <div class="tab-pane fade" id="utilizadores" role="tabpanel">
+        <div class="card-gestao">
+            <div class="card-title">
+                <span><i class="bi bi-people text-warning"></i> Gestão de Utilizadores</span>
+                <span class="badge-count" id="totalUtilizadores">0</span>
+            </div>
+            <div id="utilizadoresList">
+                <div class="empty-state">
+                    <i class="bi bi-people"></i>
+                    <p>Carregando utilizadores...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<!-- ==========================================
+     MODAL GALERIA
+========================================== -->
+<div class="modal fade" id="modalGaleria" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-image text-warning"></i> Adicionar/Editar Imagem</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formGaleria">
+                    <input type="hidden" id="galeriaKey">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Título</label>
+                        <input type="text" class="form-control-modal form-control" id="galeriaTitulo"
+                        placeholder="Título da imagem" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">URL da Imagem</label>
+                        <input type="url" class="form-control-modal form-control" id="galeriaUrl"
+                        placeholder="https://exemplo.com/imagem.jpg" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Descrição</label>
+                        <input type="text" class="form-control-modal form-control" id="galeriaDescricao"
+                        placeholder="Breve descrição">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning" onclick="salvarGaleria()"><i class="bi bi-save"></i>
+                Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL SERVIÇO
+========================================== -->
+<div class="modal fade" id="modalServico" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-grid text-warning"></i> Adicionar/Editar Serviço</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formServico">
+                    <input type="hidden" id="servicoKey">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nome do Serviço</label>
+                        <input type="text" class="form-control-modal form-control" id="servicoNome"
+                        placeholder="Ex: Casamentos" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Descrição</label>
+                        <textarea class="form-control-modal form-control" id="servicoDescricao" rows="2"
+                        placeholder="Descrição do serviço" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Preço</label>
+                        <input type="text" class="form-control-modal form-control" id="servicoPreco"
+                        placeholder="Ex: A partir de 15.000 Kz/pessoa" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Ícone (Bootstrap)</label>
+                        <input type="text" class="form-control-modal form-control" id="servicoIcone"
+                        placeholder="Ex: bi-heart-fill" value="bi-star">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning" onclick="salvarServico()"><i class="bi bi-save"></i>
+                Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL RESPOSTA ORÇAMENTO
+========================================== -->
+<div class="modal fade" id="modalRespostaOrcamento" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-reply text-warning"></i> Responder Orçamento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formRespostaOrcamento">
+                    <input type="hidden" id="orcamentoRespostaKey">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Cliente</label>
+                        <p id="orcamentoClienteNome" class="fw-bold mb-0"></p>
+                        <p id="orcamentoClienteEmail" class="text-muted small"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Sua Resposta</label>
+                        <textarea class="form-control-modal form-control" id="orcamentoResposta" rows="4"
+                        placeholder="Digite sua resposta para o orçamento..." required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Status</label>
+                        <select class="form-control-modal form-control" id="orcamentoStatus">
+                            <option value="pendente">Pendente</option>
+                            <option value="aprovado">Aprovado</option>
+                            <option value="rejeitado">Rejeitado</option>
+                            <option value="em-andamento">Em Andamento</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="enviarRespostaOrcamento()">
+                    <i class="bi bi-send"></i> Enviar Resposta
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     SCRIPTS
+========================================== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script>
+    // ==========================================
+    // AUTENTICAÇÃO
+    // ==========================================
+    const authSection = document.getElementById('authSection');
+
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Verificar se é admin (apenas manuelpumba8@gmail.com)
+        const isAdmin = user.email === 'manuelpumba8@gmail.com';
+        if (!isAdmin) {
+            showToast('⚠️ Acesso restrito a administradores.', 'error');
+            setTimeout(() => window.location.href = 'index.html', 2000);
+            return;
+        }
+
+        const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+        const initial = displayName.charAt(0).toUpperCase();
+
+        document.getElementById('userName').textContent = displayName;
+        document.getElementById('userEmail').textContent = user.email;
+        document.getElementById('userRole').textContent = '👑 Administrador';
+
+        const avatar = document.getElementById('userAvatar');
+        if (user.photoURL) {
+            avatar.innerHTML = `<img src="${user.photoURL}" alt="${displayName}">`;
+        } else {
+            avatar.textContent = initial;
+        }
+
+        authSection.innerHTML = `
+                    <div style="position: relative;">
+                        <a href="#" class="user-avatar-nav" onclick="toggleProfileDropdown(event)" title="${displayName}">
+                            ${user.photoURL ? `<img src="${user.photoURL}">` : initial}
+                        </a>
+                        <div class="profile-dropdown" id="profileDropdown">
+                            <div class="dropdown-header">
+                                <div class="name">${displayName}</div>
+                                <div class="email">${user.email}</div>
+                            </div>
+                            <div class="divider"></div>
+                            <a href="dashboard.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                            <a href="configuracoes.html"><i class="bi bi-gear"></i> Configurações</a>
+                            <div class="divider"></div>
+                            <a href="#" onclick="logoutUser(event)" class="logout-btn"><i class="bi bi-box-arrow-right"></i> Sair</a>
+                        </div>
+                    </div>
+                `;
+
+        // Carregar dados
+        carregarDepoimentos();
+        carregarGaleria();
+        carregarServicos();
+        carregarOrcamentos();
+        carregarUtilizadores();
+    });
+
+    function toggleProfileDropdown(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown) dropdown.classList.toggle('show');
+    }
+
+    function logoutUser(event) {
+        if (event) event.preventDefault();
+        if (confirm('Tem a certeza que deseja sair?')) {
+            auth.signOut().then(() => {
+                showToast('Logout efetuado!', 'success');
+                window.location.href = 'index.html';
+            }).catch(error => {
+                showToast('Erro: ' + error.message, 'error');
+            });
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('profileDropdown');
+        const avatar = document.querySelector('.user-avatar-nav');
+        if (dropdown && avatar && !avatar.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    function closeOffcanvas() {
+        const offcanvas = document.getElementById('offcanvasNavbar');
+        if (!offcanvas) return;
+        if (typeof bootstrap !== 'undefined') {
+            try {
+                const bs = bootstrap.Offcanvas.getInstance(offcanvas);
+                if (bs) { bs.hide(); return; }
+                new bootstrap.Offcanvas(offcanvas).hide();
+                return;
+            } catch (e) {}
+        }
+        offcanvas.classList.remove('show');
+        document.querySelectorAll('.offcanvas-backdrop').forEach(el => el.remove());
+        document.body.classList.remove('offcanvas-open');
+        document.body.style.overflow = '';
+    }
+
+    // ==========================================
+    // TOAST
+    // ==========================================
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `custom-toast ${type}`;
+        const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+        toast.innerHTML = `
+                    <span>${icons[type] || 'ℹ️'}</span>
+                    <span>${message}</span>
+                    <span style="cursor:pointer;margin-left:auto;font-weight:700;" onclick="this.parentElement.remove()">✕</span>
+                `;
+        container.appendChild(toast);
+        setTimeout(() => { if (toast.parentElement) toast.remove(); }, 5000);
+    }
+
+    // ==========================================
+    // 🔥 CARREGAR DEPOIMENTOS
+    // ==========================================
+    function carregarDepoimentos() {
+        const container = document.getElementById('depoimentosList');
+        database.ref('depoimentos').orderByChild('createdAt').once('value').then(snapshot => {
+            const depoimentos = snapshot.val();
+            const total = document.getElementById('totalDepoimentos');
+            if (depoimentos) {
+                const keys = Object.keys(depoimentos);
+                total.textContent = keys.length;
+                let html = `
+                            <div class="table-responsive">
+                                <table class="table table-gestao">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Estrelas</th>
+                                            <th>Mensagem</th>
+                                            <th>Status</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                `;
+                keys.reverse().forEach(key => {
+                    const d = depoimentos[key];
+                    const estrelas = '⭐'.repeat(d.estrelas || 5);
+                    const status = d.aprovado ?
+                        '<span class="status-badge aprovado">✅ Aprovado</span>' :
+                        '<span class="status-badge pendente">⏳ Pendente</span>';
+                    html += `
+                                <tr>
+                                    <td><strong>${d.nome}</strong></td>
+                                    <td>${estrelas}</td>
+                                    <td>${d.mensagem.substring(0, 60)}${d.mensagem.length > 60 ? '...' : ''}</td>
+                                    <td>${status}</td>
+                                    <td>
+                                        ${!d.aprovado ? `<button class="btn-actions btn-success" onclick="aprovarDepoimento('${key}')"><i class="bi bi-check-lg"></i></button>` : ''}
+                                        <button class="btn-actions btn-danger" onclick="removerDepoimento('${key}')"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                            `;
+                });
+                html += '</tbody></table></div>';
+                container.innerHTML = html;
+            } else {
+                total.textContent = '0';
+                container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="bi bi-chat-dots"></i>
+                                <p>Nenhum depoimento ainda.</p>
+                            </div>
+                        `;
+            }
+        }).catch(() => {});
+    }
+
+    function aprovarDepoimento(key) {
+        if (confirm('Aprovar este depoimento?')) {
+            database.ref('depoimentos/' + key + '/aprovado').set(true)
+                .then(() => { showToast('✅ Depoimento aprovado!', 'success');
+                    carregarDepoimentos(); })
+                .catch(e => showToast('❌ Erro: ' + e.message, 'error'));
+        }
+    }
+
+    function removerDepoimento(key) {
+        if (confirm('Remover este depoimento?')) {
+            database.ref('depoimentos/' + key).remove()
+                .then(() => { showToast('🗑️ Depoimento removido!', 'success');
+                    carregarDepoimentos(); })
+                .catch(e => showToast('❌ Erro: ' + e.message, 'error'));
+        }
+    }
+
+    // ==========================================
+    // 🔥 CARREGAR GALERIA
+    // ==========================================
+    function carregarGaleria() {
+        const container = document.getElementById('galeriaList');
+        database.ref('galeria').once('value').then(snapshot => {
+            const imagens = snapshot.val();
+            if (imagens) {
+                let html = '<div class="row g-3">';
+                Object.keys(imagens).forEach(key => {
+                    const img = imagens[key];
+                    html += `
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <img src="${img.url}" class="card-img-top" style="height:150px;object-fit:cover;" alt="${img.titulo}">
+                                        <div class="card-body p-2">
+                                            <h6 class="mb-0">${img.titulo}</h6>
+                                            <small class="text-muted">${img.descricao || ''}</small>
+                                            <div class="mt-2">
+                                                <button class="btn-actions btn-warning btn-sm" onclick="editarGaleria('${key}')"><i class="bi bi-pencil"></i></button>
+                                                <button class="btn-actions btn-danger btn-sm" onclick="removerGaleria('${key}')"><i class="bi bi-trash"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                });
+                html += '</div>';
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="bi bi-images"></i>
+                                <p>Nenhuma imagem na galeria.</p>
+                                <button class="btn btn-warning btn-sm" onclick="abrirModalGaleria()"><i class="bi bi-plus-circle"></i> Adicionar</button>
+                            </div>
+                        `;
+            }
+        }).catch(() => {});
+    }
+
+    function abrirModalGaleria(key) {
+        const modal = new bootstrap.Modal(document.getElementById('modalGaleria'));
+        document.getElementById('galeriaKey').value = '';
+        document.getElementById('galeriaTitulo').value = '';
+        document.getElementById('galeriaUrl').value = '';
+        document.getElementById('galeriaDescricao').value = '';
+        if (key) {
+            database.ref('galeria/' + key).once('value').then(s => {
+                const data = s.val();
+                if (data) {
+                    document.getElementById('galeriaKey').value = key;
+                    document.getElementById('galeriaTitulo').value = data.titulo || '';
+                    document.getElementById('galeriaUrl').value = data.url || '';
+                    document.getElementById('galeriaDescricao').value = data.descricao || '';
+                }
+            });
+        }
+        modal.show();
+    }
+
+    function salvarGaleria() {
+        const key = document.getElementById('galeriaKey').value;
+        const titulo = document.getElementById('galeriaTitulo').value.trim();
+        const url = document.getElementById('galeriaUrl').value.trim();
+        const descricao = document.getElementById('galeriaDescricao').value.trim();
+
+        if (!titulo || !url) {
+            showToast('Preencha título e URL da imagem.', 'error');
+            return;
+        }
+
+        const data = { titulo, url, descricao, updatedAt: firebase.database.ServerValue.TIMESTAMP };
+
+        const ref = key ? database.ref('galeria/' + key) : database.ref('galeria').push();
+        ref.set(data).then(() => {
+            showToast('✅ Imagem salva!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modalGaleria')).hide();
+            carregarGaleria();
+        }).catch(e => showToast('❌ Erro: ' + e.message, 'error'));
+    }
+
+    function editarGaleria(key) {
+        abrirModalGaleria(key);
+    }
+
+    function removerGaleria(key) {
+        if (confirm('Remover esta imagem?')) {
+            database.ref('galeria/' + key).remove()
+                .then(() => { showToast('🗑️ Imagem removida!', 'success');
+                    carregarGaleria(); })
+                .catch(e => showToast('❌ Erro: ' + e.message, 'error'));
+        }
+    }
+
+    // ==========================================
+    // 🔥 CARREGAR SERVIÇOS
+    // ==========================================
+    function carregarServicos() {
+        const container = document.getElementById('servicosList');
+        database.ref('servicos').once('value').then(snapshot => {
+            const servicos = snapshot.val();
+            if (servicos) {
+                let html =
+                    '<div class="table-responsive"><table class="table table-gestao"><thead><tr><th>Nome</th><th>Descrição</th><th>Preço</th><th>Ações</th></tr></thead><tbody>';
+                Object.keys(servicos).forEach(key => {
+                    const s = servicos[key];
+                    html += `
+                                <tr>
+                                    <td><i class="bi ${s.icone || 'bi-star'} me-2"></i><strong>${s.nome}</strong></td>
+                                    <td>${s.descricao}</td>
+                                    <td>${s.preco}</td>
+                                    <td>
+                                        <button class="btn-actions btn-warning" onclick="editarServico('${key}')"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn-actions btn-danger" onclick="removerServico('${key}')"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                            `;
+                });
+                html += '</tbody></table></div>';
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="bi bi-grid"></i>
+                                <p>Nenhum serviço cadastrado.</p>
+                                <button class="btn btn-warning btn-sm" onclick="abrirModalServico()"><i class="bi bi-plus-circle"></i> Adicionar</button>
+                            </div>
+                        `;
+            }
+        }).catch(() => {});
+    }
+
+    function abrirModalServico(key) {
+        const modal = new bootstrap.Modal(document.getElementById('modalServico'));
+        document.getElementById('servicoKey').value = '';
+        document.getElementById('servicoNome').value = '';
+        document.getElementById('servicoDescricao').value = '';
+        document.getElementById('servicoPreco').value = '';
+        document.getElementById('servicoIcone').value = 'bi-star';
+        if (key) {
+            database.ref('servicos/' + key).once('value').then(s => {
+                const data = s.val();
+                if (data) {
+                    document.getElementById('servicoKey').value = key;
+                    document.getElementById('servicoNome').value = data.nome || '';
+                    document.getElementById('servicoDescricao').value = data.descricao || '';
+                    document.getElementById('servicoPreco').value = data.preco || '';
+                    document.getElementById('servicoIcone').value = data.icone || 'bi-star';
+                }
+            });
+        }
+        modal.show();
+    }
+
+    function salvarServico() {
+        const key = document.getElementById('servicoKey').value;
+        const nome = document.getElementById('servicoNome').value.trim();
+        const descricao = document.getElementById('servicoDescricao').value.trim();
+        const preco = document.getElementById('servicoPreco').value.trim();
+        const icone = document.getElementById('servicoIcone').value.trim() || 'bi-star';
+
+        if (!nome || !descricao || !preco) {
+            showToast('Preencha todos os campos.', 'error');
+            return;
+        }
+
+        const data = { nome, descricao, preco, icone };
+
+        const ref = key ? database.ref('servicos/' + key) : database.ref('servicos').push();
+        ref.set(data).then(() => {
+            showToast('✅ Serviço salvo!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modalServico')).hide();
+            carregarServicos();
+        }).catch(e => showToast('❌ Erro: ' + e.message, 'error'));
+    }
+
+    function editarServico(key) {
+        abrirModalServico(key);
+    }
+
+    function removerServico(key) {
+        if (confirm('Remover este serviço?')) {
+            database.ref('servicos/' + key).remove()
+                .then(() => { showToast('🗑️ Serviço removido!', 'success');
+                    carregarServicos(); })
+                .catch(e => showToast('❌ Erro: ' + e.message, 'error'));
+        }
+    }
+
+    // ==========================================
+    // 🔥 CARREGAR ORÇAMENTOS
+    // ==========================================
+    function carregarOrcamentos() {
+        const container = document.getElementById('orcamentosList');
+        database.ref('orcamentos').orderByChild('createdAt').once('value').then(snapshot => {
+            const orcamentos = snapshot.val();
+            const total = document.getElementById('totalOrcamentos');
+            if (orcamentos) {
+                const keys = Object.keys(orcamentos);
+                total.textContent = keys.length;
+                let html =
+                    '<div class="table-responsive"><table class="table table-gestao"><thead><tr><th>Cliente</th><th>Evento</th><th>Convidados</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
+                keys.reverse().forEach(key => {
+                    const o = orcamentos[key];
+                    const statusClass = o.status || 'pendente';
+                    const statusMap = {
+                        'pendente': 'pendente',
+                        'aprovado': 'aprovado',
+                        'rejeitado': 'rejeitado',
+                        'em-andamento': 'em-andamento'
+                    };
+                    html += `
+                                <tr>
+                                    <td><strong>${o.nome}</strong><br><small class="text-muted">${o.email}</small></td>
+                                    <td>${o.tipoEvento}</td>
+                                    <td>${o.convidados}</td>
+                                    <td>${o.dataEvento}</td>
+                                    <td><span class="status-badge ${statusMap[statusClass] || 'pendente'}">${statusClass}</span></td>
+                                    <td>
+                                        <button class="btn-actions btn-info" onclick="responderOrcamento('${key}')"><i class="bi bi-reply"></i></button>
+                                        <button class="btn-actions btn-danger" onclick="removerOrcamento('${key}')"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                            `;
+                });
+                html += '</tbody></table></div>';
+                container.innerHTML = html;
+            } else {
+                total.textContent = '0';
+                container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="bi bi-calculator"></i>
+                                <p>Nenhum orçamento recebido.</p>
+                            </div>
+                        `;
+            }
+        }).catch(() => {});
+    }
+
+    function responderOrcamento(key) {
+        database.ref('orcamentos/' + key).once('value').then(s => {
+            const data = s.val();
+            if (data) {
+                document.getElementById('orcamentoRespostaKey').value = key;
+                document.getElementById('orcamentoClienteNome').textContent = data.nome || 'Cliente';
+                document.getElementById('orcamentoClienteEmail').textContent = data.email || '';
+                document.getElementById('orcamentoResposta').value = '';
+                document.getElementById('orcamentoStatus').value = data.status || 'pendente';
+                new bootstrap.Modal(document.getElementById('modalRespostaOrcamento')).show();
+            }
+        });
+    }
+
+    function enviarRespostaOrcamento() {
+        const key = document.getElementById('orcamentoRespostaKey').value;
+        const resposta = document.getElementById('orcamentoResposta').value.trim();
+        const status = document.getElementById('orcamentoStatus').value;
+
+        if (!resposta) {
+            showToast('Digite uma resposta.', 'error');
+            return;
+        }
+
+        const data = {
+            resposta: resposta,
+            status: status,
+            respondidoEm: firebase.database.ServerValue.TIMESTAMP,
+            respondidoPor: auth.currentUser?.email || 'admin'
+        };
+
+        database.ref('orcamentos/' + key).update(data).then(() => {
+            showToast('✅ Resposta enviada com sucesso!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('modalRespostaOrcamento')).hide();
+            carregarOrcamentos();
+        }).catch(e => showToast('❌ Erro: ' + e.message, 'error'));
+    }
+
+    function removerOrcamento(key) {
+        if (confirm('Remover este orçamento?')) {
+            database.ref('orcamentos/' + key).remove()
+                .then(() => { showToast('🗑️ Orçamento removido!', 'success');
+                    carregarOrcamentos(); })
+                .catch(e => showToast('❌ Erro: ' + e.message, 'error'));
+        }
+    }
+
+    // ==========================================
+    // 🔥 CARREGAR UTILIZADORES
+    // ==========================================
+    function carregarUtilizadores() {
+        const container = document.getElementById('utilizadoresList');
+        database.ref('users').once('value').then(snapshot => {
+            const users = snapshot.val();
+            const total = document.getElementById('totalUtilizadores');
+            if (users) {
+                const keys = Object.keys(users);
+                total.textContent = keys.length;
+                let html =
+                    '<div class="table-responsive"><table class="table table-gestao"><thead><tr><th>Utilizador</th><th>Email</th><th>Provedor</th><th>Admin</th><th>Ações</th></tr></thead><tbody>';
+                keys.forEach(key => {
+                    const u = users[key];
+                    const isAdmin = u.email === 'manuelpumba8@gmail.com';
+                    html += `
+                                <tr>
+                                    <td><strong>${u.name || 'Utilizador'}</strong></td>
+                                    <td>${u.email}</td>
+                                    <td>${u.provider || 'email'}</td>
+                                    <td>${isAdmin ? '✅ Sim' : '❌ Não'}</td>
+                                    <td>
+                                        ${!isAdmin ? `<button class="btn-actions btn-warning" onclick="tornarAdmin('${key}')"><i class="bi bi-shield"></i></button>` : ''}
+                                        <button class="btn-actions btn-danger" onclick="removerUtilizador('${key}')"><i class="bi bi-person-x"></i></button>
+                                    </td>
+                                </tr>
+                            `;
+                });
+                html += '</tbody></table></div>';
+                container.innerHTML = html;
+            } else {
+                total.textContent = '0';
+                container.innerHTML = `
+                            <div class="empty-state">
+                                <i class="bi bi-people"></i>
+                                <p>Nenhum utilizador registado.</p>
+                            </div>
+                        `;
+            }
+        }).catch(() => {});
+    }
+
+    function tornarAdmin(key) {
+        if (confirm('Tornar este utilizador administrador?')) {
+            // Atualizar o role no database
+            database.ref('users/' + key + '/role').set('admin')
+                .then(() => {
+                    showToast('✅ Utilizador tornou-se administrador!', 'success');
+                    carregarUtilizadores();
+                })
+                .catch(e => showToast('❌ Erro: ' + e.message, 'error'));
+        }
+    }
+
+    function removerUtilizador(key) {
+        if (confirm('Remover este utilizador do banco de dados?')) {
+            database.ref('users/' + key).remove()
+                .then(() => { showToast('🗑️ Utilizador removido!', 'success');
+                    carregarUtilizadores(); })
+                .catch(e => showToast('❌ Erro: ' + e.message, 'error'));
+        }
+    }
+
+    // ==========================================
+    // NAVBAR ACTIVE LINK
+    // ==========================================
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function() {
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    console.log('✅ Dashboard carregado!');
+</script>
+</body>
+</html>

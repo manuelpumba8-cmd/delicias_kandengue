@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página não encontrada - Delícias da Kandengue</title>
+<link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #faf8f5 0%, #e9ecef 100%);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Fundo decorativo */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(241, 196, 15, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            animation: floatBg 25s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -40%;
+            left: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(192, 57, 43, 0.04) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            animation: floatBg 30s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatBg {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(-30px, 20px) scale(1.05);
+            }
+            50% {
+                transform: translate(20px, -30px) scale(0.95);
+            }
+            75% {
+                transform: translate(-20px, -10px) scale(1.02);
+            }
+        }
+
+        .error-container {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08);
+            padding: 60px 50px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .error-icon {
+            font-size: 6rem;
+            color: #f1c40f;
+            margin-bottom: 20px;
+            display: block;
+            animation: pulseIcon 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseIcon {
+            0%,
+            100% {
+                transform: scale(1) rotate(-3deg);
+            }
+            50% {
+                transform: scale(1.05) rotate(3deg);
+            }
+        }
+
+        .error-code {
+            font-family: 'Playfair Display', serif;
+            font-size: 8rem;
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .error-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #1a1a2e;
+            margin: 10px 0;
+        }
+
+        .error-text {
+            color: #6c757d;
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 36px;
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(26, 26, 46, 0.25);
+            color: #fff;
+        }
+
+        .btn-home i {
+            font-size: 1.2rem;
+        }
+
+        .btn-orcamento {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 36px;
+            background: #f1c40f;
+            color: #1a1a2e;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .btn-orcamento:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(241, 196, 15, 0.3);
+            color: #1a1a2e;
+        }
+
+        .error-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .error-links a {
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .error-links a:hover {
+            color: #f1c40f;
+        }
+
+        .error-links .separator {
+            color: #dee2e6;
+        }
+
+        /* ==========================================
+           RESPONSIVIDADE
+        ========================================== */
+        @media (max-width: 576px) {
+            .error-container {
+                padding: 40px 25px;
+                border-radius: 24px;
+            }
+
+            .error-code {
+                font-size: 5rem;
+            }
+
+            .error-icon {
+                font-size: 4rem;
+            }
+
+            .error-title {
+                font-size: 1.5rem;
+            }
+
+            .btn-home,
+            .btn-orcamento {
+                width: 100%;
+                justify-content: center;
+                margin-left: 0;
+            }
+
+            .error-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .error-links .separator {
+                display: none;
+            }
+
+            body::before,
+            body::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .error-container {
+                padding: 30px 18px;
+            }
+
+            .error-code {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="error-container">
+
+        <!-- Ícone -->
+        <span class="error-icon">
+            <i class="bi bi-emoji-frown"></i>
+        </span>
+
+        <!-- Código de erro -->
+        <div class="error-code">404</div>
+
+        <!-- Título -->
+        <h1 class="error-title">Página não encontrada</h1>
+
+        <!-- Texto -->
+        <p class="error-text">
+            Ops! A página que procura não existe ou foi removida.
+            <br>Mas não se preocupe, temos muitas outras opções deliciosas para si!
+        </p>
+
+        <!-- Botões -->
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            <a href="index.html" class="btn-home">
+                <i class="bi bi-house"></i> Voltar ao Início
+            </a>
+            <a href="orcamento.html" class="btn-orcamento">
+                <i class="bi bi-calculator"></i> Pedir Orçamento
+            </a>
+        </div>
+
+        <!-- Links úteis -->
+        <div class="error-links mt-4">
+            <a href="index.html">Início</a>
+            <span class="separator">|</span>
+            <a href="servicos.html">Serviços</a>
+            <span class="separator">|</span>
+            <a href="contato.html">Contato</a>
+            <span class="separator">|</span>
+            <a href="orcamento.html">Orçamento</a>
+        </div>
+
+        <!-- Mensagem adicional -->
+        <div class="mt-4">
+            <span class="text-muted small">
+                <i class="bi bi-arrow-left"></i> 
+                <a href="javascript:history.back()" style="color: #6c757d; text-decoration: none;">
+                    Voltar para a página anterior
+                </a>
+            </span>
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // REDIRECIONAR APÓS 30 SEGUNDOS
+        // ==========================================
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 30000);
+
+        console.log('🔍 Página 404 - Delícias da Kandengue');
+        console.log('📅 Redirecionamento automático em 30 segundos...');
+    </script>
+
+</body>
+</html>

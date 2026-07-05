@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - Delícias da Kandengue</title>
+<link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
+    <!-- ========================================== -->
+    <!-- 🔥 FIREBASE SDKs -->
+    <!-- ========================================== -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js">
+    </script>
+
+    <!-- ========================================== -->
+    <!-- 🔥 CONFIGURAÇÃO FIREBASE -->
+    <!-- ========================================== -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIt7yIRQb8_MeXmVrnpQCCQUD5uXGhvNU",
+            authDomain: "delicias-91228.firebaseapp.com",
+            databaseURL: "https://delicias-91228-default-rtdb.firebaseio.com",
+            projectId: "delicias-91228",
+            storageBucket: "delicias-91228.firebasestorage.app",
+            messagingSenderId: "163923093683",
+            appId: "1:163923093683:web:82660c6097ecca35dda8c6",
+            measurementId: "G-3JF00F4X1G"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        console.log('🔥 Firebase inicializado!');
+    </script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================
+           RESET & GLOBAL
+        ========================================== */
+        :root {
+            --primary: #c0392b;
+            --gold: #f1c40f;
+            --dark: #1a1a2e;
+            --cor-principal: #ffc107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #faf8f5;
+            padding-top: 76px;
+            min-height: 100vh;
+        }
+
+        /* ==========================================
+           NAVBAR
+        ========================================== */
+        .navbar {
+            background: rgba(26, 26, 46, 0.97) !important;
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            border-bottom: 2px solid rgba(241, 196, 15, 0.12);
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand img {
+            width: 45px;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand span {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .navbar-brand span .gold {
+            color: var(--gold);
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 8px;
+        }
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        .navbar-toggler-icon {
+            filter: invert(1);
+        }
+
+        .nav-link {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.75) !important;
+            transition: color 0.3s ease;
+            padding: 8px 14px !important;
+            border-radius: 8px;
+        }
+        .nav-link:hover {
+            color: var(--gold) !important;
+            background: rgba(241, 196, 15, 0.08);
+        }
+        .nav-link.active {
+            color: var(--gold) !important;
+            background: rgba(241, 196, 15, 0.1);
+        }
+
+        .user-avatar-nav {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-decoration: none;
+            overflow: hidden;
+        }
+        .user-avatar-nav img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .user-avatar-nav:hover {
+            transform: scale(1.08);
+            border-color: var(--gold);
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            padding: 12px 0;
+            z-index: 1060;
+            animation: fadeInDown 0.3s ease;
+        }
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .profile-dropdown .dropdown-header {
+            padding: 8px 20px 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .profile-dropdown .dropdown-header .name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .profile-dropdown .dropdown-header .email {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+
+        .profile-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .profile-dropdown a:hover {
+            background: #f8f9fa;
+            color: var(--gold);
+        }
+        .profile-dropdown .divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 6px 0;
+        }
+        .profile-dropdown .logout-btn {
+            color: #e74c3c;
+        }
+        .profile-dropdown .logout-btn:hover {
+            color: #c0392b;
+            background: #fde8e8;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==========================================
+           CONFIG HEADER
+        ========================================== */
+        .config-header {
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            color: #fff;
+            padding: 30px 0;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 30px;
+        }
+
+        .config-header .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            overflow: hidden;
+        }
+        .config-header .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-back {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        .btn-logout {
+            padding: 8px 20px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .btn-logout:hover {
+            background: #c0392b;
+            color: #fff;
+        }
+
+        /* ==========================================
+           CONFIG CARDS
+        ========================================== */
+        .config-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: 0.3s;
+            height: 100%;
+        }
+        .config-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .config-card .icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        .config-card .icon.warning {
+            background: rgba(241, 196, 15, 0.12);
+            color: #f1c40f;
+        }
+        .config-card .icon.danger {
+            background: rgba(231, 76, 60, 0.12);
+            color: #e74c3c;
+        }
+        .config-card .icon.info {
+            background: rgba(13, 110, 253, 0.12);
+            color: #0d6efd;
+        }
+        .config-card .icon.success {
+            background: rgba(39, 174, 96, 0.12);
+            color: #27ae60;
+        }
+        .config-card .icon.primary {
+            background: rgba(192, 57, 43, 0.12);
+            color: #c0392b;
+        }
+
+        .config-card h5 {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .config-card p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .form-control-config {
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            padding: 12px 16px;
+            transition: 0.3s;
+        }
+        .form-control-config:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.08);
+        }
+
+        /* ==========================================
+           TOAST
+        ========================================== */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 380px;
+        }
+        .custom-toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+            border-left: 4px solid var(--gold);
+            animation: slideInRight 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+        .custom-toast.success {
+            border-left-color: #27ae60;
+        }
+        .custom-toast.error {
+            border-left-color: #e74c3c;
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(80px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .badge-status {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge-status.online {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-status.offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* ==========================================
+           RESPONSIVIDADE
+        ========================================== */
+        @media (max-width: 768px) {
+            .config-header .row {
+                flex-direction: column;
+                text-align: center;
+            }
+            .config-header .avatar {
+                margin: 0 auto;
+            }
+            .config-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+         TOAST
+    ========================================== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ==========================================
+         NAVBAR
+    ========================================== -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="media/imagens/Copilot_20251027_215018d.png" alt="Logo">
+                <span>Delícias <span class="gold">Kandengue</span></span>
+            </a>
+
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="configuracoes.html">Configurações</a></li>
+                    <li class="nav-item ms-lg-2" id="authSection"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==========================================
+         OFFCANVAS MOBILE
+    ========================================== -->
+    <div class="offcanvas offcanvas-end text-bg-dark d-lg-none" tabindex="-1"
+    style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #2d2d44 100%); z-index: 9999999 !important;"
+    id="offcanvasNavbar">
+    <div class="offcanvas-header">
+        <img src="media/imagens/Copilot_20251027_215018d.png" width="50px" alt="Logo">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="index.html" onclick="closeOffcanvas()">Início</a></li>
+            <li class="nav-item"><a class="nav-link" href="dashboard.html" onclick="closeOffcanvas()">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link active" href="configuracoes.html" onclick="closeOffcanvas()">Configurações</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html" onclick="closeOffcanvas()">Login</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ==========================================
+     CONFIG HEADER
+========================================== -->
+<div class="config-header">
+    <div class="container">
+        <div class="row align-items-center g-3">
+            <div class="col-md-6 d-flex align-items-center gap-4">
+                <div class="avatar" id="userAvatar">U</div>
+                <div>
+                    <h2 id="userName" style="font-family: 'Playfair Display', serif;">Utilizador</h2>
+                    <p class="text-light opacity-75" id="userEmail">email@email.com</p>
+                    <span class="badge bg-warning text-dark" id="userRole">Utilizador</span>
+                </div>
+            </div>
+            <div class="col-md-6 text-md-end d-flex gap-2 justify-content-md-end flex-wrap">
+                <a href="index.html" class="btn-back"><i class="bi bi-house"></i> Início</a>
+                <button onclick="logoutUser()" class="btn-logout"><i class="bi bi-box-arrow-right"></i> Sair</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     CONFIGURAÇÕES
+========================================== -->
+<div class="container py-4">
+
+    <!-- Status do Firebase -->
+    <div class="mb-4">
+        <span class="badge-status online" id="firebaseStatus">
+            <i class="bi bi-check-circle-fill"></i> Firebase Conectado
+        </span>
+        <span class="ms-2 text-muted small" id="firebaseProject">delicias-91228</span>
+    </div>
+
+    <!-- Grid de Configurações -->
+    <div class="row g-4">
+
+        <!-- Perfil -->
+        <div class="col-md-4">
+            <div class="config-card">
+                <div class="icon warning"><i class="bi bi-person"></i></div>
+                <h5>Perfil</h5>
+                <p>Gerir informações da sua conta</p>
+                <button class="btn btn-outline-warning btn-sm w-100" onclick="abrirModalPerfil()">
+                    <i class="bi bi-pencil"></i> Editar Perfil
+                </button>
+            </div>
+        </div>
+
+        <!-- Segurança -->
+        <div class="col-md-4">
+            <div class="config-card">
+                <div class="icon danger"><i class="bi bi-shield-lock"></i></div>
+                <h5>Segurança</h5>
+                <p>Alterar senha e configurações de segurança</p>
+                <button class="btn btn-outline-danger btn-sm w-100" onclick="abrirModalSenha()">
+                    <i class="bi bi-key"></i> Alterar Senha
+                </button>
+            </div>
+        </div>
+
+        <!-- Notificações -->
+        <div class="col-md-4">
+            <div class="config-card">
+                <div class="icon info"><i class="bi bi-bell"></i></div>
+                <h5>Notificações</h5>
+                <p>Configurar preferências de notificações</p>
+                <button class="btn btn-outline-info btn-sm w-100" onclick="mostrarNotificacoes()">
+                    <i class="bi bi-gear"></i> Gerenciar
+                </button>
+            </div>
+        </div>
+
+        <!-- Backup -->
+        <div class="col-md-4">
+            <div class="config-card">
+                <div class="icon success"><i class="bi bi-database"></i></div>
+                <h5>Backup</h5>
+                <p>Exportar ou importar dados do site</p>
+                <button class="btn btn-outline-success btn-sm w-100" onclick="exportarDados()">
+                    <i class="bi bi-download"></i> Exportar
+                </button>
+            </div>
+        </div>
+
+        <!-- Limpar Cache -->
+        <div class="col-md-4">
+            <div class="config-card">
+                <div class="icon warning"><i class="bi bi-arrow-counterclockwise"></i></div>
+                <h5>Limpar Cache</h5>
+                <p>Limpar dados temporários do site</p>
+                <button class="btn btn-outline-warning btn-sm w-100" onclick="limparCache()">
+                    <i class="bi bi-trash"></i> Limpar
+                </button>
+            </div>
+        </div>
+
+        <!-- Sobre -->
+        <div class="col-md-4">
+            <div class="config-card">
+                <div class="icon primary"><i class="bi bi-info-circle"></i></div>
+                <h5>Sobre</h5>
+                <p>Versão e informações do sistema</p>
+                <div class="text-muted small">
+                    <strong>Versão:</strong> 2.0.0<br>
+                    <strong>Firebase:</strong> delicias-91228<br>
+                    <strong>Status:</strong> <span class="text-success">✅ Online</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==========================================
+         CONFIGURAÇÕES DO SITE
+    ========================================== -->
+    <div class="mt-4">
+        <div class="config-card">
+            <h5><i class="bi bi-globe text-warning"></i> Configurações do Site</h5>
+            <hr>
+            <form id="configForm">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Nome do Site</label>
+                        <input type="text" class="form-control-config form-control" id="siteName" value="Delícias da Kandengue">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Email de Contato</label>
+                        <input type="email" class="form-control-config form-control" id="siteEmail" value="manuelpumba8@gmail.com">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Telefone</label>
+                        <input type="text" class="form-control-config form-control" id="sitePhone" value="+244 956 75 98 13">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Endereço</label>
+                        <input type="text" class="form-control-config form-control" id="siteAddress" value="Luanda, Angola">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Horário de Funcionamento</label>
+                        <input type="text" class="form-control-config form-control" id="siteHours" value="Seg-Sáb: 08:00 - 20:00">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Instagram</label>
+                        <input type="text" class="form-control-config form-control" id="siteInstagram" value="@delicias_kandengue">
+                    </div>
+                    <div class="col-12">
+                        <button type="button" class="btn btn-warning" onclick="salvarConfiguracoes()">
+                            <i class="bi bi-save"></i> Salvar Configurações
+                        </button>
+                        <button type="button" class="btn btn-secondary ms-2" onclick="resetarConfiguracoes()">
+                            <i class="bi bi-arrow-counterclockwise"></i> Restaurar Padrão
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================
+     ZONA DE PERIGO
+    ========================================== -->
+    <div class="mt-4">
+        <div class="config-card" style="border: 2px solid #e74c3c;">
+            <h5 class="text-danger"><i class="bi bi-exclamation-triangle"></i> Zona de Perigo</h5>
+            <hr>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <button class="btn btn-danger w-100" onclick="confirmarReset()">
+                        <i class="bi bi-arrow-counterclockwise"></i> Resetar Site
+                    </button>
+                    <p class="text-muted small mt-2">Remove todos os dados do site.</p>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-danger w-100" onclick="confirmarDelete()">
+                        <i class="bi bi-person-x"></i> Excluir Conta
+                    </button>
+                    <p class="text-muted small mt-2">Remove permanentemente sua conta.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ==========================================
+     MODAL PERFIL
+========================================== -->
+<div class="modal fade" id="modalPerfil" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-person text-warning"></i> Editar Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formPerfil">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nome</label>
+                        <input type="text" class="form-control-config form-control" id="perfilNome" placeholder="Seu nome">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        <input type="email" class="form-control-config form-control" id="perfilEmail" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Foto de Perfil (URL)</label>
+                        <input type="url" class="form-control-config form-control" id="perfilFoto" placeholder="https://exemplo.com/foto.jpg">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning" onclick="salvarPerfil()"><i class="bi bi-save"></i> Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL SENHA
+========================================== -->
+<div class="modal fade" id="modalSenha" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-key text-danger"></i> Alterar Senha</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formSenha">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Senha Atual</label>
+                        <input type="password" class="form-control-config form-control" id="senhaAtual" placeholder="Digite sua senha atual" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nova Senha</label>
+                        <input type="password" class="form-control-config form-control" id="novaSenha" placeholder="Mínimo 6 caracteres" required minlength="6">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Confirmar Nova Senha</label>
+                        <input type="password" class="form-control-config form-control" id="confirmarSenha" placeholder="Confirme a nova senha" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="alterarSenha()"><i class="bi bi-key"></i> Alterar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+<footer class="footer mt-5 py-4 text-center text-muted" style="border-top: 1px solid #e9ecef; background: #fff;">
+    <div class="container">
+        <p class="mb-0">© 2026 <strong>Delícias da Kandengue</strong> - Todos os direitos reservados</p>
+        <p class="mb-0 small">Desenvolvido com <i class="bi bi-heart-fill text-danger"></i> por <strong>FT Code</strong></p>
+    </div>
+</footer>
+
+<!-- ==========================================
+     SCRIPTS
+========================================== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script>
+    // ==========================================
+    // AUTENTICAÇÃO
+    // ==========================================
+    const authSection = document.getElementById('authSection');
+
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+        const initial = displayName.charAt(0).toUpperCase();
+
+        document.getElementById('userName').textContent = displayName;
+        document.getElementById('userEmail').textContent = user.email;
+        document.getElementById('userRole').textContent = user.email === 'manuelpumba8@gmail.com' ? '👑 Administrador' :
+            'Utilizador';
+
+        const avatar = document.getElementById('userAvatar');
+        if (user.photoURL) {
+            avatar.innerHTML = `<img src="${user.photoURL}" alt="${displayName}">`;
+        } else {
+            avatar.textContent = initial;
+        }
+
+        authSection.innerHTML = `
+                    <div style="position: relative;">
+                        <a href="#" class="user-avatar-nav" onclick="toggleProfileDropdown(event)" title="${displayName}">
+                            ${user.photoURL ? `<img src="${user.photoURL}">` : initial}
+                        </a>
+                        <div class="profile-dropdown" id="profileDropdown">
+                            <div class="dropdown-header">
+                                <div class="name">${displayName}</div>
+                                <div class="email">${user.email}</div>
+                            </div>
+                            <div class="divider"></div>
+                            <a href="dashboard.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                            <a href="configuracoes.html"><i class="bi bi-gear"></i> Configurações</a>
+                            <div class="divider"></div>
+                            <a href="#" onclick="logoutUser(event)" class="logout-btn"><i class="bi bi-box-arrow-right"></i> Sair</a>
+                        </div>
+                    </div>
+                `;
+    });
+
+    function toggleProfileDropdown(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown) dropdown.classList.toggle('show');
+    }
+
+    function logoutUser(event) {
+        if (event) event.preventDefault();
+        if (confirm('Tem a certeza que deseja sair?')) {
+            auth.signOut().then(() => {
+                showToast('Logout efetuado!', 'success');
+                window.location.href = 'index.html';
+            }).catch(error => {
+                showToast('Erro: ' + error.message, 'error');
+            });
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('profileDropdown');
+        const avatar = document.querySelector('.user-avatar-nav');
+        if (dropdown && avatar && !avatar.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    function closeOffcanvas() {
+        const offcanvas = document.getElementById('offcanvasNavbar');
+        if (!offcanvas) return;
+        if (typeof bootstrap !== 'undefined') {
+            try {
+                const bs = bootstrap.Offcanvas.getInstance(offcanvas);
+                if (bs) { bs.hide(); return; }
+                new bootstrap.Offcanvas(offcanvas).hide();
+                return;
+            } catch (e) {}
+        }
+        offcanvas.classList.remove('show');
+        document.querySelectorAll('.offcanvas-backdrop').forEach(el => el.remove());
+        document.body.classList.remove('offcanvas-open');
+        document.body.style.overflow = '';
+    }
+
+    // ==========================================
+    // TOAST
+    // ==========================================
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `custom-toast ${type}`;
+        const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+        toast.innerHTML = `
+                    <span>${icons[type] || 'ℹ️'}</span>
+                    <span>${message}</span>
+                    <span style="cursor:pointer;margin-left:auto;font-weight:700;" onclick="this.parentElement.remove()">✕</span>
+                `;
+        container.appendChild(toast);
+        setTimeout(() => { if (toast.parentElement) toast.remove(); }, 5000);
+    }
+
+    // ==========================================
+    // MODAIS
+    // ==========================================
+    function abrirModalPerfil() {
+        const user = auth.currentUser;
+        if (user) {
+            document.getElementById('perfilNome').value = user.displayName || '';
+            document.getElementById('perfilEmail').value = user.email || '';
+            document.getElementById('perfilFoto').value = user.photoURL || '';
+        }
+        new bootstrap.Modal(document.getElementById('modalPerfil')).show();
+    }
+
+    function abrirModalSenha() {
+        new bootstrap.Modal(document.getElementById('modalSenha')).show();
+    }
+
+    // ==========================================
+    // SALVAR PERFIL
+    // ==========================================
+    function salvarPerfil() {
+        const nome = document.getElementById('perfilNome').value.trim();
+        const foto = document.getElementById('perfilFoto').value.trim();
+
+        if (!nome) {
+            showToast('Por favor, insira um nome.', 'error');
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (user) {
+            user.updateProfile({
+                displayName: nome,
+                photoURL: foto || null
+            }).then(() => {
+                database.ref('users/' + user.uid + '/name').set(nome);
+                if (foto) {
+                    database.ref('users/' + user.uid + '/photoURL').set(foto);
+                }
+                showToast('✅ Perfil atualizado com sucesso!', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('modalPerfil')).hide();
+                // Recarregar
+                setTimeout(() => location.reload(), 1000);
+            }).catch(error => {
+                showToast('❌ Erro: ' + error.message, 'error');
+            });
+        }
+    }
+
+    // ==========================================
+    // ALTERAR SENHA
+    // ==========================================
+    function alterarSenha() {
+        const atual = document.getElementById('senhaAtual').value;
+        const nova = document.getElementById('novaSenha').value;
+        const confirmar = document.getElementById('confirmarSenha').value;
+
+        if (!atual || !nova || !confirmar) {
+            showToast('Preencha todos os campos.', 'error');
+            return;
+        }
+
+        if (nova.length < 6) {
+            showToast('A nova senha deve ter pelo menos 6 caracteres.', 'error');
+            return;
+        }
+
+        if (nova !== confirmar) {
+            showToast('As senhas não coincidem.', 'error');
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (user) {
+            // Re-autenticar primeiro
+            const credential = firebase.auth.EmailAuthProvider.credential(user.email, atual);
+            user.reauthenticateWithCredential(credential).then(() => {
+                user.updatePassword(nova).then(() => {
+                    showToast('✅ Senha alterada com sucesso!', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('modalSenha')).hide();
+                    document.getElementById('formSenha').reset();
+                }).catch(error => {
+                    showToast('❌ Erro: ' + error.message, 'error');
+                });
+            }).catch(error => {
+                showToast('❌ Senha atual incorreta.', 'error');
+            });
+        }
+    }
+
+    // ==========================================
+    // NOTIFICAÇÕES
+    // ==========================================
+    function mostrarNotificacoes() {
+        showToast('📱 Preferências de notificações em breve!', 'info');
+    }
+
+    // ==========================================
+    // EXPORTAR DADOS
+    // ==========================================
+    function exportarDados() {
+        database.ref().once('value').then(snapshot => {
+            const dados = snapshot.val();
+            const json = JSON.stringify(dados, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `backup_delicias_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('✅ Backup exportado com sucesso!', 'success');
+        }).catch(error => {
+            showToast('❌ Erro: ' + error.message, 'error');
+        });
+    }
+
+    // ==========================================
+    // LIMPAR CACHE
+    // ==========================================
+    function limparCache() {
+        if (confirm('Limpar cache do navegador?')) {
+            localStorage.clear();
+            sessionStorage.clear();
+            showToast('🗑️ Cache limpo com sucesso!', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+    }
+
+    // ==========================================
+    // SALVAR CONFIGURAÇÕES
+    // ==========================================
+    function salvarConfiguracoes() {
+        const data = {
+            siteName: document.getElementById('siteName').value,
+            siteEmail: document.getElementById('siteEmail').value,
+            sitePhone: document.getElementById('sitePhone').value,
+            siteAddress: document.getElementById('siteAddress').value,
+            siteHours: document.getElementById('siteHours').value,
+            siteInstagram: document.getElementById('siteInstagram').value,
+            updatedAt: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        database.ref('configuracoes').set(data).then(() => {
+            showToast('✅ Configurações salvas com sucesso!', 'success');
+        }).catch(error => {
+            showToast('❌ Erro: ' + error.message, 'error');
+        });
+    }
+
+    // ==========================================
+    // RESTAURAR PADRÃO
+    // ==========================================
+    function resetarConfiguracoes() {
+        if (confirm('Restaurar configurações padrão?')) {
+            document.getElementById('siteName').value = 'Delícias da Kandengue';
+            document.getElementById('siteEmail').value = 'manuelpumba8@gmail.com';
+            document.getElementById('sitePhone').value = '+244 956 75 98 13';
+            document.getElementById('siteAddress').value = 'Luanda, Angola';
+            document.getElementById('siteHours').value = 'Seg-Sáb: 08:00 - 20:00';
+            document.getElementById('siteInstagram').value = '@delicias_kandengue';
+            showToast('✅ Configurações restauradas!', 'success');
+        }
+    }
+
+    // ==========================================
+    // ZONA DE PERIGO
+    // ==========================================
+    function confirmarReset() {
+        if (confirm('⚠️ ATENÇÃO: Isto irá remover TODOS os dados do site. Continuar?')) {
+            if (confirm('Última chance! Tem a certeza?')) {
+                database.ref().remove().then(() => {
+                    showToast('🗑️ Todos os dados foram removidos!', 'success');
+                }).catch(error => {
+                    showToast('❌ Erro: ' + error.message, 'error');
+                });
+            }
+        }
+    }
+
+    function confirmarDelete() {
+        if (confirm('⚠️ Tem a certeza que deseja excluir sua conta permanentemente?')) {
+            const user = auth.currentUser;
+            if (user) {
+                // Re-autenticar primeiro
+                const senha = prompt('Digite sua senha para confirmar:');
+                if (!senha) {
+                    showToast('Operação cancelada.', 'info');
+                    return;
+                }
+                const credential = firebase.auth.EmailAuthProvider.credential(user.email, senha);
+                user.reauthenticateWithCredential(credential).then(() => {
+                    database.ref('users/' + user.uid).remove().then(() => {
+                        user.delete().then(() => {
+                            showToast('🗑️ Conta excluída com sucesso!', 'success');
+                            setTimeout(() => window.location.href = 'index.html', 1500);
+                        }).catch(error => {
+                            showToast('❌ Erro ao excluir: ' + error.message, 'error');
+                        });
+                    }).catch(error => {
+                        showToast('❌ Erro: ' + error.message, 'error');
+                    });
+                }).catch(() => {
+                    showToast('❌ Senha incorreta. Operação cancelada.', 'error');
+                });
+            }
+        }
+    }
+
+    // ==========================================
+    // CARREGAR CONFIGURAÇÕES
+    // ==========================================
+    database.ref('configuracoes').once('value').then(snapshot => {
+        const data = snapshot.val();
+        if (data) {
+            if (data.siteName) document.getElementById('siteName').value = data.siteName;
+            if (data.siteEmail) document.getElementById('siteEmail').value = data.siteEmail;
+            if (data.sitePhone) document.getElementById('sitePhone').value = data.sitePhone;
+            if (data.siteAddress) document.getElementById('siteAddress').value = data.siteAddress;
+            if (data.siteHours) document.getElementById('siteHours').value = data.siteHours;
+            if (data.siteInstagram) document.getElementById('siteInstagram').value = data.siteInstagram;
+        }
+    });
+
+    console.log('✅ Configurações carregadas!');
+</script>
+</body>
+</html>
