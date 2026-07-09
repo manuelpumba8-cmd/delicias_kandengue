@@ -1,7 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-PT" id="html">
 <head>
-        <meta charset="UTF-8">
+   <script>
+        const queryMedia = window.matchMedia("(max-width: 767px)");
+        if (queryMedia.matches) {
+            window.location.href = "indexmobile.html";
+        }
+        queryMedia.addEventListener("change", (e) => {
+            if (e.matches) {
+                window.location.href = "indexmobile.html";
+            } else {
+                window.location.href = "#";
+            }
+        });
+    </script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delícias da Kandengue - Buffet para Eventos</title>
     <link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
