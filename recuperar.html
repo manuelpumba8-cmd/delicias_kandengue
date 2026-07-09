@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha</title>
+
+    <!-- ========================================== -->
+    <!-- 🔥 FIREBASE SDKs -->
+    <!-- ========================================== -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js">
+    </script>
+
+    <!-- ========================================== -->
+    <!-- 🔥 CONFIGURAÇÃO FIREBASE -->
+    <!-- ========================================== -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIt7yIRQb8_MeXmVrnpQCCQUD5uXGhvNU",
+            authDomain: "delicias-91228.firebaseapp.com",
+            databaseURL: "https://delicias-91228-default-rtdb.firebaseio.com",
+            projectId: "delicias-91228",
+            storageBucket: "delicias-91228.firebasestorage.app",
+            messagingSenderId: "163923093683",
+            appId: "1:163923093683:web:82660c6097ecca35dda8c6",
+            measurementId: "G-3JF00F4X1G"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        console.log('🔥 Firebase inicializado!');
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f5f6f8;
+            padding: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .container {
+            display: flex;
+            width: 900px;
+            min-height: 550px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideUp 0.9s ease-in-out;
+            transition: box-shadow 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .container:hover {
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .image-side {
+            flex: 1;
+            background: url('media/imagens/angola.png') no-repeat center center/cover;
+            animation: fadeInImage 1.2s ease-in-out;
+            min-height: 300px;
+        }
+
+        @keyframes fadeInImage {
+            from {
+                opacity: 0;
+                transform: scale(1.05);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .form-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: #fff;
+            animation: fadeInForm 1.4s ease-in-out;
+        }
+
+        @keyframes fadeInForm {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .form-side h2 {
+            font-size: 28px;
+            color: #1e293b;
+            margin-bottom: 10px;
+            animation: fadeDown 0.8s ease-in-out;
+        }
+
+        .form-side .subtitle {
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 30px;
+            max-width: 320px;
+            animation: fadeDown 0.8s ease-in-out;
+        }
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-group {
+            width: 100%;
+            max-width: 320px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+            transform: scale(1.02);
+        }
+
+        .input-group input.error {
+            border-color: #e74c3c;
+        }
+
+        .input-group input.success {
+            border-color: #27ae60;
+        }
+
+        /* Botão Recuperar */
+        .btn-recover {
+            width: 100%;
+            max-width: 320px;
+            padding: 12px;
+            background-color: #1e293b;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+        }
+
+        .btn-recover:hover:not(:disabled) {
+            background-color: #334155;
+            transform: scale(1.03);
+            box-shadow: 0 0 12px rgba(30, 41, 59, 0.3);
+        }
+
+        .btn-recover:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-recover .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        .btn-recover.loading .btn-text {
+            display: none;
+        }
+
+        .btn-recover.loading .spinner {
+            display: block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Botão Voltar */
+        .btn-back {
+            width: 100%;
+            max-width: 320px;
+            padding: 10px;
+            background-color: transparent;
+            color: #64748b;
+            font-weight: 500;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background-color: #f8f9fa;
+            border-color: #cbd5e1;
+            transform: scale(1.02);
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #64748b;
+            animation: fadeDown 1.2s ease-in-out;
+        }
+
+        .footer-text a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .footer-text a:hover {
+            color: #4f46e5;
+            text-decoration: underline;
+        }
+
+        /* Alertas */
+        .alert-container {
+            width: 100%;
+            max-width: 320px;
+            margin-bottom: 15px;
+        }
+
+        .alert-custom {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideDown 0.3s ease;
+        }
+
+        .alert-custom .close-alert {
+            cursor: pointer;
+            margin-left: auto;
+            font-weight: 700;
+            opacity: 0.6;
+        }
+
+        .alert-custom .close-alert:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #b7dfb9;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffdfa7;
+        }
+
+        .alert-info {
+            background: #e9ecef;
+            color: #2c3e50;
+            border: 1px solid #d5d8dc;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                width: 90%;
+                height: auto;
+            }
+            .image-side {
+                height: 200px;
+            }
+            .form-side {
+                padding: 30px 20px;
+            }
+            .form-side h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="image-side"></div>
+
+        <div class="form-side">
+            <h2>RECUPERAR SENHA</h2>
+            <p class="subtitle">Digite seu email para receber um link de recuperação</p>
+
+            <!-- Alert Container -->
+            <div class="alert-container" id="alertContainer"></div>
+
+            <!-- Form Recuperar -->
+            <form id="recoverForm" onsubmit="recoverPassword(event)">
+                <div class="input-group">
+                    <input type="email" id="email" placeholder="E-mail" required autocomplete="email">
+                </div>
+
+                <button type="submit" class="btn-recover" id="recoverBtn">
+                    <span class="btn-text">Enviar Link</span>
+                    <span class="spinner"></span>
+                </button>
+            </form>
+
+            <a href="login.html" class="btn-back">
+                ← Voltar para o login
+            </a>
+
+            <div class="footer-text">
+                <p>Não tem uma conta? <a href="cadastro.html">Criar uma conta</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SCRIPTS -->
+    <!-- ========================================== -->
+    <script>
+        // ==========================================
+        // LOADING STATE
+        // ==========================================
+        function setLoading(loading) {
+            const btn = document.getElementById('recoverBtn');
+            if (loading) {
+                btn.classList.add('loading');
+                btn.disabled = true;
+            } else {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        }
+
+        // ==========================================
+        // SHOW ALERT
+        // ==========================================
+        function showAlert(message, type = 'info') {
+            const container = document.getElementById('alertContainer');
+            container.innerHTML = '';
+
+            const alert = document.createElement('div');
+            alert.className = `alert-custom alert-${type}`;
+
+            const icons = {
+                success: '✅',
+                danger: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+
+            alert.innerHTML = `
+                        <span>${icons[type] || 'ℹ️'}</span>
+                        <span>${message}</span>
+                        <span class="close-alert" onclick="this.parentElement.remove()">✕</span>
+                    `;
+
+            container.appendChild(alert);
+
+            setTimeout(() => {
+                if (alert.parentElement) {
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-10px)';
+                    setTimeout(() => alert.remove(), 300);
+                }
+            }, 6000);
+        }
+
+        // ==========================================
+        // 🔥 RECUPERAR SENHA
+        // ==========================================
+        function recoverPassword(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+
+            // Validações
+            if (!email) {
+                showAlert('Por favor, insira seu email.', 'warning');
+                return;
+            }
+
+            if (!email.includes('@') || !email.includes('.')) {
+                showAlert('Por favor, insira um email válido.', 'warning');
+                return;
+            }
+
+            setLoading(true);
+
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    setLoading(false);
+                    showAlert('✅ Link de recuperação enviado para ' + email + '!', 'success');
+                    document.getElementById('email').value = '';
+                })
+                .catch(error => {
+                    setLoading(false);
+                    let message = 'Erro ao enviar link de recuperação.';
+
+                    switch (error.code) {
+                        case 'auth/user-not-found':
+                            message = 'Nenhuma conta encontrada com este email.';
+                            break;
+                        case 'auth/invalid-email':
+                            message = 'Email inválido.';
+                            break;
+                        case 'auth/too-many-requests':
+                            message = 'Muitas tentativas. Tente mais tarde.';
+                            break;
+                        default:
+                            message = error.message;
+                    }
+
+                    showAlert('❌ ' + message, 'danger');
+                });
+        }
+
+        // ==========================================
+        // VERIFICAR SE JÁ ESTÁ LOGADO
+        // ==========================================
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // Se já estiver logado, redirecionar para o index
+                window.location.href = 'index.html';
+            }
+        });
+
+        // ==========================================
+        // ENTER PARA SUBMETER
+        // ==========================================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const form = document.getElementById('recoverForm');
+                const active = document.activeElement;
+                if (form && form.contains(active)) {
+                    form.dispatchEvent(new Event('submit'));
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

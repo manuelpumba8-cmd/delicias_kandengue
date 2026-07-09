@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+    <!-- Página Principal -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Sobre -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/sobre.html</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Serviços -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/servicos.html</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- Galeria -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/galeria.html</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Contato -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/#contato</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Orçamento -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/orcamento.html</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- Login -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/login.html</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+
+    <!-- Cadastro -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/cadastro.html</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+
+    <!-- Dashboard -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/dashboard.html</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <!-- Configurações -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/configuracoes.html</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.4</priority>
+    </url>
+
+    <!-- Termos -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/termos.html</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <!-- Privacidade -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/privacidade.html</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <!-- Política de Cookies -->
+    <url>
+        <loc>https://manuelpumba8-cmd.github.io/delicias_kandengue/politica-cookies.html</loc>
+        <lastmod>2026-01-08</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+</urlset>

@@ -1,14 +1,43 @@
 <!DOCTYPE html>
 <html lang="pt-PT" id="html">
 <head>
+     <script>
+// Define a condição de mídia
+const queryMedia = window.matchMedia("(max-width: 767px)");
+
+// Executa a verificação inicial
+if (queryMedia.matches) {
+    window.location.href = "indexmobile.html";
+}
+
+// Escuta mudanças de tamanho de tela futuras
+queryMedia.addEventListener("change", (e) => {
+    if (e.matches) {
+    window.location.href = "indexmobile.html";
+    } else {
+    window.location.href = "#";
+    }
+});
+
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delícias da Kandengue - Buffet para Eventos</title>
-<link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
+
+    <!-- ========================================== -->
+    <!-- 🔥 FIREBASE SDKs -->
+    <!-- ========================================== -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js">
+    </script>
+
+    <!-- ========================================== -->
+    <!-- 🔥 CONFIGURAÇÃO FIREBASE -->
+    <!-- ========================================== -->
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCIt7yIRQb8_MeXmVrnpQCCQUD5uXGhvNU",
@@ -32,8 +61,9 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
     <style>
         :root {
             --primary: #c0392b;
@@ -555,7 +585,7 @@
         }
 
         /* ==========================================
-           SERVIÇOS
+           SERVIÇOS (DINÂMICOS)
         ========================================== */
         #servicos {
             padding: 80px 0;
@@ -619,7 +649,7 @@
         }
 
         /* ==========================================
-           DEPOIMENTOS (COM FORMULÁRIO)
+           DEPOIMENTOS (COM FORMULÁRIO BLOQUEADO)
         ========================================== */
         #depoimentos {
             padding: 80px 0;
@@ -664,6 +694,39 @@
         }
         .testimonial-form .btn-submit-depoimento:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(241, 196, 15, 0.3);
+        }
+
+        /* Alerta de login necessário */
+        .login-required-alert {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(241, 196, 15, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .login-required-alert i {
+            font-size: 2rem;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 10px;
+        }
+        .login-required-alert p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+        .login-required-alert .btn-login-alert {
+            background: var(--gold);
+            color: var(--dark);
+            padding: 8px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-block;
+        }
+        .login-required-alert .btn-login-alert:hover {
+            transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(241, 196, 15, 0.3);
         }
 
@@ -718,7 +781,7 @@
         }
 
         /* ==========================================
-           GALERIA
+           GALERIA (DINÂMICA)
         ========================================== */
         #galeria {
             padding: 80px 0;
@@ -763,7 +826,7 @@
         }
 
         /* ==========================================
-           CONTATO (COM ENVIO DE DEPOIMENTO)
+           CONTATO (COM FORMULÁRIO BLOQUEADO)
         ========================================== */
         #contato {
             padding: 80px 0;
@@ -831,6 +894,186 @@
             background: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(192, 57, 43, 0.3);
+        }
+
+        /* Botão de orçamento bloqueado */
+        .btn-orcamento-blocked {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 36px;
+            background: #6c757d;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .btn-orcamento-blocked i {
+            font-size: 1rem;
+        }
+
+        .btn-orcamento-blocked .lock-icon {
+            margin-left: 8px;
+        }
+
+        /* ==========================================
+           🔔 NOTIFICAÇÕES EM TEMPO REAL
+        ========================================== */
+        .notificacao-flutuante {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 99999;
+            max-width: 380px;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .notificacao-flutuante .notif-item {
+            pointer-events: auto;
+            background: #fff;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+            border-left: 4px solid var(--gold);
+            animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .notificacao-flutuante .notif-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .notificacao-flutuante .notif-item .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .notificacao-flutuante .notif-item .icon.orcamento {
+            background: rgba(13, 110, 253, 0.12);
+            color: #0d6efd;
+        }
+
+        .notificacao-flutuante .notif-item .icon.depoimento {
+            background: rgba(241, 196, 15, 0.12);
+            color: #f1c40f;
+        }
+
+        .notificacao-flutuante .notif-item .icon.mensagem {
+            background: rgba(39, 174, 96, 0.12);
+            color: #27ae60;
+        }
+
+        .notificacao-flutuante .notif-item .content {
+            flex: 1;
+        }
+
+        .notificacao-flutuante .notif-item .content .title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+
+        .notificacao-flutuante .notif-item .content .text {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin: 2px 0;
+        }
+
+        .notificacao-flutuante .notif-item .content .time {
+            font-size: 0.65rem;
+            color: #adb5bd;
+        }
+
+        .notificacao-flutuante .notif-item .close-notif {
+            background: none;
+            border: none;
+            color: #adb5bd;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0 4px;
+            transition: 0.3s;
+        }
+
+        .notificacao-flutuante .notif-item .close-notif:hover {
+            color: #e74c3c;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(80px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(80px);
+            }
+        }
+
+        .notificacao-flutuante .notif-item.removing {
+            animation: slideOutRight 0.4s ease forwards;
+        }
+
+        /* Badge de contagem na navbar */
+        .notif-badge {
+            position: relative;
+            display: inline-block;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .notif-badge .badge-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: #fff;
+            font-size: 0.6rem;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--dark);
+        }
+
+        .notif-badge .badge-count.visible {
+            display: flex;
+        }
+
+        .notif-badge i {
+            color: #fff;
+            font-size: 1.2rem;
         }
 
         /* ==========================================
@@ -1034,6 +1277,14 @@
                 flex-direction: column;
                 text-align: center;
             }
+            .notificacao-flutuante {
+                right: 10px;
+                left: 10px;
+                max-width: 100%;
+            }
+            .notificacao-flutuante .notif-item {
+                padding: 14px 16px;
+            }
         }
     </style>
 </head>
@@ -1043,6 +1294,13 @@
     <!-- TOAST -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- ========================================== -->
+    <!-- 🔔 NOTIFICAÇÕES EM TEMPO REAL -->
+    <!-- ========================================== -->
+    <div class="notificacao-flutuante" id="notificacaoContainer">
+        <!-- Notificações aparecem aqui via JavaScript -->
+    </div>
+
     <!-- ==========================================
          NAVBAR
     ========================================== -->
@@ -1050,6 +1308,7 @@
         <div class="container">
             <a class="navbar-brand" href="index.html">
                 <img src="media/imagens/Copilot_20251027_215018d.png" alt="Logo">
+                <span>Delícias <span class="gold">Kandengue</span></span>
             </a>
 
             <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
@@ -1064,7 +1323,6 @@
                     <li class="nav-item"><a class="nav-link" href="#depoimentos">Depoimentos</a></li>
                     <li class="nav-item"><a class="nav-link" href="#galeria">Galeria</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
-                    <li class="nav-item"><a class="nav-link" href="orcamento.html">Orçamento</a></li>
                     <li class="nav-item ms-lg-2" id="authSection"></li>
                 </ul>
             </div>
@@ -1087,7 +1345,6 @@
                 <li class="nav-item"><a class="nav-link" href="#depoimentos" onclick="closeOffcanvas()">Depoimentos</a></li>
                 <li class="nav-item"><a class="nav-link" href="#galeria" onclick="closeOffcanvas()">Galeria</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contato" onclick="closeOffcanvas()">Contato</a></li>
-                <li class="nav-item"><a class="nav-link" href="orcamento.html" onclick="closeOffcanvas()">Orçamento</a></li>
                 <li class="nav-item"><a class="nav-link" href="login.html" onclick="closeOffcanvas()">Login</a></li>
             </ul>
         </div>
@@ -1104,7 +1361,11 @@
                     <h1 class="hero-title">Buffet para <br><span class="highlight">Eventos Inesquecíveis</span></h1>
                     <p class="hero-subtitle">Transformamos cada evento numa experiência gastronómica única. Casamentos, aniversários, eventos corporativos e muito mais.</p>
                     <div class="hero-buttons">
-                        <a href="orcamento.html" class="btn-primary-custom"><i class="bi bi-whatsapp"></i> Pedir Orçamento</a>
+                        <!-- Botão Orçamento - BLOQUEADO SEM LOGIN -->
+                        <a href="#" class="btn-primary-custom" onclick="verificarLoginOrcamento(event)" id="btnOrcamento">
+                            <i class="bi bi-whatsapp"></i> Pedir Orçamento
+                            <span class="lock-icon" style="font-size: 0.8rem; opacity: 0.6;">🔒</span>
+                        </a>
                         <a href="#servicos" class="btn-secondary-custom">Ver Cardápio <i class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
@@ -1144,98 +1405,27 @@
     </section>
 
     <!-- ==========================================
-         SERVIÇOS
-    ========================================== --> <section id="servicos" class="fade-in">
-    <div class="container">
-      <div class="text-center mb-5">
-        <span class="section-tag">O que oferecemos</span>
-        <h2 class="section-title">Cardápios para <span>todos os gostos</span></h2>
-        <p style="color: #6c757d; max-width: 600px; margin: 0 auto;">
-          Escolha o serviço ideal para o seu evento. Cada cardápio é personalizado
-          de acordo com as suas preferências.
-        </p>
-      </div>
-
-      <div class="row g-4">
-        
-        <!-- Casamentos -->
-        <div class="col-md-4">
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="bi bi-heart-fill"></i>
+         SERVIÇOS (DINÂMICOS)
+    ========================================== -->
+    <section id="servicos" class="fade-in">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="section-tag">O que oferecemos</span>
+                <h2 class="section-title">Cardápios para <span>todos os gostos</span></h2>
+                <p style="color: #6c757d; max-width: 600px; margin: 0 auto;">Escolha o serviço ideal para o seu evento. Cada cardápio é personalizado de acordo com as suas preferências.</p>
             </div>
-            <h4>Casamentos</h4>
-            <p>Buffet completo para o dia mais especial da sua vida. Entradas, pratos principais, sobremesas e open bar.</p>
-            <span class="price-tag">A partir de 15.000 Kz/pessoa</span>
-          </div>
-        </div>
-
-        <!-- Aniversários -->
-        <div class="col-md-4">
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="bi bi-gift-fill"></i>
+            <div class="row g-4" id="servicosContainer">
+                <!-- Carregado dinamicamente do Firebase -->
+                <div class="col-12 text-center text-muted py-5">
+                    <i class="bi bi-grid fs-1"></i>
+                    <p class="mt-2">Carregando serviços...</p>
+                </div>
             </div>
-            <h4>Aniversários</h4>
-            <p>Festa infantil ou adulto? Temos opções para todos. Bolo personalizado, salgadinhos, doces e muito mais.</p>
-            <span class="price-tag">A partir de 8.000 Kz/pessoa</span>
-          </div>
         </div>
-
-        <!-- Eventos Corporativos -->
-        <div class="col-md-4">
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="bi bi-building"></i>
-            </div>
-            <h4>Eventos Corporativos</h4>
-            <p>Coffee breaks, almoços executivos, happy hours. Perfeito para impressionar clientes e colaboradores.</p>
-            <span class="price-tag">A partir de 10.000 Kz/pessoa</span>
-          </div>
-        </div>
-
-        <!-- Buffet Privado -->
-        <div class="col-md-4">
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="bi bi-house-fill"></i>
-            </div>
-            <h4>Eventos Privados</h4>
-            <p>Jantares românticos, almoços em família, churrascos. Nós levamos a nossa cozinha até si.</p>
-            <span class="price-tag">A partir de 12.000 Kz/pessoa</span>
-          </div>
-        </div>
-
-        <!-- Buffet Temático -->
-        <div class="col-md-4">
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="bi bi-globe"></i>
-            </div>
-            <h4>Buffet Temático</h4>
-            <p>Culinária angolana, portuguesa, italiana, asiática... Surpreenda os seus convidados com sabores do mundo.</p>
-            <span class="price-tag">Sob consulta</span>
-          </div>
-        </div>
-
-        <!-- Serviço de Bolo -->
-        <div class="col-md-4">
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="bi bi-cake"></i>
-            </div>
-            <h4>Bolos & Doces</h4>
-            <p>Bolos personalizados para todas as ocasiões. Decoração exclusiva e sabores irresistíveis.</p>
-            <span class="price-tag">A partir de 5.000 Kz</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
+    </section>
 
     <!-- ==========================================
-         DEPOIMENTOS (COM FORMULÁRIO)
+         DEPOIMENTOS (FORMULÁRIO BLOQUEADO)
     ========================================== -->
     <section id="depoimentos" class="fade-in">
         <div class="container">
@@ -1247,18 +1437,28 @@
             <div class="row">
                 <!-- Lista de depoimentos -->
                 <div class="col-lg-7" id="depoimentosList">
-                    <!-- Carregado do Firebase -->
                     <div class="text-center text-light opacity-50 py-5">
                         <i class="bi bi-chat-dots fs-1"></i>
                         <p class="mt-2">Carregando depoimentos...</p>
                     </div>
                 </div>
 
-                <!-- Formulário de Depoimento -->
+                <!-- Formulário de Depoimento - BLOQUEADO SEM LOGIN -->
                 <div class="col-lg-5">
                     <div class="testimonial-form">
                         <h5 class="text-light mb-3"><i class="bi bi-pencil-square text-warning"></i> Deixe seu depoimento</h5>
-                        <form id="depoimentoForm" onsubmit="enviarDepoimento(event)">
+
+                        <!-- Mensagem para NÃO LOGADO -->
+                        <div id="depoimentoLoginRequired">
+                            <div class="login-required-alert">
+                                <i class="bi bi-lock"></i>
+                                <p>Faça login para deixar um depoimento</p>
+                                <a href="login.html" class="btn-login-alert">Fazer Login</a>
+                            </div>
+                        </div>
+
+                        <!-- Formulário (visível apenas quando logado) -->
+                        <form id="depoimentoForm" onsubmit="enviarDepoimento(event)" style="display: none;">
                             <div class="mb-3">
                                 <label class="text-light-50 small">Seu nome</label>
                                 <input type="text" class="form-control" id="depoNome" placeholder="Seu nome" required>
@@ -1281,7 +1481,7 @@
                                 <i class="bi bi-send"></i> Enviar Depoimento
                             </button>
                             <p class="text-light opacity-50 small mt-2 text-center">
-                                <i class="bi bi-shield-check"></i> Seu depoimento será publicado após aprovação
+                                <i class="bi bi-shield-check"></i> Seu depoimento será publicado automaticamente
                             </p>
                         </form>
                     </div>
@@ -1291,77 +1491,26 @@
     </section>
 
     <!-- ==========================================
-         GALERIA
+         GALERIA (DINÂMICA)
     ========================================== -->
     <section id="galeria" class="fade-in">
-    <div class="container">
-      <div class="text-center mb-5">
-        <span class="section-tag">Galeria</span>
-        <h2 class="section-title">Momentos <span>dos nossos eventos</span></h2>
-      </div>
-
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="gallery-item">
-            <img src="media/imagens/comidas/IMG-20251027-WA0012.jpg" alt="Evento Delícias">
-            <div class="overlay">
-              <h6>Decoração de Mesa</h6>
-              <small>Casamento - 2024</small>
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="section-tag">Galeria</span>
+                <h2 class="section-title">Momentos <span>dos nossos eventos</span></h2>
             </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="gallery-item">
-            <img src="media/imagens/comidas/IMG-20251027-WA0013.jpg" alt="Evento Delícias">
-            <div class="overlay">
-              <h6>Buffet Servido</h6>
-              <small>Evento Corporativo</small>
+            <div class="row g-4" id="galeriaContainer">
+                <!-- Carregado dinamicamente do Firebase -->
+                <div class="col-12 text-center text-muted py-5">
+                    <i class="bi bi-images fs-1"></i>
+                    <p class="mt-2">Carregando imagens...</p>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="col-md-4">
-          <div class="gallery-item">
-            <img src="media/imagens/comidas/IMG-20251027-WA0015.jpg" alt="Evento Delícias">
-            <div class="overlay">
-              <h6>Mesa de Sobremesas</h6>
-              <small>Aniversário</small>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="gallery-item">
-            <img src="media/imagens/comidas/IMG-20251027-WA0016.jpg" alt="Evento Delícias">
-            <div class="overlay">
-              <h6>Montagem do Buffet</h6>
-              <small>Evento Privado</small>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="gallery-item">
-            <img src="media/imagens/comidas/IMG-20251027-WA0017.jpg" alt="Evento Delícias">
-            <div class="overlay">
-              <h6>Equipa Delícias</h6>
-              <small>Preparação</small>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="gallery-item">
-            <img src="media/imagens/comidas/IMG-20251027-WA0014.jpg" alt="Evento Delícias">
-            <div class="overlay">
-              <h6>Pratos Especiais</h6>
-              <small>Cardápio Premium</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
+    </section>
 
     <!-- ==========================================
-         CONTATO
+         CONTATO (FORMULÁRIO BLOQUEADO)
     ========================================== -->
     <section id="contato" class="fade-in">
         <div class="container">
@@ -1384,45 +1533,75 @@
                             <div class="info"><h6>Localização</h6><p>Luanda, Angola</p></div>
                         </div>
                     </div>
+                    <!-- ==========================================
+   📍 GOOGLE MAPS
+========================================== -->
+<div class="map-container mt-4" style="border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+    <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15770.244910218322!2d13.224684!3d-8.838333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a51f15e5b0f2e8d%3A0x2c9a3b7f4a2a3b7f!2sLuanda%2C%20Angola!5e0!3m2!1spt-PT!2spt!4v1700000000000" 
+        width="100%" 
+        height="250" 
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+</div>
                     <div class="mt-4">
                         <a href="https://wa.me/+244956759813" target="_blank" class="btn-primary-custom"><i class="bi bi-whatsapp"></i> Fale connosco</a>
                     </div>
                 </div>
                 <div class="col-lg-7">
-                    <form id="contactForm" style="background: #fff; padding: 40px; border-radius: 20px; box-shadow: var(--shadow);">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Nome</label>
-                                <input type="text" class="form-control-custom" placeholder="Seu nome" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Email</label>
-                                <input type="email" class="form-control-custom" placeholder="seu@email.com" required>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label fw-bold">Tipo de Evento</label>
-                                <select class="form-control-custom">
-                                    <option value="">Selecione...</option>
-                                    <option>Casamento</option>
-                                    <option>Aniversário</option>
-                                    <option>Evento Corporativo</option>
-                                    <option>Evento Privado</option>
-                                    <option>Outro</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label fw-bold">Nº de Convidados</label>
-                                <input type="number" class="form-control-custom" placeholder="Quantas pessoas?" required>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label fw-bold">Mensagem</label>
-                                <textarea class="form-control-custom" rows="4" placeholder="Conte-nos sobre o seu evento..." required></textarea>
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn-submit"><i class="bi bi-send"></i> Enviar Mensagem</button>
+                    <!-- Formulário de Contato - BLOQUEADO SEM LOGIN -->
+                    <div id="contactFormWrapper" style="background: #fff; padding: 40px; border-radius: 20px; box-shadow: var(--shadow);">
+
+                        <!-- Mensagem para NÃO LOGADO -->
+                        <div id="contactLoginRequired">
+                            <div class="text-center py-4">
+                                <i class="bi bi-lock" style="font-size: 3rem; color: #f1c40f; display: block; margin-bottom: 15px;"></i>
+                                <h5 style="color: #1a1a2e;">Faça login para enviar uma mensagem</h5>
+                                <p class="text-muted">Precisa estar logado para entrar em contacto connosco.</p>
+                                <a href="login.html" class="btn btn-warning mt-2" style="font-weight: 600; border-radius: 50px; padding: 10px 40px;">Fazer Login</a>
                             </div>
                         </div>
-                    </form>
+
+                        <!-- Formulário (visível apenas quando logado) -->
+                        <form id="contactForm" style="display: none;">
+                            <h5 class="mb-3"><i class="bi bi-envelope text-warning"></i> Envie uma Mensagem</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Nome</label>
+                                    <input type="text" id="contatoNomePC" class="form-control-custom" placeholder="Seu nome" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Email</label>
+                                    <input type="email" id="contatoEmailPC" class="form-control-custom" placeholder="seu@email.com" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">Tipo de Evento</label>
+                                    <select id="contatoEventoPC" class="form-control-custom">
+                                        <option value="">Selecione...</option>
+                                        <option>Casamento</option>
+                                        <option>Aniversário</option>
+                                        <option>Evento Corporativo</option>
+                                        <option>Evento Privado</option>
+                                        <option>Outro</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">Nº de Convidados</label>
+                                    <input type="number" id="contatoConvidadosPC" class="form-control-custom" placeholder="Quantas pessoas?" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">Mensagem</label>
+                                    <textarea id="contatoMensagemPC" class="form-control-custom" rows="4" placeholder="Conte-nos sobre o seu evento..." required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn-submit"><i class="bi bi-send"></i> Enviar Mensagem</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1519,14 +1698,44 @@
                                 </div>
                             </div>
                         `;
+
+                // UTILIZADOR LOGADO: mostrar formulários
+                document.getElementById('depoimentoLoginRequired').style.display = 'none';
+                document.getElementById('depoimentoForm').style.display = 'block';
+                document.getElementById('contactLoginRequired').style.display = 'none';
+                document.getElementById('contactForm').style.display = 'block';
+
+                // Atualizar botão de orçamento
+                const btnOrcamento = document.getElementById('btnOrcamento');
+                btnOrcamento.href = 'orcamento.html';
+                btnOrcamento.innerHTML = '<i class="bi bi-whatsapp"></i> Pedir Orçamento';
+                btnOrcamento.onclick = null;
+
+                // Mostrar toast de boas-vindas
+                mostrarWelcomeModal();
+
+                // 🔔 INICIAR NOTIFICAÇÕES (apenas admin)
+                if (user.email === 'manuelpumba8@gmail.com') {
+                    setTimeout(iniciarNotificacoes, 1500);
+                }
+
             } else {
                 authSection.innerHTML = `
                             <a href="login.html" class="btn-nav-outline me-2">Entrar</a>
                             <a href="cadastro.html" class="btn-nav">Registar</a>
                         `;
+
+                // UTILIZADOR NÃO LOGADO: ocultar formulários
+                document.getElementById('depoimentoLoginRequired').style.display = 'block';
+                document.getElementById('depoimentoForm').style.display = 'none';
+                document.getElementById('contactLoginRequired').style.display = 'block';
+                document.getElementById('contactForm').style.display = 'none';
             }
         });
 
+        // ==========================================
+        // FUNÇÕES DE AUTENTICAÇÃO
+        // ==========================================
         function toggleProfileDropdown(event) {
             event.preventDefault();
             event.stopPropagation();
@@ -1595,27 +1804,28 @@
         }
 
         // ==========================================
-        // FORM CONTATO
+        // 🔒 VERIFICAR LOGIN PARA ORÇAMENTO
         // ==========================================
-        document.getElementById('contactForm')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = this.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> A enviar...';
-            btn.disabled = true;
-            setTimeout(() => {
-                showToast('Mensagem enviada com sucesso! Entraremos em contacto.', 'success');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                this.reset();
-            }, 1500);
-        });
+        function verificarLoginOrcamento(event) {
+            event.preventDefault();
+            const user = auth.currentUser;
+            if (!user) {
+                showToast('⚠️ Faça login para solicitar um orçamento.', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
+            } else {
+                window.location.href = 'orcamento.html';
+            }
+        }
 
         // ==========================================
-        // 🔥 CARREGAR SERVIÇOS
+        // 🔥 CARREGAR SERVIÇOS (DO FIREBASE)
         // ==========================================
         function carregarServicos() {
             const container = document.getElementById('servicosContainer');
+            if (!container) return;
+
             database.ref('servicos').once('value').then(snapshot => {
                 const servicos = snapshot.val();
                 if (servicos) {
@@ -1635,21 +1845,28 @@
                     });
                     container.innerHTML = html;
                 } else {
-                    // Serviços padrão
                     container.innerHTML = `
                                 <div class="col-md-4"><div class="service-card"><div class="service-icon"><i class="bi bi-heart-fill"></i></div><h4>Casamentos</h4><p>Buffet completo para o dia mais especial da sua vida.</p><span class="price-tag">A partir de 15.000 Kz/pessoa</span></div></div>
                                 <div class="col-md-4"><div class="service-card"><div class="service-icon"><i class="bi bi-gift-fill"></i></div><h4>Aniversários</h4><p>Festa infantil ou adulto com opções personalizadas.</p><span class="price-tag">A partir de 8.000 Kz/pessoa</span></div></div>
                                 <div class="col-md-4"><div class="service-card"><div class="service-icon"><i class="bi bi-building"></i></div><h4>Eventos Corporativos</h4><p>Coffee breaks, almoços executivos e happy hours.</p><span class="price-tag">A partir de 10.000 Kz/pessoa</span></div></div>
                             `;
                 }
-            }).catch(() => {});
+            }).catch(() => {
+                container.innerHTML = `
+                            <div class="col-md-4"><div class="service-card"><div class="service-icon"><i class="bi bi-heart-fill"></i></div><h4>Casamentos</h4><p>Buffet completo para o dia mais especial da sua vida.</p><span class="price-tag">A partir de 15.000 Kz/pessoa</span></div></div>
+                            <div class="col-md-4"><div class="service-card"><div class="service-icon"><i class="bi bi-gift-fill"></i></div><h4>Aniversários</h4><p>Festa infantil ou adulto com opções personalizadas.</p><span class="price-tag">A partir de 8.000 Kz/pessoa</span></div></div>
+                            <div class="col-md-4"><div class="service-card"><div class="service-icon"><i class="bi bi-building"></i></div><h4>Eventos Corporativos</h4><p>Coffee breaks, almoços executivos e happy hours.</p><span class="price-tag">A partir de 10.000 Kz/pessoa</span></div></div>
+                        `;
+            });
         }
 
         // ==========================================
-        // 🔥 CARREGAR GALERIA
+        // 🔥 CARREGAR GALERIA (DO FIREBASE)
         // ==========================================
         function carregarGaleria() {
             const container = document.getElementById('galeriaContainer');
+            if (!container) return;
+
             database.ref('galeria').once('value').then(snapshot => {
                 const imagens = snapshot.val();
                 if (imagens) {
@@ -1677,14 +1894,23 @@
                                 </div>
                             `;
                 }
-            }).catch(() => {});
+            }).catch(() => {
+                container.innerHTML = `
+                            <div class="col-12 text-center text-muted py-5">
+                                <i class="bi bi-images fs-1"></i>
+                                <p class="mt-2">Erro ao carregar imagens.</p>
+                            </div>
+                        `;
+            });
         }
 
         // ==========================================
-        // 🔥 CARREGAR DEPOIMENTOS
+        // 🔥 CARREGAR DEPOIMENTOS (DO FIREBASE)
         // ==========================================
         function carregarDepoimentos() {
             const container = document.getElementById('depoimentosList');
+            if (!container) return;
+
             database.ref('depoimentos').orderByChild('aprovado').equalTo(true).once('value').then(snapshot => {
                 const depoimentos = snapshot.val();
                 if (depoimentos) {
@@ -1693,7 +1919,6 @@
                     Object.keys(depoimentos).forEach(key => {
                         if (count >= 3) return;
                         const d = depoimentos[key];
-                        if (!d.aprovado) return;
                         const estrelas = '⭐'.repeat(d.estrelas || 5);
                         const inicial = d.nome.charAt(0).toUpperCase();
                         html += `
@@ -1727,10 +1952,20 @@
         }
 
         // ==========================================
-        // 🔥 ENVIAR DEPOIMENTO
+        // 🔒 ENVIAR DEPOIMENTO (COM VALIDAÇÃO DE LOGIN)
         // ==========================================
         function enviarDepoimento(event) {
             event.preventDefault();
+
+            // 🔒 Verificar se está logado
+            const user = auth.currentUser;
+            if (!user) {
+                showToast('⚠️ Faça login para enviar um depoimento.', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+                return;
+            }
 
             const nome = document.getElementById('depoNome').value.trim();
             const estrelas = parseInt(document.getElementById('depoEstrelas').value);
@@ -1751,9 +1986,12 @@
                 nome: nome,
                 estrelas: estrelas,
                 mensagem: mensagem,
-                aprovado: true, // Aprovação automática
+                aprovado: true,
                 data: new Date().toLocaleDateString('pt-PT'),
-                createdAt: firebase.database.ServerValue.TIMESTAMP
+                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                userId: user.uid,
+                userEmail: user.email,
+                userName: user.displayName || nome
             }).then(() => {
                 showToast('✅ Depoimento enviado com sucesso! Obrigado!', 'success');
                 btn.innerHTML = originalText;
@@ -1766,6 +2004,381 @@
                 btn.disabled = false;
             });
         }
+
+        // ==========================================
+        // 🔥 FORM CONTATO PC - SALVAR NO FIREBASE
+        // ==========================================
+        document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // 🔒 Verificar se está logado
+            const user = auth.currentUser;
+            if (!user) {
+                showToast('⚠️ Faça login para enviar uma mensagem.', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+                return;
+            }
+
+            const nome = document.getElementById('contatoNomePC')?.value?.trim() || '';
+            const email = document.getElementById('contatoEmailPC')?.value?.trim() || '';
+            const evento = document.getElementById('contatoEventoPC')?.value || '';
+            const convidados = document.getElementById('contatoConvidadosPC')?.value || '0';
+            const mensagem = document.getElementById('contatoMensagemPC')?.value?.trim() || '';
+
+            if (!nome || !email || !mensagem) {
+                showToast('⚠️ Por favor, preencha todos os campos obrigatórios.', 'error');
+                return;
+            }
+
+            if (!email.includes('@') || !email.includes('.')) {
+                showToast('⚠️ Por favor, insira um email válido.', 'error');
+                return;
+            }
+
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> A enviar...';
+            btn.disabled = true;
+
+            const dadosMensagem = {
+                nome: nome,
+                email: email,
+                tipoEvento: evento || 'Não informado',
+                convidados: parseInt(convidados) || 0,
+                mensagem: mensagem,
+                data: new Date().toLocaleString('pt-PT'),
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                lida: false,
+                respondida: false,
+                origem: 'pc',
+                userId: user.uid,
+                userEmail: user.email
+            };
+
+            const mensagemRef = database.ref('mensagens_contato').push();
+            mensagemRef.set(dadosMensagem)
+                .then(() => {
+                    showToast('✅ Mensagem enviada com sucesso!', 'success');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    this.reset();
+                })
+                .catch(error => {
+                    showToast('❌ Erro: ' + error.message, 'error');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+        });
+
+        // ==========================================
+        // 🎉 MODAL DE BOAS-VINDAS (APENAS ADMIN)
+        // ==========================================
+        function mostrarWelcomeModal() {
+            const user = auth.currentUser;
+            if (!user || user.email !== 'manuelpumba8@gmail.com') return;
+
+            const storageKey = 'welcome_shown_' + user.uid;
+            if (localStorage.getItem(storageKey) === 'true') return;
+
+            // Criar modal dinamicamente
+            const modalHTML = `
+                        <div class="modal fade" id="welcomeModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content" style="border-radius: 24px; border: none; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.2);">
+                                    <div style="background: linear-gradient(135deg, #1a1a2e, #2d2d44); padding: 30px; text-align: center;">
+                                        <div style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 15px; border: 4px solid #f1c40f; overflow: hidden; box-shadow: 0 8px 30px rgba(241,196,15,0.2); background: #1a1a2e;">
+                                            ${user.photoURL ? `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:700;color:#f1c40f;">${(user.displayName || 'A').charAt(0).toUpperCase()}</div>`}
+                                        </div>
+                                        <h3 style="color: #fff; font-family: 'Playfair Display', serif; margin: 0; font-size: 24px;">
+                                            Bem-vindo(a), <span style="color: #f1c40f;">${user.displayName || 'Administrador'}</span>! 👋
+                                        </h3>
+                                        <p style="color: rgba(255,255,255,0.6); margin: 5px 0 0; font-size: 14px;">${user.email}</p>
+                                    </div>
+                                    <div style="padding: 25px 30px; background: #fff;">
+                                        <h5 style="color: #1a1a2e; font-weight: 600; margin-bottom: 15px;">
+                                            <i class="bi bi-megaphone" style="color: #f1c40f;"></i> Novidades desta versão
+                                        </h5>
+                                        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                                            <div class="update-item" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f8f9fa;border-radius:12px;border-left:3px solid #f1c40f;">
+                                                <span style="font-size:20px;">🚀</span>
+                                                <span style="font-size:14px;color:#2d2d2d;"><strong>Novo design</strong> - Interface renovada</span>
+                                                <span style="font-size:10px;background:#f1c40f;color:#1a1a2e;padding:2px 10px;border-radius:50px;font-weight:600;margin-left:auto;">2.0.0</span>
+                                            </div>
+                                            <div class="update-item" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f8f9fa;border-radius:12px;border-left:3px solid #f1c40f;">
+                                                <span style="font-size:20px;">🔐</span>
+                                                <span style="font-size:14px;color:#2d2d44;"><strong>Login com Google</strong> - Autenticação mais rápida</span>
+                                                <span style="font-size:10px;background:#f1c40f;color:#1a1a2e;padding:2px 10px;border-radius:50px;font-weight:600;margin-left:auto;">NOVO</span>
+                                            </div>
+                                            <div class="update-item" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f8f9fa;border-radius:12px;border-left:3px solid #f1c40f;">
+                                                <span style="font-size:20px;">📊</span>
+                                                <span style="font-size:14px;color:#2d2d44;"><strong>Dashboard</strong> - Gestão completa de conteúdos</span>
+                                                <span style="font-size:10px;background:#f1c40f;color:#1a1a2e;padding:2px 10px;border-radius:50px;font-weight:600;margin-left:auto;">ATUALIZADO</span>
+                                            </div>
+                                            <div class="update-item" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f8f9fa;border-radius:12px;border-left:3px solid #f1c40f;">
+                                                <span style="font-size:20px;">📋</span>
+                                                <span style="font-size:14px;color:#2d2d44;"><strong>Orçamentos</strong> - Responda diretamente do dashboard</span>
+                                                <span style="font-size:10px;background:#f1c40f;color:#1a1a2e;padding:2px 10px;border-radius:50px;font-weight:600;margin-left:auto;">NOVO</span>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-warning w-100" onclick="fecharWelcomeModal()" style="font-weight:600;border-radius:12px;padding:12px;">
+                                            <i class="bi bi-rocket"></i> Vamos começar!
+                                        </button>
+                                        <p style="text-align:center;margin-top:10px;font-size:12px;color:#adb5bd;">
+                                            <i class="bi bi-info-circle"></i> Esta mensagem aparecerá apenas uma vez
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+            // Adicionar modal ao body
+            const modalContainer = document.createElement('div');
+            modalContainer.innerHTML = modalHTML;
+            document.body.appendChild(modalContainer.firstElementChild);
+
+            // Mostrar modal com delay
+            setTimeout(() => {
+                const modal = new bootstrap.Modal(document.getElementById('welcomeModal'));
+                modal.show();
+                localStorage.setItem(storageKey, 'true');
+            }, 1000);
+        }
+
+        function fecharWelcomeModal() {
+            const modal = document.getElementById('welcomeModal');
+            if (modal) {
+                const bsModal = bootstrap.Modal.getInstance(modal);
+                if (bsModal) bsModal.hide();
+                setTimeout(() => modal.remove(), 500);
+            }
+        }
+
+        // ==========================================
+        // 🔔 NOTIFICAÇÕES EM TEMPO REAL
+        // ==========================================
+
+        // Variáveis
+        let notificacoesLidas = JSON.parse(localStorage.getItem('notificacoes_lidas') || '[]');
+        let contadorNotificacoes = 0;
+
+        // ==========================================
+        // MOSTRAR NOTIFICAÇÃO
+        // ==========================================
+        function mostrarNotificacao(titulo, mensagem, tipo = 'orcamento', acao = null) {
+            const container = document.getElementById('notificacaoContainer');
+            if (!container) return;
+
+            // Criar elemento
+            const notif = document.createElement('div');
+            notif.className = 'notif-item';
+
+            // Ícones por tipo
+            const icones = {
+                orcamento: { icon: '📋', class: 'orcamento' },
+                depoimento: { icon: '💬', class: 'depoimento' },
+                mensagem: { icon: '📧', class: 'mensagem' }
+            };
+
+            const info = icones[tipo] || icones.orcamento;
+            const agora = new Date();
+            const hora = agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+
+            notif.innerHTML = `
+                <div class="icon ${info.class}">${info.icon}</div>
+                <div class="content">
+                    <div class="title">${titulo}</div>
+                    <div class="text">${mensagem}</div>
+                    <div class="time">${hora}</div>
+                </div>
+                <button class="close-notif" onclick="fecharNotificacao(this)">✕</button>
+            `;
+
+            // Clique na notificação
+            notif.addEventListener('click', function(e) {
+                if (e.target.closest('.close-notif')) return;
+                if (acao) {
+                    if (acao === 'orcamento') {
+                        window.location.href = 'orcamento.html';
+                    } else if (acao === 'depoimento') {
+                        document.getElementById('depoimentos')?.scrollIntoView({ behavior: 'smooth' });
+                    } else if (acao === 'mensagem') {
+                        document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+                fecharNotificacao(this.querySelector('.close-notif'));
+            });
+
+            // Adicionar ao container
+            container.prepend(notif);
+            contadorNotificacoes++;
+            atualizarBadge();
+
+            // Auto-remover após 10 segundos
+            setTimeout(() => {
+                if (notif.parentElement) {
+                    fecharNotificacao(notif.querySelector('.close-notif'));
+                }
+            }, 10000);
+
+            // Reproduzir som (opcional - silencioso)
+            try {
+                const audio = new Audio('data:audio/wav;base64,UklGRnoAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoAAACBhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFhYqFg==');
+                audio.volume = 0.1;
+                audio.play().catch(() => {});
+            } catch(e) {}
+        }
+
+        // ==========================================
+        // FECHAR NOTIFICAÇÃO
+        // ==========================================
+        function fecharNotificacao(btn) {
+            const item = btn.closest('.notif-item');
+            if (!item) return;
+            item.classList.add('removing');
+            setTimeout(() => {
+                if (item.parentElement) {
+                    item.remove();
+                    contadorNotificacoes--;
+                    atualizarBadge();
+                }
+            }, 400);
+        }
+
+        // ==========================================
+        // ATUALIZAR BADGE
+        // ==========================================
+        function atualizarBadge() {
+            let badge = document.querySelector('.notif-badge');
+            if (!badge) {
+                // Criar badge na navbar
+                const authSection = document.getElementById('authSection');
+                if (authSection) {
+                    badge = document.createElement('span');
+                    badge.className = 'notif-badge';
+                    badge.innerHTML = `
+                        <i class="bi bi-bell"></i>
+                        <span class="badge-count" id="notifCount">0</span>
+                    `;
+                    authSection.appendChild(badge);
+                }
+            }
+
+            const countEl = document.getElementById('notifCount');
+            if (countEl) {
+                countEl.textContent = contadorNotificacoes;
+                countEl.classList.toggle('visible', contadorNotificacoes > 0);
+            }
+        }
+
+        // ==========================================
+        // INICIAR OUVINTES DO FIREBASE
+        // ==========================================
+        function iniciarNotificacoes() {
+            console.log('🔔 Iniciando notificações em tempo real...');
+
+            // ==========================================
+            // 1. NOVOS ORÇAMENTOS
+            // ==========================================
+            database.ref('orcamentos').orderByChild('createdAt').limitToLast(1).on('child_added', function(snapshot) {
+                const orcamento = snapshot.val();
+                if (!orcamento) return;
+
+                const key = 'orc_' + snapshot.key;
+                if (notificacoesLidas.includes(key)) return;
+                notificacoesLidas.push(key);
+                localStorage.setItem('notificacoes_lidas', JSON.stringify(notificacoesLidas));
+
+                mostrarNotificacao(
+                    '📋 Novo Orçamento',
+                    `${orcamento.nome} solicitou um orçamento para ${orcamento.tipoEvento}`,
+                    'orcamento',
+                    'orcamento'
+                );
+            });
+
+            // ==========================================
+            // 2. NOVOS DEPOIMENTOS (PENDENTES)
+            // ==========================================
+            database.ref('depoimentos').orderByChild('createdAt').limitToLast(1).on('child_added', function(snapshot) {
+                const depoimento = snapshot.val();
+                if (!depoimento || depoimento.aprovado) return;
+
+                const key = 'dep_' + snapshot.key;
+                if (notificacoesLidas.includes(key)) return;
+                notificacoesLidas.push(key);
+                localStorage.setItem('notificacoes_lidas', JSON.stringify(notificacoesLidas));
+
+                mostrarNotificacao(
+                    '💬 Novo Depoimento',
+                    `${depoimento.nome} deixou um novo depoimento aguardando aprovação.`,
+                    'depoimento',
+                    'depoimento'
+                );
+            });
+
+            // ==========================================
+            // 3. NOVAS MENSAGENS DE CONTATO
+            // ==========================================
+            database.ref('mensagens_contato').orderByChild('timestamp').limitToLast(1).on('child_added', function(snapshot) {
+                const mensagem = snapshot.val();
+                if (!mensagem || mensagem.lida) return;
+
+                const key = 'msg_' + snapshot.key;
+                if (notificacoesLidas.includes(key)) return;
+                notificacoesLidas.push(key);
+                localStorage.setItem('notificacoes_lidas', JSON.stringify(notificacoesLidas));
+
+                mostrarNotificacao(
+                    '📧 Nova Mensagem',
+                    `${mensagem.nome} enviou uma mensagem via contato.`,
+                    'mensagem',
+                    'mensagem'
+                );
+            });
+
+            // ==========================================
+            // 4. RESPOSTAS A ORÇAMENTOS
+            // ==========================================
+            database.ref('orcamentos').on('child_changed', function(snapshot) {
+                const orcamento = snapshot.val();
+                if (!orcamento || !orcamento.resposta) return;
+
+                const key = 'res_' + snapshot.key;
+                if (notificacoesLidas.includes(key)) return;
+                notificacoesLidas.push(key);
+                localStorage.setItem('notificacoes_lidas', JSON.stringify(notificacoesLidas));
+
+                mostrarNotificacao(
+                    '✅ Orçamento Respondido',
+                    `O orçamento de ${orcamento.nome} foi respondido. Status: ${orcamento.status}`,
+                    'orcamento',
+                    'orcamento'
+                );
+            });
+
+            console.log('🔔 Notificações ativas!');
+        }
+
+        // ==========================================
+        // LIMPAR NOTIFICAÇÕES (para testes)
+        // ==========================================
+        function limparNotificacoes() {
+            document.getElementById('notificacaoContainer').innerHTML = '';
+            contadorNotificacoes = 0;
+            atualizarBadge();
+            localStorage.removeItem('notificacoes_lidas');
+            notificacoesLidas = [];
+            console.log('🧹 Notificações limpas!');
+        }
+
+        // Expor funções no console para testes
+        window.__limparNotificacoes = limparNotificacoes;
+        window.__testarNotificacao = function() {
+            mostrarNotificacao('🧪 Teste', 'Esta é uma notificação de teste!', 'orcamento', null);
+        };
 
         // ==========================================
         // SCROLL ANIMATION
@@ -1800,7 +2413,10 @@
 
         console.log('✅ Site Delícias da Kandengue carregado!');
         console.log('🔥 Firebase:', firebaseConfig.projectId);
+        console.log('🔒 Ações restritas: Orçamento, Depoimentos, Contato');
+        console.log('📊 Conteúdo gerido pelo Dashboard');
+        console.log('🔔 Notificações em tempo real ativas para administradores!');
+        console.log('🛠️ Comandos: __testarNotificacao() | __limparNotificacoes()');
     </script>
-
 </body>
 </html>

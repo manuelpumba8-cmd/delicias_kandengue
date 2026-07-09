@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard.html
+Disallow: /configuracoes.html
+Disallow: /login.html
+Disallow: /cadastro.html
+Disallow: /orcamento.html
+Allow: /media/imagens/
+
+Sitemap: https://manuelpumba8-cmd.github.io/delicias_kandengue/sitemap.xml
+
+# Tempo de atualização
+Crawl-delay: 5
+
+# Host
+Host: https://manuelpumba8-cmd.github.io/delicias_kandengue/

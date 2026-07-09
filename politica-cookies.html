@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Cookies - Delícias da Kandengue</title>
+    <link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIt7yIRQb8_MeXmVrnpQCCQUD5uXGhvNU",
+            authDomain: "delicias-91228.firebaseapp.com",
+            databaseURL: "https://delicias-91228-default-rtdb.firebaseio.com",
+            projectId: "delicias-91228",
+            storageBucket: "delicias-91228.firebasestorage.app",
+            messagingSenderId: "163923093683",
+            appId: "1:163923093683:web:82660c6097ecca35dda8c6",
+            measurementId: "G-3JF00F4X1G"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --primary: #c0392b; --gold: #f1c40f; --dark: #1a1a2e; --cor-principal: #ffc107; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #faf8f5;
+            color: #2d2d2d;
+            overflow-x: hidden;
+            padding-top: 76px;
+        }
+
+        h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; }
+
+        /* ==========================================
+           NAVBAR (igual às outras páginas - versão resumida)
+        ========================================== */
+        .navbar {
+            background: rgba(26, 26, 46, 0.97) !important;
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            border-bottom: 2px solid rgba(241, 196, 15, 0.12);
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .navbar-brand img { width: 50px; transition: transform 0.3s ease; }
+        .navbar-brand span { font-family: 'Playfair Display', serif; font-weight: 700; color: #fff; font-size: 1.2rem; }
+        .navbar-brand span .gold { color: var(--gold); }
+
+        .navbar-toggler { border: none; padding: 8px; }
+        .navbar-toggler:focus { box-shadow: none; }
+        .navbar-toggler-icon { filter: invert(1); }
+
+        .nav-link {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8) !important;
+            transition: color 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+            margin: 0 12px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 60%; }
+        .nav-link:hover { color: var(--gold) !important; }
+
+        .btn-nav {
+            padding: 8px 22px;
+            background: var(--gold);
+            color: var(--dark);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(241, 196, 15, 0.3);
+            color: var(--dark);
+        }
+
+        .btn-nav-outline {
+            padding: 8px 22px;
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-nav-outline:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar-nav {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), #f39c12);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .user-avatar-nav img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .user-avatar-nav:hover { transform: scale(1.08); border-color: var(--gold); }
+        .user-avatar-nav .status-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: #27ae60;
+            border-radius: 50%;
+            border: 2px solid var(--dark);
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 115%;
+            right: 0;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            min-width: 250px;
+            padding: 12px 0;
+            z-index: 1060;
+            animation: fadeInDown 0.3s ease;
+        }
+        .profile-dropdown.show { display: block; }
+
+        .profile-dropdown .dropdown-header {
+            padding: 12px 20px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .profile-dropdown .dropdown-header .avatar-small {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--dark);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .profile-dropdown .dropdown-header .avatar-small img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-dropdown .dropdown-header .user-info .name { font-weight: 600; color: var(--dark); font-size: 0.95rem; }
+        .profile-dropdown .dropdown-header .user-info .email { font-size: 0.75rem; color: #6c757d; }
+        .profile-dropdown .dropdown-header .user-info .role {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 50px;
+            background: var(--gold);
+            color: var(--dark);
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        .profile-dropdown .divider { height: 1px; background: #f0f0f0; margin: 6px 12px; }
+        .profile-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .profile-dropdown a:hover { background: #f8f9fa; color: var(--gold); }
+        .profile-dropdown a i { width: 20px; text-align: center; }
+        .profile-dropdown .logout-btn {
+            color: #e74c3c;
+            border-top: 1px solid #f0f0f0;
+            margin-top: 4px;
+            padding-top: 12px;
+        }
+        .profile-dropdown .logout-btn:hover { color: #c0392b; background: #fde8e8; }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==========================================
+           PAGE HEADER
+        ========================================== */
+        .page-header {
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            color: #fff;
+            padding: 60px 0 40px;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .page-header h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; }
+        .page-header h1 .gold { color: var(--gold); }
+        .page-header p { color: rgba(255, 255, 255, 0.7); max-width: 600px; margin: 10px auto 0; }
+
+        /* ==========================================
+           COOKIES
+        ========================================== */
+        .cookies-content {
+            padding: 0 0 60px;
+        }
+
+        .cookies-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .cookies-card:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .cookies-card h4 {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .cookies-card h4 i {
+            color: var(--gold);
+            margin-right: 10px;
+        }
+
+        .cookies-card p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .cookies-card ul {
+            padding-left: 20px;
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .cookies-card ul li {
+            margin-bottom: 8px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .section-tag::before {
+            content: '';
+            display: inline-block;
+            width: 30px;
+            height: 2px;
+            background: var(--gold);
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+        .section-title span { color: var(--primary); }
+
+        /* ==========================================
+           TOAST
+        ========================================== */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+        }
+        .custom-toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px 24px;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid var(--gold);
+            animation: slideInRight 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .custom-toast.success { border-left-color: #27ae60; }
+        .custom-toast.error { border-left-color: #e74c3c; }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================
+           FOOTER
+        ========================================== */
+        .footer {
+            background: var(--dark);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 60px 0 20px;
+            margin-top: 60px;
+            border-top: 1px solid rgba(0, 191, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cor-principal), transparent) !important;
+        }
+        .footer-logo {
+            width: 120px;
+            margin-bottom: 20px;
+            filter: brightness(0) invert(1);
+        }
+        .footer h5 {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--cor-principal);
+        }
+        .footer a {
+            color: #aaa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        .footer a:hover { color: var(--gold); padding-left: 8px; }
+        .footer-social a {
+            display: inline-flex;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: 0.3s;
+            margin-right: 10px;
+        }
+        .footer-social a:hover {
+            background: var(--cor-principal);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px var(--cor-principal);
+            color: #fff;
+            padding-left: 0px;
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            color: #888 !important;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header { padding: 40px 0 30px; }
+            .cookies-card { padding: 20px; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOAST -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ==========================================
+         NAVBAR
+    ========================================== -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="media/imagens/Copilot_20251027_215018d.png" alt="Logo">
+                <span>Delícias <span class="gold">Kandengue</span></span>
+            </a>
+
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre</a></li>
+                    <li class="nav-item"><a class="nav-link" href="servicos.html">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="galeria.html">Galeria</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contato">Contato</a></li>
+                    <li class="nav-item"><a class="nav-link" href="orcamento.html">Orçamento</a></li>
+                    <li class="nav-item ms-lg-2" id="authSection"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- OFFCANVAS -->
+    <div class="offcanvas offcanvas-end text-bg-dark d-lg-none" tabindex="-1"
+    style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #2d2d44 100%); z-index: 9999999 !important;"
+    id="offcanvasNavbar">
+    <div class="offcanvas-header">
+        <img src="media/imagens/Copilot_20251027_215018d.png" width="50px" alt="Logo">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="index.html" onclick="closeOffcanvas()">Início</a></li>
+            <li class="nav-item"><a class="nav-link" href="sobre.html" onclick="closeOffcanvas()">Sobre</a></li>
+            <li class="nav-item"><a class="nav-link" href="servicos.html" onclick="closeOffcanvas()">Serviços</a></li>
+            <li class="nav-item"><a class="nav-link" href="galeria.html" onclick="closeOffcanvas()">Galeria</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contato" onclick="closeOffcanvas()">Contato</a></li>
+            <li class="nav-item"><a class="nav-link" href="orcamento.html" onclick="closeOffcanvas()">Orçamento</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html" onclick="closeOffcanvas()">Login</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ==========================================
+     HEADER
+========================================== -->
+<div class="page-header">
+    <div class="container">
+        <h1>Política de <span class="gold">Cookies</span></h1>
+        <p>Saiba como utilizamos cookies para melhorar a sua experiência no nosso site.</p>
+    </div>
+</div>
+
+<!-- ==========================================
+     COOKIES
+========================================== -->
+<div class="cookies-content">
+    <div class="container">
+
+        <div class="fade-in">
+            <div class="cookies-card">
+                <h4><i class="bi bi-info-circle"></i> 1. O que são Cookies?</h4>
+                <p>
+                    Cookies são pequenos ficheiros de texto que são armazenados no seu dispositivo quando visita
+                    um site. Eles permitem que o site reconheça o seu dispositivo e armazene informações sobre
+                    as suas preferências.
+                </p>
+            </div>
+        </div>
+
+        <div class="fade-in">
+            <div class="cookies-card">
+                <h4><i class="bi bi-list-check"></i> 2. Tipos de Cookies que Utilizamos</h4>
+                <ul>
+                    <li><strong>Cookies essenciais:</strong> Necessários para o funcionamento básico do site</li>
+                    <li><strong>Cookies de funcionalidade:</strong> Permitem personalizar a sua experiência</li>
+                    <li><strong>Cookies de análise:</strong> Ajudam-nos a entender como os utilizadores interagem com o site</li>
+                    <li><strong>Cookies de marketing:</strong> Utilizados para apresentar conteúdo relevante</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="fade-in">
+            <div class="cookies-card">
+                <h4><i class="bi bi-gear"></i> 3. Cookies Específicos</h4>
+                <ul>
+                    <li><strong>Firebase Auth:</strong> Armazena a sessão de autenticação</li>
+                    <li><strong>Bootstrap:</strong> Gerencia o comportamento do menu e componentes</li>
+                    <li><strong>Google Fonts:</strong> Carrega as fontes utilizadas no site</li>
+                    <li><strong>Bootstrap Icons:</strong> Carrega os ícones utilizados</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="fade-in">
+            <div class="cookies-card">
+                <h4><i class="bi bi-sliders"></i> 4. Como Gerir os Cookies</h4>
+                <p>
+                    Pode gerir ou desativar os cookies nas definições do seu navegador:
+                </p>
+                <ul>
+                    <li><strong>Google Chrome:</strong> Definições → Privacidade e segurança → Cookies</li>
+                    <li><strong>Mozilla Firefox:</strong> Opções → Privacidade e segurança → Cookies</li>
+                    <li><strong>Microsoft Edge:</strong> Definições → Cookies e permissões do site</li>
+                    <li><strong>Safari:</strong> Preferências → Privacidade → Gerir dados do site</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="fade-in">
+            <div class="cookies-card">
+                <h4><i class="bi bi-check-circle"></i> 5. Consentimento</h4>
+                <p>
+                    Ao continuar a utilizar o nosso site, você consente com a utilização de cookies de acordo
+                    com esta política. Pode retirar o seu consentimento a qualquer momento.
+                </p>
+            </div>
+        </div>
+
+        <div class="fade-in">
+            <div class="cookies-card">
+                <h4><i class="bi bi-arrow-repeat"></i> 6. Atualizações</h4>
+                <p>
+                    Esta política de cookies pode ser atualizada periodicamente. Recomendamos que reveja
+                    esta página regularmente para se manter informado sobre quaisquer alterações.
+                </p>
+            </div>
+        </div>
+
+        <div class="fade-in">
+            <div class="cookies-card">
+                <h4><i class="bi bi-envelope"></i> 7. Contacto</h4>
+                <p>
+                    Para questões sobre esta política de cookies, entre em contacto connosco:
+                </p>
+                <ul>
+                    <li>Email: <a href="mailto:manuelpumba8@gmail.com">manuelpumba8@gmail.com</a></li>
+                    <li>WhatsApp: <a href="https://wa.me/+244956759813">+244 956 75 98 13</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-center mt-4 fade-in">
+            <p style="color: #6c757d; font-size: 0.9rem;">
+                Última atualização: Janeiro 2026
+            </p>
+            <a href="index.html" class="btn btn-warning" style="border-radius: 50px; padding: 10px 30px; font-weight: 600;">
+                <i class="bi bi-arrow-left"></i> Voltar ao Início
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<!-- ==========================================
+     CONTATO
+========================================== -->
+<section id="contato" class="fade-in" style="padding: 60px 0; background: #faf8f5;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-tag">Contato</span>
+            <h2 class="section-title">Vamos <span>conversar?</span></h2>
+            <p style="color: #6c757d; max-width: 600px; margin: 0 auto;">
+                Quer fazer do seu evento um momento inesquecível? Entre em contacto connosco.
+            </p>
+        </div>
+        <div class="row justify-content-center g-4">
+            <div class="col-md-4">
+                <div style="padding: 25px; background:#fff; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.05); text-align:center; height:100%;">
+                    <div style="width:60px;height:60px;border-radius:50%;background:rgba(241,196,15,0.1);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--gold);margin:0 auto 15px;"><i class="bi bi-whatsapp"></i></div>
+                    <h5>WhatsApp</h5>
+                    <p>+244 956 75 98 13</p>
+                    <a href="https://wa.me/+244956759813" target="_blank" class="btn btn-warning btn-sm">Falar agora</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div style="padding: 25px; background:#fff; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.05); text-align:center; height:100%;">
+                    <div style="width:60px;height:60px;border-radius:50%;background:rgba(241,196,15,0.1);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--gold);margin:0 auto 15px;"><i class="bi bi-envelope"></i></div>
+                    <h5>Email</h5>
+                    <p>manuelpumba8@gmail.com</p>
+                    <a href="mailto:manuelpumba8@gmail.com" class="btn btn-warning btn-sm">Enviar email</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div style="padding: 25px; background:#fff; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.05); text-align:center; height:100%;">
+                    <div style="width:60px;height:60px;border-radius:50%;background:rgba(241,196,15,0.1);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--gold);margin:0 auto 15px;"><i class="bi bi-geo-alt"></i></div>
+                    <h5>Localização</h5>
+                    <p>Luanda, Angola</p>
+                    <a href="#" class="btn btn-warning btn-sm">Ver no mapa</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+<footer class="footer">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <img src="media/imagens/Copilot_20251027_215018.png" alt="Logo" class="footer-logo">
+                <p style="margin-top: 15px; max-width: 300px;">Buffet especializado em eventos. Sabores que encantam e transformam cada ocasião num momento inesquecível.</p>
+                <div class="footer-social">
+                    <a href="https://wa.me/+244956759813" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                    <a href="#" target="_blank"><i class="bi bi-facebook"></i></a>
+                    <a href="https://www.instagram.com/manuel_pumba8" target="_blank"><i class="bi bi-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <h5>Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="sobre.html">Sobre</a></li>
+                    <li><a href="servicos.html">Serviços</a></li>
+                    <li><a href="galeria.html">Galeria</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Serviços</h5>
+                <ul class="list-unstyled">
+                    <li><a href="servicos.html">Casamentos</a></li>
+                    <li><a href="servicos.html">Aniversários</a></li>
+                    <li><a href="servicos.html">Eventos Corporativos</a></li>
+                    <li><a href="servicos.html">Buffet Privado</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Contato</h5>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-telephone me-2"></i> +244 956 75 98 13</li>
+                    <li><i class="bi bi-envelope me-2"></i> manuelpumba8@gmail.com</li>
+                    <li><i class="bi bi-geo-alt me-2"></i> Luanda, Angola</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 <strong>Delícias da Kandengue</strong> - Todos os direitos reservados</p>
+            <p>Desenvolvido com <i class="bi bi-heart-fill text-danger"></i> por <strong>FT Code</strong></p>
+        </div>
+    </div>
+</footer>
+
+<!-- ==========================================
+     SCRIPTS
+========================================== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // ==========================================
+    // AUTENTICAÇÃO
+    // ==========================================
+    const authSection = document.getElementById('authSection');
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+            const initial = displayName.charAt(0).toUpperCase();
+
+            authSection.innerHTML = `
+                        <div style="position: relative;">
+                            <a href="#" class="user-avatar-nav" onclick="toggleProfileDropdown(event)" title="${displayName}">
+                                ${user.photoURL ? `<img src="${user.photoURL}" alt="${displayName}">` : initial}
+                                <span class="status-dot"></span>
+                            </a>
+                            <div class="profile-dropdown" id="profileDropdown">
+                                <div class="dropdown-header">
+                                    <div class="avatar-small">
+                                        ${user.photoURL ? `<img src="${user.photoURL}" alt="${displayName}">` : initial}
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="name">${displayName}</div>
+                                        <div class="email">${user.email}</div>
+                                        <span class="role">${user.email === 'manuelpumba8@gmail.com' ? '👑 Admin' : 'Utilizador'}</span>
+                                    </div>
+                                </div>
+                                <div class="divider"></div>
+                                <a href="dashboard.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                                <a href="configuracoes.html"><i class="bi bi-gear"></i> Configurações</a>
+                                <div class="divider"></div>
+                                <a href="#" onclick="logoutUser(event)" class="logout-btn"><i class="bi bi-box-arrow-right"></i> Sair</a>
+                            </div>
+                        </div>
+                    `;
+        } else {
+            authSection.innerHTML = `
+                        <a href="login.html" class="btn-nav-outline me-2">Entrar</a>
+                        <a href="cadastro.html" class="btn-nav">Registar</a>
+                    `;
+        }
+    });
+
+    function toggleProfileDropdown(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown) dropdown.classList.toggle('show');
+    }
+
+    function logoutUser(event) {
+        if (event) event.preventDefault();
+        if (confirm('Tem a certeza que deseja sair?')) {
+            auth.signOut().then(() => {
+                showToast('Logout efetuado com sucesso!', 'success');
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            }).catch(error => {
+                showToast('Erro ao sair: ' + error.message, 'error');
+            });
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('profileDropdown');
+        const avatar = document.querySelector('.user-avatar-nav');
+        if (dropdown && avatar) {
+            if (!avatar.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        }
+    });
+
+    function closeOffcanvas() {
+        const offcanvas = document.getElementById('offcanvasNavbar');
+        if (!offcanvas) return;
+        if (typeof bootstrap !== 'undefined') {
+            try {
+                const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvas);
+                if (bsOffcanvas) { bsOffcanvas.hide(); return; }
+                new bootstrap.Offcanvas(offcanvas).hide();
+                return;
+            } catch (e) {}
+        }
+        offcanvas.classList.remove('show');
+        document.querySelectorAll('.offcanvas-backdrop').forEach(el => el.remove());
+        document.body.classList.remove('offcanvas-open');
+        document.body.style.overflow = '';
+    }
+
+    // ==========================================
+    // TOAST
+    // ==========================================
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `custom-toast ${type}`;
+        const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+        toast.innerHTML = `
+                    <span>${icons[type] || 'ℹ️'}</span>
+                    <span>${message}</span>
+                    <span style="cursor:pointer;margin-left:auto;font-weight:700;" onclick="this.parentElement.remove()">✕</span>
+                `;
+        container.appendChild(toast);
+        setTimeout(() => { if (toast.parentElement) toast.remove(); }, 5000);
+    }
+
+    // ==========================================
+    // SCROLL ANIMATION
+    // ==========================================
+    function revealOnScroll() {
+        document.querySelectorAll('.fade-in').forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 80) {
+                el.classList.add('visible');
+            }
+        });
+    }
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+
+    console.log('✅ Página Política de Cookies carregada!');
+</script>
+</body>
+</html>

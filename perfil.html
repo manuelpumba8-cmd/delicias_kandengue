@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Delícias da Kandengue</title>
+    <link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIt7yIRQb8_MeXmVrnpQCCQUD5uXGhvNU",
+            authDomain: "delicias-91228.firebaseapp.com",
+            databaseURL: "https://delicias-91228-default-rtdb.firebaseio.com",
+            projectId: "delicias-91228",
+            storageBucket: "delicias-91228.firebasestorage.app",
+            messagingSenderId: "163923093683",
+            appId: "1:163923093683:web:82660c6097ecca35dda8c6",
+            measurementId: "G-3JF00F4X1G"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #c0392b;
+            --gold: #f1c40f;
+            --dark: #1a1a2e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #faf8f5;
+            padding-top: 76px;
+        }
+
+        .navbar {
+            background: rgba(26, 26, 46, 0.97) !important;
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            border-bottom: 2px solid rgba(241, 196, 15, 0.12);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand img {
+            width: 45px;
+        }
+
+        .navbar-brand span {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .navbar-brand span .gold {
+            color: var(--gold);
+        }
+
+        .nav-link {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.75) !important;
+            transition: color 0.3s ease;
+            padding: 8px 14px !important;
+            border-radius: 8px;
+        }
+        .nav-link:hover {
+            color: var(--gold) !important;
+            background: rgba(241, 196, 15, 0.08);
+        }
+        .nav-link.active {
+            color: var(--gold) !important;
+            background: rgba(241, 196, 15, 0.1);
+        }
+
+        .user-avatar-nav {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-decoration: none;
+            overflow: hidden;
+        }
+        .user-avatar-nav img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .user-avatar-nav:hover {
+            transform: scale(1.08);
+            border-color: var(--gold);
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            padding: 12px 0;
+            z-index: 1060;
+            animation: fadeInDown 0.3s ease;
+        }
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .profile-dropdown .dropdown-header {
+            padding: 8px 20px 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .profile-dropdown .dropdown-header .name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .profile-dropdown .dropdown-header .email {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+
+        .profile-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .profile-dropdown a:hover {
+            background: #f8f9fa;
+            color: var(--gold);
+        }
+        .profile-dropdown .divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 6px 0;
+        }
+        .profile-dropdown .logout-btn {
+            color: #e74c3c;
+        }
+        .profile-dropdown .logout-btn:hover {
+            color: #c0392b;
+            background: #fde8e8;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+            color: #fff;
+            padding: 40px 0;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 30px;
+        }
+
+        .profile-header .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            overflow: hidden;
+            margin: 0 auto 15px;
+            border: 4px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .profile-header .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            height: 100%;
+        }
+
+        .profile-card .card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .form-control-profile {
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            padding: 12px 16px;
+            transition: 0.3s;
+        }
+
+        .form-control-profile:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.08);
+        }
+
+        .btn-save {
+            padding: 10px 30px;
+            background: var(--gold);
+            color: var(--dark);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(241, 196, 15, 0.3);
+        }
+
+        .btn-back {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 380px;
+        }
+
+        .custom-toast {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+            border-left: 4px solid var(--gold);
+            animation: slideInRight 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+
+        .custom-toast.success {
+            border-left-color: #27ae60;
+        }
+        .custom-toast.error {
+            border-left-color: #e74c3c;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(80px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-header .row {
+                flex-direction: column;
+                text-align: center;
+            }
+            .profile-header .avatar {
+                margin: 0 auto;
+            }
+            .profile-card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOAST -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="media/imagens/Copilot_20251027_215018d.png" alt="Logo">
+                <span>Delícias <span class="gold">Kandengue</span></span>
+            </a>
+
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="perfil.html">Perfil</a></li>
+                    <li class="nav-item ms-lg-2" id="authSection"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- OFFCANVAS MOBILE -->
+    <div class="offcanvas offcanvas-end text-bg-dark d-lg-none" tabindex="-1"
+    style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #2d2d44 100%); z-index: 9999999 !important;"
+    id="offcanvasNavbar">
+    <div class="offcanvas-header">
+        <img src="media/imagens/Copilot_20251027_215018d.png" width="50px" alt="Logo">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="index.html" onclick="closeOffcanvas()">Início</a></li>
+            <li class="nav-item"><a class="nav-link" href="dashboard.html" onclick="closeOffcanvas()">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link active" href="perfil.html" onclick="closeOffcanvas()">Perfil</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html" onclick="closeOffcanvas()">Login</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ==========================================
+     PERFIL HEADER
+========================================== -->
+<div class="profile-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="avatar" id="userAvatar">
+                    <div id="avatarText">U</div>
+                    <img id="avatarImage" style="display:none;" alt="Avatar">
+                </div>
+                <div class="text-center">
+                    <h2 id="userName" style="font-family: 'Playfair Display', serif;">Utilizador</h2>
+                    <p class="text-light opacity-75" id="userEmail">email@email.com</p>
+                    <span class="badge bg-warning text-dark" id="userRole">Utilizador</span>
+                    <span class="badge bg-info text-dark ms-2" id="emailStatus">📧 Não verificado</span>
+                </div>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="index.html" class="btn-back"><i class="bi bi-house"></i> Início</a>
+                <button onclick="logoutUser()" class="btn-logout" style="padding:8px 20px;background:#e74c3c;color:#fff;border:none;border-radius:10px;font-weight:500;transition:0.3s;margin-left:8px;">
+                    <i class="bi bi-box-arrow-right"></i> Sair
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     PERFIL CONTEÚDO
+========================================== -->
+<div class="container">
+    <div class="row g-4">
+
+        <!-- Dados Pessoais -->
+        <div class="col-md-6">
+            <div class="profile-card">
+                <div class="card-title"><i class="bi bi-person text-warning"></i> Dados Pessoais</div>
+                <form id="perfilForm">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nome</label>
+                        <input type="text" class="form-control-profile form-control" id="perfilNome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        <input type="email" class="form-control-profile form-control" id="perfilEmail" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Foto de Perfil (URL)</label>
+                        <input type="url" class="form-control-profile form-control" id="perfilFoto" placeholder="https://exemplo.com/foto.jpg">
+                        <small class="text-muted">Cole o URL da sua foto de perfil</small>
+                    </div>
+                    <button type="submit" class="btn-save w-100"><i class="bi bi-save"></i> Atualizar Perfil</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Segurança -->
+        <div class="col-md-6">
+            <div class="profile-card">
+                <div class="card-title"><i class="bi bi-shield-lock text-danger"></i> Segurança</div>
+                <form id="senhaForm">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Senha Atual</label>
+                        <input type="password" class="form-control-profile form-control" id="senhaAtual" placeholder="Digite sua senha atual" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nova Senha</label>
+                        <input type="password" class="form-control-profile form-control" id="novaSenha" placeholder="Mínimo 6 caracteres" required minlength="6">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Confirmar Nova Senha</label>
+                        <input type="password" class="form-control-profile form-control" id="confirmarSenha" placeholder="Confirme a nova senha" required>
+                    </div>
+                    <button type="submit" class="btn-save w-100" id="btnAlterarSenha"><i class="bi bi-key"></i> Alterar Senha</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Histórico de Orçamentos -->
+        <div class="col-12">
+            <div class="profile-card">
+                <div class="card-title"><i class="bi bi-clock-history text-warning"></i> Histórico de Orçamentos</div>
+                <div id="historicoOrcamentos">
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-calculator fs-1"></i>
+                        <p class="mt-2">Carregando orçamentos...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ==========================================
+     SCRIPTS
+========================================== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script>
+    // ==========================================
+    // AUTENTICAÇÃO
+    // ==========================================
+    const authSection = document.getElementById('authSection');
+
+    auth.onAuthStateChanged(user => {
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+        const initial = displayName.charAt(0).toUpperCase();
+
+        document.getElementById('userName').textContent = displayName;
+        document.getElementById('userEmail').textContent = user.email;
+        document.getElementById('userRole').textContent = user.email === 'manuelpumba8@gmail.com' ? '👑 Administrador' :
+            'Utilizador';
+
+        // Email verificado?
+        const emailStatus = document.getElementById('emailStatus');
+        if (user.emailVerified) {
+            emailStatus.textContent = '✅ Email verificado';
+            emailStatus.className = 'badge bg-success text-light ms-2';
+        } else {
+            emailStatus.textContent = '⚠️ Email não verificado';
+            emailStatus.className = 'badge bg-warning text-dark ms-2';
+        }
+
+        // Avatar
+        const avatarText = document.getElementById('avatarText');
+        const avatarImage = document.getElementById('avatarImage');
+        if (user.photoURL) {
+            avatarImage.src = user.photoURL;
+            avatarImage.style.display = 'block';
+            avatarText.style.display = 'none';
+        } else {
+            avatarText.textContent = initial;
+            avatarText.style.display = 'block';
+            avatarImage.style.display = 'none';
+        }
+
+        // Preencher formulário
+        document.getElementById('perfilNome').value = displayName;
+        document.getElementById('perfilEmail').value = user.email;
+        document.getElementById('perfilFoto').value = user.photoURL || '';
+
+        // Carregar histórico de orçamentos
+        carregarHistoricoOrcamentos(user.uid);
+
+        authSection.innerHTML = `
+                    <div style="position: relative;">
+                        <a href="#" class="user-avatar-nav" onclick="toggleProfileDropdown(event)" title="${displayName}">
+                            ${user.photoURL ? `<img src="${user.photoURL}">` : initial}
+                        </a>
+                        <div class="profile-dropdown" id="profileDropdown">
+                            <div class="dropdown-header">
+                                <div class="name">${displayName}</div>
+                                <div class="email">${user.email}</div>
+                            </div>
+                            <div class="divider"></div>
+                            <a href="dashboard.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                            <a href="perfil.html"><i class="bi bi-person"></i> Perfil</a>
+                            <div class="divider"></div>
+                            <a href="#" onclick="logoutUser(event)" class="logout-btn"><i class="bi bi-box-arrow-right"></i> Sair</a>
+                        </div>
+                    </div>
+                `;
+    });
+
+    function toggleProfileDropdown(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown) dropdown.classList.toggle('show');
+    }
+
+    function logoutUser(event) {
+        if (event) event.preventDefault();
+        if (confirm('Tem a certeza que deseja sair?')) {
+            auth.signOut().then(() => {
+                showToast('Logout efetuado!', 'success');
+                window.location.href = 'index.html';
+            }).catch(error => {
+                showToast('Erro: ' + error.message, 'error');
+            });
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('profileDropdown');
+        const avatar = document.querySelector('.user-avatar-nav');
+        if (dropdown && avatar && !avatar.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    function closeOffcanvas() {
+        const offcanvas = document.getElementById('offcanvasNavbar');
+        if (!offcanvas) return;
+        if (typeof bootstrap !== 'undefined') {
+            try {
+                const bs = bootstrap.Offcanvas.getInstance(offcanvas);
+                if (bs) { bs.hide(); return; }
+                new bootstrap.Offcanvas(offcanvas).hide();
+                return;
+            } catch (e) {}
+        }
+        offcanvas.classList.remove('show');
+        document.querySelectorAll('.offcanvas-backdrop').forEach(el => el.remove());
+        document.body.classList.remove('offcanvas-open');
+        document.body.style.overflow = '';
+    }
+
+    // ==========================================
+    // TOAST
+    // ==========================================
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `custom-toast ${type}`;
+        const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+        toast.innerHTML = `
+                    <span>${icons[type] || 'ℹ️'}</span>
+                    <span>${message}</span>
+                    <span style="cursor:pointer;margin-left:auto;font-weight:700;" onclick="this.parentElement.remove()">✕</span>
+                `;
+        container.appendChild(toast);
+        setTimeout(() => { if (toast.parentElement) toast.remove(); }, 5000);
+    }
+
+    // ==========================================
+    // ATUALIZAR PERFIL
+    // ==========================================
+    document.getElementById('perfilForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const nome = document.getElementById('perfilNome').value.trim();
+        const foto = document.getElementById('perfilFoto').value.trim();
+
+        if (!nome) {
+            showToast('Por favor, insira um nome.', 'error');
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        user.updateProfile({
+            displayName: nome,
+            photoURL: foto || null
+        }).then(() => {
+            database.ref('users/' + user.uid + '/name').set(nome);
+            if (foto) {
+                database.ref('users/' + user.uid + '/photoURL').set(foto);
+            }
+            showToast('✅ Perfil atualizado com sucesso!', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }).catch(error => {
+            showToast('❌ Erro: ' + error.message, 'error');
+        });
+    });
+
+    // ==========================================
+    // ALTERAR SENHA
+    // ==========================================
+    document.getElementById('senhaForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const atual = document.getElementById('senhaAtual').value;
+        const nova = document.getElementById('novaSenha').value;
+        const confirmar = document.getElementById('confirmarSenha').value;
+
+        if (!atual || !nova || !confirmar) {
+            showToast('Preencha todos os campos.', 'error');
+            return;
+        }
+
+        if (nova.length < 6) {
+            showToast('A nova senha deve ter pelo menos 6 caracteres.', 'error');
+            return;
+        }
+
+        if (nova !== confirmar) {
+            showToast('As senhas não coincidem.', 'error');
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const credential = firebase.auth.EmailAuthProvider.credential(user.email, atual);
+
+        user.reauthenticateWithCredential(credential).then(() => {
+            return user.updatePassword(nova);
+        }).then(() => {
+            showToast('✅ Senha alterada com sucesso!', 'success');
+            document.getElementById('senhaForm').reset();
+        }).catch(error => {
+            if (error.code === 'auth/wrong-password') {
+                showToast('❌ Senha atual incorreta.', 'error');
+            } else {
+                showToast('❌ Erro: ' + error.message, 'error');
+            }
+        });
+    });
+
+    // ==========================================
+    // HISTÓRICO DE ORÇAMENTOS
+    // ==========================================
+    function carregarHistoricoOrcamentos(userId) {
+        const container = document.getElementById('historicoOrcamentos');
+
+        database.ref('orcamentos').orderByChild('userId').equalTo(userId).once('value').then(snapshot => {
+            const orcamentos = snapshot.val();
+
+            if (!orcamentos) {
+                container.innerHTML = `
+                            <div class="text-center text-muted py-4">
+                                <i class="bi bi-calculator fs-1"></i>
+                                <p class="mt-2">Nenhum orçamento solicitado ainda.</p>
+                                <a href="orcamento.html" class="btn btn-warning btn-sm">Solicitar Orçamento</a>
+                            </div>
+                        `;
+                return;
+            }
+
+            let html = `
+                        <div class="table-responsive">
+                            <table class="table table-gestao">
+                                <thead>
+                                    <tr>
+                                        <th>Evento</th>
+                                        <th>Convidados</th>
+                                        <th>Data</th>
+                                        <th>Status</th>
+                                        <th>Resposta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                            `;
+
+            Object.keys(orcamentos).forEach(key => {
+                const o = orcamentos[key];
+                const statusClass = o.status || 'pendente';
+                const statusMap = {
+                    'pendente': 'pendente',
+                    'aprovado': 'aprovado',
+                    'rejeitado': 'rejeitado',
+                    'em-andamento': 'em-andamento'
+                };
+
+                html += `
+                            <tr>
+                                <td><strong>${o.tipoEvento}</strong></td>
+                                <td>${o.convidados}</td>
+                                <td>${o.dataEvento || 'Não definida'}</td>
+                                <td><span class="status-badge ${statusMap[statusClass] || 'pendente'}">${statusClass}</span></td>
+                                <td>${o.resposta ? '<span class="text-success"><i class="bi bi-check-circle"></i> Respondido</span>' : '<span class="text-muted">Aguardando</span>'}</td>
+                            </tr>
+                        `;
+            });
+
+            html += `
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-end mt-2">
+                            <a href="orcamento.html" class="btn btn-warning btn-sm"><i class="bi bi-plus-circle"></i> Novo Orçamento</a>
+                        </div>
+                    `;
+
+            container.innerHTML = html;
+        }).catch(() => {
+            container.innerHTML = `
+                        <div class="text-center text-muted py-4">
+                            <i class="bi bi-exclamation-triangle fs-1"></i>
+                            <p class="mt-2">Erro ao carregar orçamentos.</p>
+                        </div>
+                    `;
+        });
+    }
+</script>
+
+</body>
+</html>

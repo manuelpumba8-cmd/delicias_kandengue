@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <script>
+        const queryMedia = window.matchMedia("(max-width: 767px)");
+        if (queryMedia.matches) {
+            window.location.href = "#";
+        }
+        queryMedia.addEventListener("change", (e) => {
+            if (e.matches) {
+                window.location.href = "#";
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+    </script>
+    <link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Delícias da Kandengue - Mobile</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js">
+    </script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIt7yIRQb8_MeXmVrnpQCCQUD5uXGhvNU",
+            authDomain: "delicias-91228.firebaseapp.com",
+            databaseURL: "https://delicias-91228-default-rtdb.firebaseio.com",
+            projectId: "delicias-91228",
+            storageBucket: "delicias-91228.firebasestorage.app",
+            messagingSenderId: "163923093683",
+            appId: "1:163923093683:web:82660c6097ecca35dda8c6",
+            measurementId: "G-3JF00F4X1G"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #c0392b;
+            --primary-dark: #a93226;
+            --gold: #f1c40f;
+            --dark: #1a1a2e;
+            --cor-principal: #ffc107;
+            --skeleton-base: #e9ecef;
+            --skeleton-shine: #f8f9fa;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #faf8f5;
+            color: #2d2d2d;
+            overflow-x: hidden;
+            padding-top: 60px;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+        }
+        .page-wrapper {
+            opacity: 0;
+            transform: translateY(30px) scale(0.98);
+            animation: fadeInSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeInSlideUp {
+            0% { opacity: 0; transform: translateY(40px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cascadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-item:nth-child(1) { animation-delay: 0.1s; }
+        .animate-item:nth-child(2) { animation-delay: 0.2s; }
+        .animate-item:nth-child(3) { animation-delay: 0.3s; }
+        .animate-item:nth-child(4) { animation-delay: 0.4s; }
+        .animate-item:nth-child(5) { animation-delay: 0.5s; }
+        .animate-item:nth-child(6) { animation-delay: 0.6s; }
+        .animate-item:nth-child(7) { animation-delay: 0.7s; }
+        .animate-item:nth-child(8) { animation-delay: 0.8s; }
+        @keyframes cascadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .badge-animated {
+            display: inline-block;
+            animation: badgeBounce 2s ease-in-out infinite;
+        }
+        @keyframes badgeBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .skeleton-loading {
+            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shine) 50%, var(--skeleton-base) 75%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.5s infinite;
+            border-radius: 12px;
+            min-height: 80px;
+            margin-bottom: 16px;
+        }
+        .skeleton-text {
+            height: 14px;
+            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shine) 50%, var(--skeleton-base) 75%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.5s infinite;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .skeleton-text.short { width: 60%; }
+        .skeleton-text.medium { width: 80%; }
+        .skeleton-text.long { width: 100%; }
+        .skeleton-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shine) 50%, var(--skeleton-base) 75%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.5s infinite;
+            margin: 0 auto 12px;
+        }
+        .skeleton-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px 16px;
+            height: 100%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .skeleton-image {
+            width: 100%;
+            height: 160px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shine) 50%, var(--skeleton-base) 75%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.5s infinite;
+        }
+        @keyframes skeletonShimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .navbar {
+            background: rgba(26, 26, 46, 0.97) !important;
+            backdrop-filter: blur(10px);
+            padding: 8px 0;
+            border-bottom: 2px solid rgba(241, 196, 15, 0.12);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050;
+        }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .navbar-brand img {
+            width: 40px;
+            transition: transform 0.3s ease;
+        }
+        .navbar-brand span {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        .navbar-brand span .gold {
+            color: var(--gold);
+        }
+        .navbar-toggler {
+            border: none;
+            padding: 6px;
+        }
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        .navbar-toggler-icon {
+            filter: invert(1);
+            width: 24px;
+            height: 24px;
+        }
+        .user-avatar-nav {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            text-decoration: none;
+            overflow: hidden;
+            position: relative;
+        }
+        .user-avatar-nav img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .user-avatar-nav:hover {
+            transform: scale(1.05);
+            border-color: var(--gold);
+        }
+        .user-avatar-nav .status-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            background: #27ae60;
+            border-radius: 50%;
+            border: 2px solid var(--dark);
+        }
+        .btn-nav-mobile {
+            padding: 6px 16px;
+            background: var(--gold);
+            color: var(--dark);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-nav-mobile:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3);
+        }
+        .btn-nav-outline-mobile {
+            padding: 6px 16px;
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-nav-outline-mobile:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            padding: 10px 0;
+            z-index: 1060;
+            animation: fadeInDown 0.3s ease;
+        }
+        .profile-dropdown.show {
+            display: block;
+        }
+        .profile-dropdown .dropdown-header {
+            padding: 12px 16px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .profile-dropdown .dropdown-header .avatar-small {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--dark);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .profile-dropdown .dropdown-header .avatar-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-dropdown .dropdown-header .user-info .name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+        .profile-dropdown .dropdown-header .user-info .email {
+            font-size: 0.7rem;
+            color: #6c757d;
+        }
+        .profile-dropdown .dropdown-header .user-info .role {
+            display: inline-block;
+            font-size: 0.55rem;
+            padding: 2px 10px;
+            border-radius: 50px;
+            background: var(--gold);
+            color: var(--dark);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+        .profile-dropdown .divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 6px 12px;
+        }
+        .profile-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            color: #333;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.85rem;
+        }
+        .profile-dropdown a:hover {
+            background: #f8f9fa;
+            color: var(--gold);
+        }
+        .profile-dropdown a i {
+            width: 20px;
+            text-align: center;
+        }
+        .profile-dropdown .logout-btn {
+            color: #e74c3c;
+            border-top: 1px solid #f0f0f0;
+            margin-top: 4px;
+            padding-top: 12px;
+        }
+        .profile-dropdown .logout-btn:hover {
+            color: #c0392b;
+            background: #fde8e8;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #2d2d44 100%);
+            padding: 20px 0 40px;
+            overflow: hidden;
+        }
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(192, 57, 43, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(241, 196, 15, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .hero-container {
+            position: relative;
+            z-index: 2;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(241, 196, 15, 0.15);
+            border: 1px solid rgba(241, 196, 15, 0.25);
+            color: var(--gold);
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .hero-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+        .hero-title .highlight {
+            color: var(--gold);
+        }
+        .hero-subtitle {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .hero-text {
+            flex: 1;
+        }
+        .hero-image-wrapper {
+            flex: 0 0 120px;
+            position: relative;
+        }
+        .hero-image-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .hero-image-wrapper .hero-badge-img {
+            position: absolute;
+            bottom: -8px;
+            right: -8px;
+            background: var(--gold);
+            color: var(--dark);
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3);
+        }
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-primary-custom {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--gold);
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(241, 196, 15, 0.3);
+            width: 100%;
+        }
+        .btn-primary-custom:active {
+            transform: scale(0.97);
+        }
+        .btn-secondary-custom {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: transparent;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .btn-secondary-custom:active {
+            transform: scale(0.97);
+        }
+        .section-mobile {
+            padding: 40px 0;
+        }
+        .section-tag {
+            display: inline-block;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .section-tag::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 2px;
+            background: var(--gold);
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        .section-title span {
+            color: var(--primary);
+        }
+        .service-card-mobile {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+        .service-card-mobile:active {
+            transform: scale(0.97);
+        }
+        .service-icon-mobile {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(192, 57, 43, 0.08), rgba(241, 196, 15, 0.08));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 1.6rem;
+            color: var(--primary);
+        }
+        .service-card-mobile h5 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+        .service-card-mobile p {
+            color: #6c757d;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+        .service-card-mobile .price-tag {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 3px 12px;
+            background: rgba(241, 196, 15, 0.15);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            color: var(--primary);
+        }
+        #depoimentos-mobile {
+            background: var(--dark);
+            color: #fff;
+            padding: 40px 0;
+        }
+        .login-required-alert {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(241, 196, 15, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .login-required-alert i {
+            font-size: 2rem;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 10px;
+        }
+        .login-required-alert p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+        .login-required-alert .btn-login-alert {
+            background: var(--gold);
+            color: var(--dark);
+            padding: 8px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-block;
+        }
+        .login-required-alert .btn-login-alert:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(241, 196, 15, 0.3);
+        }
+        .testimonial-card-mobile {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            height: 100%;
+        }
+        .testimonial-card-mobile .stars {
+            color: var(--gold);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .testimonial-card-mobile p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        .testimonial-card-mobile .client {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .testimonial-card-mobile .client-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--dark);
+            overflow: hidden;
+        }
+        .testimonial-card-mobile .client-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .gallery-item-mobile {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .gallery-item-mobile img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .gallery-item-mobile:active img {
+            transform: scale(1.05);
+        }
+        .gallery-item-mobile .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 15px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            color: #fff;
+        }
+        .gallery-item-mobile .overlay h6 {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            font-size: 0.8rem;
+        }
+        .gallery-item-mobile .overlay small {
+            opacity: 0.8;
+            font-size: 0.65rem;
+        }
+        .contact-blocked {
+            background: #fff;
+            padding: 30px 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        .contact-blocked i {
+            font-size: 3rem;
+            color: #f1c40f;
+            display: block;
+            margin-bottom: 15px;
+        }
+        .contact-blocked h5 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .contact-blocked p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .form-control-mobile {
+            padding: 12px 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .form-control-mobile:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.1);
+            outline: none;
+        }
+        .btn-submit-mobile {
+            padding: 12px 20px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+        .btn-submit-mobile:active {
+            transform: scale(0.97);
+        }
+        .contact-item-mobile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+        }
+        .contact-item-mobile .icon {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+        .map-container {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .footer-mobile {
+            background: var(--dark);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 40px 0 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(241, 196, 15, 0.1);
+        }
+        .footer-mobile-logo {
+            width: 80px;
+            margin-bottom: 10px;
+            filter: brightness(0) invert(1);
+        }
+        .footer-mobile h6 {
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+        .footer-mobile a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .footer-mobile a:hover {
+            color: var(--gold);
+        }
+        .footer-mobile-social a {
+            display: inline-flex;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: 0.3s;
+            margin-right: 6px;
+            font-size: 0.9rem;
+        }
+        .footer-mobile-social a:active {
+            transform: scale(0.9);
+        }
+        .footer-mobile-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 15px;
+            margin-top: 25px;
+            text-align: center;
+            font-size: 0.7rem;
+        }
+        .toast-container {
+            position: fixed;
+            top: 70px;
+            right: 10px;
+            left: 10px;
+            z-index: 9999;
+        }
+        .custom-toast {
+            background: #fff;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid var(--gold);
+            animation: slideInRight 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+        .custom-toast.success {
+            border-left-color: #27ae60;
+        }
+        .custom-toast.error {
+            border-left-color: #e74c3c;
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .offcanvas {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #2d2d44 100%) !important;
+        }
+        .offcanvas .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-size: 0.9rem;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .offcanvas .nav-link:active {
+            color: var(--gold) !important;
+        }
+        .notificacao-flutuante {
+            position: fixed;
+            top: 70px;
+            right: 10px;
+            left: 10px;
+            z-index: 99999;
+            max-width: 100%;
+            pointer-events: none;
+        }
+        .notificacao-flutuante .notif-item {
+            pointer-events: auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+            border-left: 4px solid var(--gold);
+            animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .notificacao-flutuante .notif-item:hover {
+            transform: translateX(-3px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+        }
+        .notificacao-flutuante .notif-item .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .notificacao-flutuante .notif-item .icon.orcamento {
+            background: rgba(13, 110, 253, 0.12);
+            color: #0d6efd;
+        }
+        .notificacao-flutuante .notif-item .icon.depoimento {
+            background: rgba(241, 196, 15, 0.12);
+            color: #f1c40f;
+        }
+        .notificacao-flutuante .notif-item .icon.mensagem {
+            background: rgba(39, 174, 96, 0.12);
+            color: #27ae60;
+        }
+        .notificacao-flutuante .notif-item .content {
+            flex: 1;
+        }
+        .notificacao-flutuante .notif-item .content .title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--dark);
+        }
+        .notificacao-flutuante .notif-item .content .text {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin: 2px 0;
+        }
+        .notificacao-flutuante .notif-item .content .time {
+            font-size: 0.6rem;
+            color: #adb5bd;
+        }
+        .notificacao-flutuante .notif-item .close-notif {
+            background: none;
+            border: none;
+            color: #adb5bd;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0 4px;
+            transition: 0.3s;
+        }
+        .notificacao-flutuante .notif-item .close-notif:hover {
+            color: #e74c3c;
+        }
+        .notificacao-flutuante .notif-item.removing {
+            animation: slideOutRight 0.4s ease forwards;
+        }
+        @keyframes slideOutRight {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(80px); }
+        }
+        .notif-badge {
+            position: relative;
+            display: inline-block;
+            margin-left: 4px;
+            cursor: pointer;
+        }
+        .notif-badge .badge-count {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #e74c3c;
+            color: #fff;
+            font-size: 0.5rem;
+            font-weight: 700;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--dark);
+        }
+        .notif-badge .badge-count.visible {
+            display: flex;
+        }
+        .notif-badge i {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        @media (max-width: 400px) {
+            .hero-title { font-size: 1.5rem; }
+            .hero-image-wrapper { flex: 0 0 100px; }
+            .section-title { font-size: 1.3rem; }
+            .service-card-mobile { padding: 16px 12px; }
+            .gallery-item-mobile img { height: 130px; }
+        }
+        @media (max-width: 360px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero-image-wrapper {
+                flex: 0 0 auto;
+                max-width: 150px;
+            }
+            .hero-buttons {
+                align-items: center;
+            }
+        }
+        @media (min-width: 769px) {
+            body {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="toast-container" id="toastContainer"></div>
+        <div class="notificacao-flutuante" id="notificacaoContainerMobile"></div>
+
+        <nav class="navbar navbar-expand-lg animate-item">
+            <div class="container-fluid px-3">
+                <a class="navbar-brand" href="indexmobile.html">
+                    <img src="media/imagens/Copilot_20251027_215018d.png" alt="Logo">
+                    <span>Delícias <span class="gold">Kandengue</span></span>
+                </a>
+                <div class="d-flex align-items-center gap-2">
+                    <div id="authSectionMobile" style="position: relative;"></div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMobile">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMobile">
+            <div class="offcanvas-header">
+                <img src="media/imagens/Copilot_20251027_215018d.png" width="40px" alt="Logo">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" href="#hero" onclick="closeOffcanvasMobile()">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#sobre" onclick="closeOffcanvasMobile()">Sobre</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicos" onclick="closeOffcanvasMobile()">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#depoimentos-mobile" onclick="closeOffcanvasMobile()">Depoimentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#galeria" onclick="closeOffcanvasMobile()">Galeria</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contato" onclick="closeOffcanvasMobile()">Contato</a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html" onclick="closeOffcanvasMobile()">Login</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <section id="hero" class="animate-item">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="hero-badge badge-animated">
+                            <i class="bi bi-star-fill me-1"></i> Sabores que encantam
+                        </div>
+                        <h1 class="hero-title">
+                            Buffet para <br>
+                            <span class="highlight">Eventos Inesquecíveis</span>
+                        </h1>
+                        <p class="hero-subtitle">
+                            Transformamos cada evento numa experiência gastronómica única.
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="#" class="btn-primary-custom" onclick="verificarLoginOrcamentoMobile(event)" id="btnOrcamentoMobile">
+                                <i class="bi bi-whatsapp"></i> Pedir Orçamento
+                                <span class="lock-icon" style="font-size: 0.7rem; opacity: 0.6;">🔒</span>
+                            </a>
+                            <a href="#servicos" class="btn-secondary-custom">
+                                Ver Cardápio <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-image-wrapper">
+                        <img src="media/imagens/angola.png" alt="Delícias da Kandengue">
+                        <span class="hero-badge-img">+5 anos</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sobre" class="section-mobile fade-in animate-item">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <span class="section-tag">Quem Somos</span>
+                        <h2 class="section-title">O sabor que <span>faz a diferença</span></h2>
+                        <p style="color: #555; line-height: 1.8; font-size: 0.9rem;">
+                            A <strong>Delícias da Kandengue</strong> é um buffet especializado em eventos,
+                            que nasceu da paixão pela culinária e do desejo de criar momentos inesquecíveis.
+                        </p>
+                        <p style="color: #555; line-height: 1.8; font-size: 0.9rem;">
+                            Com mais de 5 anos de experiência, já realizamos centenas de eventos em Luanda,
+                            sempre com o compromisso de oferecer sabores autênticos e atendimento impecável.
+                        </p>
+                        <div class="row g-2 mt-3">
+                            <div class="col-6">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-check-circle-fill text-warning"></i>
+                                    <span style="font-size: 0.85rem;">Ingredientes frescos</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-check-circle-fill text-warning"></i>
+                                    <span style="font-size: 0.85rem;">Chef especializado</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-check-circle-fill text-warning"></i>
+                                    <span style="font-size: 0.85rem;">Montagem personalizada</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-check-circle-fill text-warning"></i>
+                                    <span style="font-size: 0.85rem;">Atendimento premium</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <img src="media/imagens/angola.jpeg" alt="Sobre" class="img-fluid rounded-3 shadow">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="servicos" class="section-mobile fade-in animate-item" style="background: #faf8f5;">
+            <div class="container">
+                <div class="text-center mb-4">
+                    <span class="section-tag">O que oferecemos</span>
+                    <h2 class="section-title">Cardápios para <span>todos os gostos</span></h2>
+                </div>
+                <div class="row g-3" id="servicosContainerMobile">
+                    <div class="col-6">
+                        <div class="skeleton-card">
+                            <div class="skeleton-circle"></div>
+                            <div class="skeleton-text short"></div>
+                            <div class="skeleton-text long"></div>
+                            <div class="skeleton-text medium" style="margin-top: 8px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="skeleton-card">
+                            <div class="skeleton-circle"></div>
+                            <div class="skeleton-text short"></div>
+                            <div class="skeleton-text long"></div>
+                            <div class="skeleton-text medium" style="margin-top: 8px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="skeleton-card">
+                            <div class="skeleton-circle"></div>
+                            <div class="skeleton-text short"></div>
+                            <div class="skeleton-text long"></div>
+                            <div class="skeleton-text medium" style="margin-top: 8px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="skeleton-card">
+                            <div class="skeleton-circle"></div>
+                            <div class="skeleton-text short"></div>
+                            <div class="skeleton-text long"></div>
+                            <div class="skeleton-text medium" style="margin-top: 8px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="depoimentos-mobile" class="fade-in animate-item">
+            <div class="container">
+                <div class="text-center mb-4">
+                    <span class="section-tag" style="color: var(--gold);">Depoimentos</span>
+                    <h2 class="section-title" style="color: #fff;">O que dizem <span style="color: var(--gold);">sobre nós</span></h2>
+                </div>
+                <div class="row">
+                    <div class="col-12" id="depoimentosListMobile">
+                        <div class="skeleton-loading" style="min-height:100px;"></div>
+                        <div class="skeleton-loading" style="min-height:100px;"></div>
+                        <div class="skeleton-loading" style="min-height:100px;"></div>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <div class="testimonial-form" style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.06);">
+                            <h5 class="text-light mb-3"><i class="bi bi-pencil-square text-warning"></i> Deixe seu depoimento</h5>
+                            <div id="depoimentoLoginRequiredMobile">
+                                <div class="login-required-alert">
+                                    <i class="bi bi-lock"></i>
+                                    <p>Faça login para deixar um depoimento</p>
+                                    <a href="login.html" class="btn-login-alert">Fazer Login</a>
+                                </div>
+                            </div>
+                            <form id="depoimentoFormMobile" onsubmit="enviarDepoimentoMobile(event)" style="display: none;">
+                                <div class="mb-3">
+                                    <label class="text-light-50 small">Seu nome</label>
+                                    <input type="text" class="form-control" id="depoNomeMobile" placeholder="Seu nome" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:12px; padding:12px 16px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="text-light-50 small">Avaliação</label>
+                                    <select class="form-control" id="depoEstrelasMobile" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:12px; padding:12px 16px;">
+                                        <option value="5" style="color:#333;">⭐⭐⭐⭐⭐ - Excelente</option>
+                                        <option value="4" style="color:#333;">⭐⭐⭐⭐ - Muito Bom</option>
+                                        <option value="3" style="color:#333;">⭐⭐⭐ - Bom</option>
+                                        <option value="2" style="color:#333;">⭐⭐ - Regular</option>
+                                        <option value="1" style="color:#333;">⭐ - Ruim</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="text-light-50 small">Seu depoimento</label>
+                                    <textarea class="form-control" id="depoMensagemMobile" rows="3" placeholder="Conte-nos sobre sua experiência..." style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:12px; padding:12px 16px;"></textarea>
+                                </div>
+                                <button type="submit" class="btn-submit-depoimento" style="width:100%; padding:12px; background:var(--gold); color:var(--dark); border:none; border-radius:12px; font-weight:600;">
+                                    <i class="bi bi-send"></i> Enviar Depoimento
+                                </button>
+                                <p class="text-light opacity-50 small mt-2 text-center">
+                                    <i class="bi bi-shield-check"></i> Seu depoimento será publicado automaticamente
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="galeria" class="section-mobile fade-in animate-item">
+            <div class="container">
+                <div class="text-center mb-4">
+                    <span class="section-tag">Galeria</span>
+                    <h2 class="section-title">Momentos <span>dos nossos eventos</span></h2>
+                </div>
+                <div class="row g-3" id="galeriaContainerMobile">
+                    <div class="col-4"><div class="skeleton-image" style="height:160px;"></div></div>
+                    <div class="col-4"><div class="skeleton-image" style="height:160px;"></div></div>
+                    <div class="col-4"><div class="skeleton-image" style="height:160px;"></div></div>
+                    <div class="col-4"><div class="skeleton-image" style="height:160px;"></div></div>
+                    <div class="col-4"><div class="skeleton-image" style="height:160px;"></div></div>
+                    <div class="col-4"><div class="skeleton-image" style="height:160px;"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contato" class="section-mobile fade-in animate-item" style="background: #faf8f5;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <span class="section-tag">Contato</span>
+                        <h2 class="section-title">Vamos <span>conversar?</span></h2>
+                        <p style="color: #6c757d; font-size: 0.9rem; line-height: 1.8;">
+                            Quer fazer do seu evento um momento inesquecível? Entre em contacto connosco.
+                        </p>
+                        <div class="contact-item-mobile">
+                            <div class="icon"><i class="bi bi-whatsapp"></i></div>
+                            <div class="info">
+                                <h6>WhatsApp</h6>
+                                <p>+244 956 75 98 13</p>
+                            </div>
+                        </div>
+                        <div class="contact-item-mobile">
+                            <div class="icon"><i class="bi bi-envelope"></i></div>
+                            <div class="info">
+                                <h6>Email</h6>
+                                <p>manuelpumba8@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item-mobile">
+                            <div class="icon"><i class="bi bi-geo-alt"></i></div>
+                            <div class="info">
+                                <h6>Localização</h6>
+                                <p>Luanda, Angola</p>
+                            </div>
+                        </div>
+                        <div class="map-container mt-3">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15770.244910218322!2d13.224684!3d-8.838333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a51f15e5b0f2e8d%3A0x2c9a3b7f4a2a3b7f!2sLuanda%2C%20Angola!5e0!3m2!1spt-PT!2spt!4v1700000000000" 
+                                width="100%" 
+                                height="200" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                        <a href="https://wa.me/+244956759813" target="_blank" class="btn-primary-custom mt-3">
+                            <i class="bi bi-whatsapp"></i> Fale connosco
+                        </a>
+                        <div id="contactFormWrapperMobile" style="background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-top: 15px;">
+                            <div id="contactLoginRequiredMobile">
+                                <div class="contact-blocked">
+                                    <i class="bi bi-lock"></i>
+                                    <h5>Faça login para enviar uma mensagem</h5>
+                                    <p>Precisa estar logado para entrar em contacto connosco.</p>
+                                    <a href="login.html" class="btn btn-warning mt-2" style="font-weight:600; border-radius:50px; padding:10px 40px;">Fazer Login</a>
+                                </div>
+                            </div>
+                            <form id="contactFormMobile" style="display: none;">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" style="font-size: 0.85rem;">Nome</label>
+                                    <input type="text" id="contatoNome" class="form-control-mobile" placeholder="Seu nome" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" style="font-size: 0.85rem;">Email</label>
+                                    <input type="email" id="contatoEmail" class="form-control-mobile" placeholder="seu@email.com" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" style="font-size: 0.85rem;">Tipo de Evento</label>
+                                    <select id="contatoEvento" class="form-control-mobile">
+                                        <option value="">Selecione...</option>
+                                        <option>Casamento</option>
+                                        <option>Aniversário</option>
+                                        <option>Evento Corporativo</option>
+                                        <option>Evento Privado</option>
+                                        <option>Outro</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" style="font-size: 0.85rem;">Nº de Convidados</label>
+                                    <input type="number" id="contatoConvidados" class="form-control-mobile" placeholder="Quantas pessoas?">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" style="font-size: 0.85rem;">Mensagem</label>
+                                    <textarea id="contatoMensagem" class="form-control-mobile" rows="3" placeholder="Conte-nos sobre o seu evento..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn-submit-mobile"><i class="bi bi-send"></i> Enviar Mensagem</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer-mobile animate-item">
+            <div class="container">
+                <div class="text-center">
+                    <img src="media/imagens/Copilot_20251027_215018.png" alt="Logo" class="footer-mobile-logo">
+                    <p style="font-size: 0.8rem; max-width: 280px; margin: 0 auto 15px;">
+                        Buffet especializado em eventos. Sabores que encantam e transformam cada ocasião.
+                    </p>
+                    <div class="footer-mobile-social">
+                        <a href="https://wa.me/+244956759813" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="https://www.instagram.com/manuel_pumba8" target="_blank"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="row g-3 mt-3">
+                    <div class="col-4">
+                        <h6>Links</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="#hero">Início</a></li>
+                            <li><a href="#sobre">Sobre</a></li>
+                            <li><a href="#servicos">Serviços</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-4">
+                        <h6>Serviços</h6>
+                        <ul class="list-unstyled">
+                            <li><a href="#servicos">Casamentos</a></li>
+                            <li><a href="#servicos">Aniversários</a></li>
+                            <li><a href="#servicos">Corporativos</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-4">
+                        <h6>Contato</h6>
+                        <ul class="list-unstyled">
+                            <li style="font-size: 0.75rem; color: rgba(255,255,255,0.6);">+244 956 75 98 13</li>
+                            <li style="font-size: 0.75rem; color: rgba(255,255,255,0.6);">manuelpumba8@gmail.com</li>
+                            <li style="font-size: 0.75rem; color: rgba(255,255,255,0.6);">Luanda, Angola</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-mobile-bottom">
+                    <p>© 2026 <strong>Delícias da Kandengue</strong></p>
+                    <p>Desenvolvido por <strong>FT Code</strong></p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+    </script>
+    <script>
+        const authSectionMobile = document.getElementById('authSectionMobile');
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                const displayName = user.displayName || user.email?.split('@')[0] || 'User';
+                const initial = displayName.charAt(0).toUpperCase();
+                const photoURL = user.photoURL || '';
+                const isAdmin = user.email === 'manuelpumba8@gmail.com';
+
+                authSectionMobile.innerHTML = `
+                            <a href="#" class="user-avatar-nav" onclick="toggleProfileDropdownMobile(event)" title="${displayName}">
+                                ${photoURL ? `<img src="${photoURL}" alt="${displayName}">` : initial}
+                                <span class="status-dot"></span>
+                            </a>
+                            <div class="profile-dropdown" id="profileDropdownMobile">
+                                <div class="dropdown-header">
+                                    <div class="avatar-small">
+                                        ${photoURL ? `<img src="${photoURL}" alt="${displayName}">` : initial}
+                                    </div>
+                                    <div class="user-info">
+                                        <div class="name">${displayName}</div>
+                                        <div class="email">${user.email}</div>
+                                        <span class="role">${isAdmin ? '👑 Admin' : 'Utilizador'}</span>
+                                    </div>
+                                </div>
+                                <div class="divider"></div>
+                                <a href="dashboard.html"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                                <a href="configuracoes.html"><i class="bi bi-gear"></i> Configurações</a>
+                                <div class="divider"></div>
+                                <a href="#" onclick="logoutUserMobile(event)" class="logout-btn"><i class="bi bi-box-arrow-right"></i> Sair</a>
+                            </div>
+                        `;
+
+                document.getElementById('depoimentoLoginRequiredMobile').style.display = 'none';
+                document.getElementById('depoimentoFormMobile').style.display = 'block';
+                document.getElementById('contactLoginRequiredMobile').style.display = 'none';
+                document.getElementById('contactFormMobile').style.display = 'block';
+
+                const btnOrcamento = document.getElementById('btnOrcamentoMobile');
+                btnOrcamento.href = 'orcamento.html';
+                btnOrcamento.innerHTML = '<i class="bi bi-whatsapp"></i> Pedir Orçamento';
+                btnOrcamento.onclick = null;
+
+                mostrarWelcomeModalMobile();
+
+                if (isAdmin) {
+                    setTimeout(iniciarNotificacoesMobile, 1500);
+                }
+
+            } else {
+                authSectionMobile.innerHTML = `
+                            <a href="login.html" class="btn-nav-outline-mobile">Entrar</a>
+                            <a href="cadastro.html" class="btn-nav-mobile">Registar</a>
+                        `;
+
+                document.getElementById('depoimentoLoginRequiredMobile').style.display = 'block';
+                document.getElementById('depoimentoFormMobile').style.display = 'none';
+                document.getElementById('contactLoginRequiredMobile').style.display = 'block';
+                document.getElementById('contactFormMobile').style.display = 'none';
+            }
+        });
+
+        function toggleProfileDropdownMobile(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const dropdown = document.getElementById('profileDropdownMobile');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
+        }
+
+        function logoutUserMobile(event) {
+            event.preventDefault();
+            if (confirm('Tem a certeza que deseja sair?')) {
+                auth.signOut().then(() => {
+                    showToastMobile('Logout efetuado com sucesso!', 'success');
+                    document.getElementById('profileDropdownMobile').classList.remove('show');
+                }).catch(error => {
+                    showToastMobile('Erro ao sair: ' + error.message, 'error');
+                });
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('profileDropdownMobile');
+            const avatar = document.querySelector('.user-avatar-nav');
+            if (dropdown && avatar) {
+                if (!avatar.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        });
+
+        function closeOffcanvasMobile() {
+            const offcanvas = document.getElementById('offcanvasMobile');
+            if (offcanvas) {
+                const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvas);
+                if (bsOffcanvas) bsOffcanvas.hide();
+            }
+        }
+
+        function verificarLoginOrcamentoMobile(event) {
+            event.preventDefault();
+            const user = auth.currentUser;
+            if (!user) {
+                showToastMobile('Faça login para solicitar um orçamento.', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
+            } else {
+                window.location.href = 'orcamento.html';
+            }
+        }
+
+        function showToastMobile(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type}`;
+            const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+            toast.innerHTML = `
+                        <span>${icons[type] || 'ℹ️'}</span>
+                        <span>${message}</span>
+                        <span style="cursor:pointer;margin-left:auto;font-weight:700;" onclick="this.parentElement.remove()">✕</span>
+                    `;
+            container.appendChild(toast);
+            setTimeout(() => { if (toast.parentElement) toast.remove(); }, 4000);
+        }
+
+        function enviarDepoimentoMobile(event) {
+            event.preventDefault();
+
+            const user = auth.currentUser;
+            if (!user) {
+                showToastMobile('Faça login para enviar um depoimento.', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+                return;
+            }
+
+            const nome = document.getElementById('depoNomeMobile').value.trim();
+            const estrelas = parseInt(document.getElementById('depoEstrelasMobile').value);
+            const mensagem = document.getElementById('depoMensagemMobile').value.trim();
+
+            if (!nome || !mensagem) {
+                showToastMobile('Preencha todos os campos.', 'error');
+                return;
+            }
+
+            const btn = event.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'A enviar...';
+            btn.disabled = true;
+
+            const depoimentoRef = database.ref('depoimentos').push();
+            depoimentoRef.set({
+                nome: nome,
+                estrelas: estrelas,
+                mensagem: mensagem,
+                aprovado: true,
+                data: new Date().toLocaleDateString('pt-PT'),
+                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                userId: user.uid,
+                userEmail: user.email,
+                userName: user.displayName || nome
+            }).then(() => {
+                showToastMobile('Depoimento enviado com sucesso!', 'success');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                document.getElementById('depoimentoFormMobile').reset();
+                carregarDepoimentosMobile();
+            }).catch(error => {
+                showToastMobile('Erro ao enviar depoimento: ' + error.message, 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            });
+        }
+
+        document.getElementById('contactFormMobile')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const user = auth.currentUser;
+            if (!user) {
+                showToastMobile('Faça login para enviar uma mensagem.', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+                return;
+            }
+
+            const nome = document.getElementById('contatoNome')?.value?.trim() || '';
+            const email = document.getElementById('contatoEmail')?.value?.trim() || '';
+            const evento = document.getElementById('contatoEvento')?.value || '';
+            const convidados = document.getElementById('contatoConvidados')?.value || '0';
+            const mensagem = document.getElementById('contatoMensagem')?.value?.trim() || '';
+
+            if (!nome || !email || !mensagem) {
+                showToastMobile('Preencha todos os campos obrigatórios.', 'error');
+                return;
+            }
+
+            if (!email.includes('@') || !email.includes('.')) {
+                showToastMobile('Insira um email válido.', 'error');
+                return;
+            }
+
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'A enviar...';
+            btn.disabled = true;
+
+            const dadosMensagem = {
+                nome: nome,
+                email: email,
+                tipoEvento: evento || 'Não informado',
+                convidados: parseInt(convidados) || 0,
+                mensagem: mensagem,
+                data: new Date().toLocaleString('pt-PT'),
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                lida: false,
+                respondida: false,
+                origem: 'mobile',
+                enviadoWhatsapp: false,
+                userId: user.uid,
+                userEmail: user.email
+            };
+
+            const mensagemRef = database.ref('mensagens_contato').push();
+
+            mensagemRef.set(dadosMensagem)
+                .then(() => {
+                    const telefone = '244956759813';
+                    const mensagemWhatsapp = `
+                        Nova Mensagem do Site (Mobile)
+                        Nome: ${nome}
+                        Email: ${email}
+                        Evento: ${evento || 'Não informado'}
+                        Convidados: ${convidados || '0'}
+                        Data: ${new Date().toLocaleString('pt-PT')}
+                        Mensagem: ${mensagem}
+                        ID: ${mensagemRef.key}
+                    `.trim();
+
+                    const urlWhatsapp = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagemWhatsapp)}`;
+                    window.open(urlWhatsapp, '_blank');
+
+                    database.ref('mensagens_contato/' + mensagemRef.key + '/enviadoWhatsapp').set(true);
+
+                    showToastMobile('Mensagem enviada com sucesso!', 'success');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    this.reset();
+                })
+                .catch(error => {
+                    showToastMobile('Erro ao enviar: ' + error.message, 'error');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+        });
+
+        function carregarServicosMobile() {
+            const container = document.getElementById('servicosContainerMobile');
+            if (!container) return;
+            database.ref('servicos').once('value').then(snapshot => {
+                const servicos = snapshot.val();
+                if (servicos) {
+                    let html = '';
+                    Object.keys(servicos).forEach(key => {
+                        const s = servicos[key];
+                        html += `
+                                    <div class="col-6">
+                                        <div class="service-card-mobile">
+                                            <div class="service-icon-mobile"><i class="bi ${s.icone || 'bi-star'}"></i></div>
+                                            <h5>${s.nome}</h5>
+                                            <p>${s.descricao}</p>
+                                            <span class="price-tag">${s.preco}</span>
+                                        </div>
+                                    </div>
+                                `;
+                    });
+                    container.innerHTML = html;
+                }
+            }).catch(() => {});
+        }
+
+        function carregarGaleriaMobile() {
+            const container = document.getElementById('galeriaContainerMobile');
+            if (!container) return;
+            database.ref('galeria').once('value').then(snapshot => {
+                const imagens = snapshot.val();
+                if (imagens) {
+                    let html = '';
+                    Object.keys(imagens).forEach(key => {
+                        const img = imagens[key];
+                        html += `
+                                    <div class="col-4">
+                                        <div class="gallery-item-mobile">
+                                            <img src="${img.url}" alt="${img.titulo}">
+                                            <div class="overlay">
+                                                <h6>${img.titulo}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                    });
+                    container.innerHTML = html;
+                }
+            }).catch(() => {});
+        }
+
+        function carregarDepoimentosMobile() {
+            const container = document.getElementById('depoimentosListMobile');
+            if (!container) return;
+            database.ref('depoimentos').orderByChild('aprovado').equalTo(true).once('value').then(snapshot => {
+                const depoimentos = snapshot.val();
+                if (depoimentos) {
+                    let html = '';
+                    let count = 0;
+                    Object.keys(depoimentos).forEach(key => {
+                        if (count >= 3) return;
+                        const d = depoimentos[key];
+                        const estrelas = '⭐'.repeat(d.estrelas || 5);
+                        const inicial = d.nome.charAt(0).toUpperCase();
+                        const foto = d.foto || '';
+                        html += `
+                                    <div class="col-12 mb-3">
+                                        <div class="testimonial-card-mobile">
+                                            <div class="stars">${estrelas}</div>
+                                            <p>"${d.mensagem}"</p>
+                                            <div class="client">
+                                                <div class="client-avatar">
+                                                    ${foto ? `<img src="${foto}" alt="${d.nome}">` : inicial}
+                                                </div>
+                                                <div class="client-info">
+                                                    <h6>${d.nome}</h6>
+                                                    <small>${d.data || 'Cliente'}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                        count++;
+                    });
+                    container.innerHTML = html;
+                }
+            }).catch(() => {});
+        }
+
+        function showRedirectNotification() {
+            const redirected = sessionStorage.getItem('redirected_mobile');
+            if (redirected === 'true') {
+                setTimeout(() => {
+                    showToastMobile('Versão mobile carregada!', 'info');
+                }, 800);
+            }
+        }
+
+        function revealOnScrollMobile() {
+            document.querySelectorAll('.fade-in').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 60) {
+                    el.classList.add('visible');
+                }
+            });
+        }
+        window.addEventListener('scroll', revealOnScrollMobile);
+        window.addEventListener('load', revealOnScrollMobile);
+
+        // ==========================================
+        // NOTIFICACOES EM TEMPO REAL MOBILE
+        // ==========================================
+        let notificacoesLidasMobile = JSON.parse(localStorage.getItem('notificacoes_lidas_mobile') || '[]');
+        let contadorNotificacoesMobile = 0;
+
+        function mostrarNotificacaoMobile(titulo, mensagem, tipo = 'orcamento', acao = null) {
+            const container = document.getElementById('notificacaoContainerMobile');
+            if (!container) return;
+
+            const notif = document.createElement('div');
+            notif.className = 'notif-item';
+
+            const icones = {
+                orcamento: { icon: '📋', class: 'orcamento' },
+                depoimento: { icon: '💬', class: 'depoimento' },
+                mensagem: { icon: '📧', class: 'mensagem' }
+            };
+
+            const info = icones[tipo] || icones.orcamento;
+            const agora = new Date();
+            const hora = agora.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+
+            notif.innerHTML = `
+                <div class="icon ${info.class}">${info.icon}</div>
+                <div class="content">
+                    <div class="title">${titulo}</div>
+                    <div class="text">${mensagem}</div>
+                    <div class="time">${hora}</div>
+                </div>
+                <button class="close-notif" onclick="fecharNotificacaoMobile(this)">✕</button>
+            `;
+
+            notif.addEventListener('click', function(e) {
+                if (e.target.closest('.close-notif')) return;
+                if (acao) {
+                    if (acao === 'orcamento') {
+                        window.location.href = 'orcamento.html';
+                    } else if (acao === 'depoimento') {
+                        document.getElementById('depoimentos-mobile')?.scrollIntoView({ behavior: 'smooth' });
+                    } else if (acao === 'mensagem') {
+                        document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+                fecharNotificacaoMobile(this.querySelector('.close-notif'));
+            });
+
+            container.prepend(notif);
+            contadorNotificacoesMobile++;
+            atualizarBadgeMobile();
+
+            setTimeout(() => {
+                if (notif.parentElement) {
+                    fecharNotificacaoMobile(notif.querySelector('.close-notif'));
+                }
+            }, 10000);
+        }
+
+        function fecharNotificacaoMobile(btn) {
+            const item = btn.closest('.notif-item');
+            if (!item) return;
+            item.classList.add('removing');
+            setTimeout(() => {
+                if (item.parentElement) {
+                    item.remove();
+                    contadorNotificacoesMobile--;
+                    atualizarBadgeMobile();
+                }
+            }, 400);
+        }
+
+        function atualizarBadgeMobile() {
+            let badge = document.querySelector('.notif-badge');
+            if (!badge) {
+                const authSection = document.getElementById('authSectionMobile');
+                if (authSection) {
+                    badge = document.createElement('span');
+                    badge.className = 'notif-badge';
+                    badge.innerHTML = `
+                        <i class="bi bi-bell"></i>
+                        <span class="badge-count" id="notifCountMobile">0</span>
+                    `;
+                    authSection.appendChild(badge);
+                }
+            }
+            const countEl = document.getElementById('notifCountMobile');
+            if (countEl) {
+                countEl.textContent = contadorNotificacoesMobile;
+                countEl.classList.toggle('visible', contadorNotificacoesMobile > 0);
+            }
+        }
+
+        function iniciarNotificacoesMobile() {
+            database.ref('orcamentos').orderByChild('createdAt').limitToLast(1).on('child_added', function(snapshot) {
+                const orcamento = snapshot.val();
+                if (!orcamento) return;
+                const key = 'orc_' + snapshot.key;
+                if (notificacoesLidasMobile.includes(key)) return;
+                notificacoesLidasMobile.push(key);
+                localStorage.setItem('notificacoes_lidas_mobile', JSON.stringify(notificacoesLidasMobile));
+                mostrarNotificacaoMobile(
+                    '📋 Novo Orçamento',
+                    `${orcamento.nome} solicitou um orçamento para ${orcamento.tipoEvento}`,
+                    'orcamento',
+                    'orcamento'
+                );
+            });
+
+            database.ref('depoimentos').orderByChild('createdAt').limitToLast(1).on('child_added', function(snapshot) {
+                const depoimento = snapshot.val();
+                if (!depoimento || depoimento.aprovado) return;
+                const key = 'dep_' + snapshot.key;
+                if (notificacoesLidasMobile.includes(key)) return;
+                notificacoesLidasMobile.push(key);
+                localStorage.setItem('notificacoes_lidas_mobile', JSON.stringify(notificacoesLidasMobile));
+                mostrarNotificacaoMobile(
+                    '💬 Novo Depoimento',
+                    `${depoimento.nome} deixou um novo depoimento aguardando aprovação.`,
+                    'depoimento',
+                    'depoimento'
+                );
+            });
+
+            database.ref('mensagens_contato').orderByChild('timestamp').limitToLast(1).on('child_added', function(snapshot) {
+                const mensagem = snapshot.val();
+                if (!mensagem || mensagem.lida) return;
+                const key = 'msg_' + snapshot.key;
+                if (notificacoesLidasMobile.includes(key)) return;
+                notificacoesLidasMobile.push(key);
+                localStorage.setItem('notificacoes_lidas_mobile', JSON.stringify(notificacoesLidasMobile));
+                mostrarNotificacaoMobile(
+                    '📧 Nova Mensagem',
+                    `${mensagem.nome} enviou uma mensagem via contato.`,
+                    'mensagem',
+                    'mensagem'
+                );
+            });
+        }
+
+        // ==========================================
+        // WELCOME MODAL MOBILE
+        // ==========================================
+        function mostrarWelcomeModalMobile() {
+            const user = auth.currentUser;
+            if (!user || user.email !== 'manuelpumba8@gmail.com') return;
+
+            const storageKey = 'welcome_shown_mobile_' + user.uid;
+            if (localStorage.getItem(storageKey) === 'true') return;
+
+            const modalHTML = `
+                        <div class="modal fade" id="welcomeModalMobile" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+                            <div class="modal-dialog modal-dialog-centered modal-sm">
+                                <div class="modal-content" style="border-radius: 24px; border: none; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.2);">
+                                    <div style="background: linear-gradient(135deg, #1a1a2e, #2d2d44); padding: 25px 20px; text-align: center;">
+                                        <div style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 12px; border: 4px solid #f1c40f; overflow: hidden; box-shadow: 0 8px 30px rgba(241,196,15,0.2); background: #1a1a2e;">
+                                            ${user.photoURL ? `<img src="${user.photoURL}" style="width:100%;height:100%;object-fit:cover;">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;color:#f1c40f;">${(user.displayName || 'A').charAt(0).toUpperCase()}</div>`}
+                                        </div>
+                                        <h4 style="color: #fff; font-family: 'Playfair Display', serif; margin: 0; font-size: 20px;">
+                                            Bem-vindo(a), <span style="color: #f1c40f;">${user.displayName || 'Administrador'}</span>! 👋
+                                        </h4>
+                                        <p style="color: rgba(255,255,255,0.6); margin: 3px 0 0; font-size: 12px;">${user.email}</p>
+                                    </div>
+                                    <div style="padding: 20px; background: #fff;">
+                                        <h6 style="color: #1a1a2e; font-weight: 600; margin-bottom: 12px; font-size: 14px;">
+                                            <i class="bi bi-megaphone" style="color: #f1c40f;"></i> Novidades desta versão
+                                        </h6>
+                                        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+                                            <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f9fa;border-radius:10px;border-left:3px solid #f1c40f;font-size:13px;color:#2d2d2d;">
+                                                <span>🚀</span> <strong>Novo design</strong> - Interface renovada
+                                            </div>
+                                            <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f9fa;border-radius:10px;border-left:3px solid #f1c40f;font-size:13px;color:#2d2d2d;">
+                                                <span>🔐</span> <strong>Login com Google</strong> - Autenticação mais rápida
+                                            </div>
+                                            <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f8f9fa;border-radius:10px;border-left:3px solid #f1c40f;font-size:13px;color:#2d2d2d;">
+                                                <span>📊</span> <strong>Dashboard</strong> - Gestão completa de conteúdos
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-warning w-100" onclick="fecharWelcomeModalMobile()" style="font-weight:600;border-radius:12px;padding:10px;font-size:14px;">
+                                            <i class="bi bi-rocket"></i> Vamos começar!
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+            const modalContainer = document.createElement('div');
+            modalContainer.innerHTML = modalHTML;
+            document.body.appendChild(modalContainer.firstElementChild);
+
+            setTimeout(() => {
+                const modal = new bootstrap.Modal(document.getElementById('welcomeModalMobile'));
+                modal.show();
+                localStorage.setItem(storageKey, 'true');
+            }, 1000);
+        }
+
+        function fecharWelcomeModalMobile() {
+            const modal = document.getElementById('welcomeModalMobile');
+            if (modal) {
+                const bsModal = bootstrap.Modal.getInstance(modal);
+                if (bsModal) bsModal.hide();
+                setTimeout(() => modal.remove(), 500);
+            }
+        }
+
+        setTimeout(() => {
+            carregarServicosMobile();
+            carregarGaleriaMobile();
+            carregarDepoimentosMobile();
+        }, 300);
+
+        showRedirectNotification();
+    </script>
+</body>
+</html>

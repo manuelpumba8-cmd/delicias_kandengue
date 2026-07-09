@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Delícias da Kandengue</title>
-<link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
+    <link rel="shortcut icon" href="media/imagens/Copilot_20251027_215018.png" type="image/x-icon">
+
     <!-- ========================================== -->
     <!-- 🔥 FIREBASE SDKs -->
     <!-- ========================================== -->
@@ -273,7 +274,7 @@
            TABS
         ========================================== */
         .nav-tabs .nav-link {
-            color: #6c757d;
+            color: black;
             border: none;
             padding: 12px 24px;
             font-weight: 500;
@@ -284,11 +285,10 @@
         }
         .nav-tabs .nav-link:hover {
             background: rgba(241, 196, 15, 0.08);
-            color: var(--gold);
         }
         .nav-tabs .nav-link.active {
             background: var(--gold);
-            color: var(--dark);
+            color: #fff;
             font-weight: 600;
         }
         .nav-tabs .nav-link i {
@@ -514,6 +514,37 @@
         }
 
         /* ==========================================
+           INPUT FILE ESTILIZADO
+        ========================================== */
+        #galeriaFile {
+            padding: 12px;
+            background: #f8f9fa;
+            border: 2px dashed #e9ecef;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #galeriaFile:hover {
+            border-color: var(--gold);
+            background: #fffbf0;
+        }
+
+        #previewContainer {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==========================================
            RESPONSIVIDADE
         ========================================== */
         @media (max-width: 768px) {
@@ -678,7 +709,7 @@
     </div>
 
     <!-- ==========================================
-     GALERIA
+     GALERIA - COM UPLOAD DE IMAGEM LOCAL
     ========================================== -->
     <div class="tab-pane fade" id="galeria" role="tabpanel">
         <div class="card-gestao">
@@ -757,7 +788,7 @@
 </div>
 
 <!-- ==========================================
-     MODAL GALERIA
+     MODAL GALERIA - COM UPLOAD DE IMAGEM LOCAL
 ========================================== -->
 <div class="modal fade" id="modalGaleria" tabindex="-1">
     <div class="modal-dialog">
@@ -775,14 +806,19 @@
                         placeholder="Título da imagem" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold">URL da Imagem</label>
-                        <input type="url" class="form-control-modal form-control" id="galeriaUrl"
-                        placeholder="https://exemplo.com/imagem.jpg" required>
-                    </div>
-                    <div class="mb-3">
                         <label class="form-label fw-bold">Descrição</label>
                         <input type="text" class="form-control-modal form-control" id="galeriaDescricao"
                         placeholder="Breve descrição">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Selecionar Imagem</label>
+                        <input type="file" class="form-control-modal form-control" id="galeriaFile"
+                        accept="image/*" required>
+                        <small class="text-muted">Formatos: JPG, PNG, GIF, WEBP (máx. 5MB)</small>
+                    </div>
+                    <div id="previewContainer" style="display: none; margin-top: 10px;">
+                        <label class="form-label fw-bold">Pré-visualização</label>
+                        <img id="previewImage" src="#" alt="Pré-visualização" style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 1px solid #e9ecef; padding: 5px;">
                     </div>
                 </form>
             </div>
@@ -1088,7 +1124,43 @@
     }
 
     // ==========================================
-    // 🔥 CARREGAR GALERIA
+    // 🔥 GALERIA - UPLOAD DE IMAGENS LOCAIS
+    // ==========================================
+
+    // Variável para armazenar a imagem em base64
+    let imagemBase64 = null;
+
+    // Pré-visualização da imagem selecionada
+    document.getElementById('galeriaFile')?.addEventListener('change', function(e) {
+        const file = this.files[0];
+        if (!file) return;
+
+        // Validar tamanho (5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('⚠️ A imagem é muito grande. Máximo 5MB.', 'error');
+            this.value = '';
+            return;
+        }
+
+        // Validar formato
+        const tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!tiposPermitidos.includes(file.type)) {
+            showToast('⚠️ Formato não suportado. Use JPG, PNG, GIF ou WEBP.', 'error');
+            this.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imagemBase64 = e.target.result;
+            document.getElementById('previewImage').src = imagemBase64;
+            document.getElementById('previewContainer').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // ==========================================
+    // CARREGAR GALERIA
     // ==========================================
     function carregarGaleria() {
         const container = document.getElementById('galeriaList');
@@ -1128,56 +1200,137 @@
         }).catch(() => {});
     }
 
+    // ==========================================
+    // ABRIR MODAL GALERIA
+    // ==========================================
     function abrirModalGaleria(key) {
         const modal = new bootstrap.Modal(document.getElementById('modalGaleria'));
+
+        // Resetar formulário
         document.getElementById('galeriaKey').value = '';
         document.getElementById('galeriaTitulo').value = '';
-        document.getElementById('galeriaUrl').value = '';
         document.getElementById('galeriaDescricao').value = '';
+        document.getElementById('galeriaFile').value = '';
+        document.getElementById('previewContainer').style.display = 'none';
+        document.getElementById('previewImage').src = '#';
+        imagemBase64 = null;
+
         if (key) {
+            // Editar imagem existente
             database.ref('galeria/' + key).once('value').then(s => {
                 const data = s.val();
                 if (data) {
                     document.getElementById('galeriaKey').value = key;
                     document.getElementById('galeriaTitulo').value = data.titulo || '';
-                    document.getElementById('galeriaUrl').value = data.url || '';
                     document.getElementById('galeriaDescricao').value = data.descricao || '';
+                    // Mostrar imagem existente
+                    if (data.url) {
+                        document.getElementById('previewImage').src = data.url;
+                        document.getElementById('previewContainer').style.display = 'block';
+                        imagemBase64 = data.url; // Para manter a imagem existente
+                    }
                 }
             });
         }
+
         modal.show();
     }
 
+    // ==========================================
+    // SALVAR GALERIA
+    // ==========================================
     function salvarGaleria() {
         const key = document.getElementById('galeriaKey').value;
         const titulo = document.getElementById('galeriaTitulo').value.trim();
-        const url = document.getElementById('galeriaUrl').value.trim();
         const descricao = document.getElementById('galeriaDescricao').value.trim();
+        const fileInput = document.getElementById('galeriaFile');
 
-        if (!titulo || !url) {
-            showToast('Preencha título e URL da imagem.', 'error');
+        if (!titulo) {
+            showToast('Preencha o título da imagem.', 'error');
             return;
         }
 
-        const data = { titulo, url, descricao, updatedAt: firebase.database.ServerValue.TIMESTAMP };
+        // Se for nova imagem, precisa de arquivo
+        if (!key && (!fileInput.files || fileInput.files.length === 0)) {
+            showToast('Selecione uma imagem.', 'error');
+            return;
+        }
 
-        const ref = key ? database.ref('galeria/' + key) : database.ref('galeria').push();
-        ref.set(data).then(() => {
-            showToast('✅ Imagem salva!', 'success');
-            bootstrap.Modal.getInstance(document.getElementById('modalGaleria')).hide();
-            carregarGaleria();
-        }).catch(e => showToast('❌ Erro: ' + e.message, 'error'));
+        // Se for edição e não selecionou nova imagem, mantém a existente
+        let imagemUrl = imagemBase64;
+
+        // Se selecionou um novo arquivo, usa ele
+        if (fileInput.files && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+
+            // Validar tamanho
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('⚠️ A imagem é muito grande. Máximo 5MB.', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagemUrl = e.target.result;
+                salvarNoFirebase(key, titulo, descricao, imagemUrl);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            // Editando sem alterar imagem
+            salvarNoFirebase(key, titulo, descricao, imagemUrl);
+        }
     }
 
+    // ==========================================
+    // SALVAR NO FIREBASE
+    // ==========================================
+    function salvarNoFirebase(key, titulo, descricao, imagemUrl) {
+        if (!imagemUrl) {
+            showToast('⚠️ Nenhuma imagem selecionada.', 'error');
+            return;
+        }
+
+        const data = {
+            titulo: titulo,
+            descricao: descricao || '',
+            url: imagemUrl,
+            updatedAt: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        const ref = key ? database.ref('galeria/' + key) : database.ref('galeria').push();
+
+        ref.set(data)
+            .then(() => {
+                showToast('✅ Imagem salva com sucesso!', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('modalGaleria')).hide();
+                carregarGaleria();
+                // Resetar
+                imagemBase64 = null;
+                document.getElementById('galeriaFile').value = '';
+                document.getElementById('previewContainer').style.display = 'none';
+            })
+            .catch(e => {
+                showToast('❌ Erro ao salvar: ' + e.message, 'error');
+            });
+    }
+
+    // ==========================================
+    // EDITAR GALERIA
+    // ==========================================
     function editarGaleria(key) {
         abrirModalGaleria(key);
     }
 
+    // ==========================================
+    // REMOVER GALERIA
+    // ==========================================
     function removerGaleria(key) {
         if (confirm('Remover esta imagem?')) {
             database.ref('galeria/' + key).remove()
-                .then(() => { showToast('🗑️ Imagem removida!', 'success');
-                    carregarGaleria(); })
+                .then(() => {
+                    showToast('🗑️ Imagem removida!', 'success');
+                    carregarGaleria();
+                })
                 .catch(e => showToast('❌ Erro: ' + e.message, 'error'));
         }
     }
@@ -1419,7 +1572,6 @@
 
     function tornarAdmin(key) {
         if (confirm('Tornar este utilizador administrador?')) {
-            // Atualizar o role no database
             database.ref('users/' + key + '/role').set('admin')
                 .then(() => {
                     showToast('✅ Utilizador tornou-se administrador!', 'success');
@@ -1449,6 +1601,7 @@
     });
 
     console.log('✅ Dashboard carregado!');
+    console.log('🖼️ Galeria com upload de imagens locais ativo!');
 </script>
 </body>
 </html>
